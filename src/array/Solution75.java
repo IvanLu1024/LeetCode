@@ -30,11 +30,41 @@ public class Solution75 {
             else nums[i]=2;
         }
 
+
+
+    }
+
+    //使用三向快排的思想来实现
+    public void sortColors1(int[] nums) {
+        int zero=-1,n=nums.length;            //nums[0,zero]=0,由于不能将初始值nums[0]设为0
+        int two=n;                            //nums[two,n-1]=2,与上同理
+        int i=0;
+        while (i<two){
+            if (nums[i]==0&&zero<n-1){
+                zero++;
+                swap(nums,i++,zero);//**num[zero+1]=0,i从下一个位置开始
+            }
+            else if (nums[i]==1){
+                i++;
+            }else {
+                two--;
+                swap(nums,two,i);//由于num[two-1]元素未知
+            }
+
+        }
+
+    }
+
+    private void swap(int[] a,int i,int j){
+        int t=a[i];
+        a[i]=a[j];
+        a[j]=t;
+
     }
     @Test
     public void test(){
         int[] nums = {2,0,2,1,1,0};
-        sortColors(nums);
+        sortColors1(nums);
         for (int n:nums){
             System.out.print(n+",");
         }
