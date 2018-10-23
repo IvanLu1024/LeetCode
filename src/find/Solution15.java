@@ -75,10 +75,54 @@ public class Solution15 {
 
     }
 
+    //使用Map的方式
+    public List<List<Integer>> threeSum2(int[] nums){
+        List<List<Integer>> res=new ArrayList<>();
+        //用于记录nums数组中各元素出现的次数
+        Map<Integer,Integer> countMap=new HashMap<>();
+        for (int i:nums){
+            countMap.put(i,countMap.getOrDefault(i,0)+1);
+        }
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            Integer v0 = entry.getKey();
+            Integer count0 = entry.getValue();
+            //如果出现次数超过3次，那么结果只能为0
+            if (count0>=3){
+                if (v0==0){
+                    res.add(Arrays.asList(0,0,0));
+                }
+            }
+            //如果出现次数超过2次
+            if (count0>=2){
+                int v2=0-2*v0;
+                if (v2!=v0) {
+                    if (countMap.containsKey(v2)) {
+                        res.add(Arrays.asList(v0, v0, v2));
+                    }
+                }
+            }
+            //剩余的就是只出现一次的元素
+            for (int v1:countMap.keySet()){
+                int v2=0-v0-v1;
+                //确保[[v0,v1,v2]...]内部有序，去重
+                if (v2<=v1||v1<=v0||countMap.get(v2)==null)
+                    continue;
+                res.add(Arrays.asList(v0,v1,v2));
+            }
+
+
+        }
+
+        return res;
+    }
+
+
+
+
     @Test
     public void test(){
         int[] nums={-1, 0, 1, 2, -1, -4};
-        List<List<Integer>> lists = threeSum1(nums);
+        List<List<Integer>> lists = threeSum2(nums);
         System.out.println(lists);
 
     }
