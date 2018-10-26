@@ -39,7 +39,6 @@ public class Solution1 {
                 return res;
             }
             map.put(nums[i], i);
-
         }
         return res;
     }
