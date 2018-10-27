@@ -54,11 +54,31 @@ public class Solution219 {
         }
         return false;
     }
+    //实现方式2
+    public boolean containsNearbyDuplicate1(int[] nums, int k){
+        Set<Integer> record=new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (record.contains(nums[i])){
+                return true;
+            }else {
+                record.add(nums[i]);
+            }
+
+            //确保查找表的长度为k
+            if (record.size()==k+1){
+                record.remove(nums[i-k]);
+            }
+
+        }
+        return false;
+
+    }
+
     @Test
     public void test(){
-         int[] nums={1,2,3,1,2,3};
-         int k=2;
-        boolean res = containsNearbyDuplicate(nums, k);
+         int[] nums={1,1,3,1,2,3};
+         int k=1;
+        boolean res = containsNearbyDuplicate1(nums, k);
         System.out.println(res);
     }
 }
