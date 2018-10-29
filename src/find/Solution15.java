@@ -24,6 +24,7 @@ import java.util.*;
  **/
 public class Solution15 {
 
+    //*得到的结果没有去重
     public List<List<Integer>> threeSum(int[] nums) {
         if (nums==null||nums.length==0){
             return null;
