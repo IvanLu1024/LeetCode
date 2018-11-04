@@ -28,6 +28,7 @@ import java.util.*;
  * @create 2018-10-22 22:08
  **/
 public class Solution18 {
+    //未通过
     public List<List<Integer>> fourSum(int[] nums, int target) {
         List<List<Integer>> res=new ArrayList<>();
         Map<Integer,Integer> countMap=new HashMap<>();
