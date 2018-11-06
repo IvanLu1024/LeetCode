@@ -17,7 +17,7 @@ import java.util.Collections;
 public class Solution344 {
 
     public String reverseString(String s) {
-        if (s==null||s.length()==0){
+        if (s==null){
             return null;
         }
         char[] chars = s.toCharArray();
