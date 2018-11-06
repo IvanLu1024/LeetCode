@@ -38,7 +38,7 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 
 相关题目：
  * [283](#283)
- * [27](#)
+ * [27](#27)
  * [26](#)
  * [80](#)
  
@@ -147,6 +147,94 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
         }
     }
 
+```
+#### 27
+- 移除元素
+
+给定一个数组 nums 和一个值 val，你需要原地移除所有数值等于 val 的元素，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+
+元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+
+示例 1:
+
+给定 nums = [3,2,2,3], val = 3,
+
+函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。
+
+你不需要考虑数组中超出新长度后面的元素。
+
+- 分析：
+1. 解法1：
+
+首先遍历一遍数组统计出不等于val元素的个数记为count;
+
+然后通过一个双重循环，当搜索到待删除的元素的时候，从这个元素后面开始寻找第一个不为val的元素，将这两个元素交换位置，即可。
+
+例如：nums=[3,2,2,3],val =3
+当搜索到nums[0],此时为3，则交换位置得到[2,3,2,3]
+
+当搜素到nums[1],此时为3，则交换位置得到[2,2,3,3]
+
+当搜索到nums[2],此时为3，则交换位置得到[2,2,3,3]
+
+当搜索到nums[3],此时为3，后面没有元素可以搜索了，则遍历结束。得到结果为[2,2,3,3]
+
+这种解法其实是伪删除，只是将待删除的元素移动到数组的最后。
+
+2. 解法2：
+
+设置一个计数器count来记录不等于val的元素，遍历数组，只有当搜索的元素不等于val的时候，记录该元素。
+这样确保了nums[0,count]均为不等于val的元素，并且保持相对顺序。
+
+- 实现：
+解法1：
+```java
+    //时间复杂度：O(n^2)
+    //空间复杂度：O(1)
+    public int removeElement(int[] nums, int val) {
+        if (nums==null||nums.length==0)
+            return 0;
+        int count=0;
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=val)
+                count++;
+        }
+
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]==val) {
+                for (int j = i + 1; j < nums.length; j++) {
+                    if (nums[j]!=val){
+                        int t=nums[i];
+                        nums[i]=nums[j];
+                        nums[j]=t;
+                    }
+
+                }
+            }
+        }
+        return count;
+
+    }
+```
+解法2：
+```java
+    //时间复杂度：O(n)
+    //空间复杂度：O(1)
+    public int removeElement(int[] nums, int val) {
+        if (nums==null||nums.length==0)
+            return 0;
+        int count=0;
+        //遍历数组，只记录不等于val的元素
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=val)
+               nums[count++]=nums[i];
+        }
+
+        return count;
+
+    }
 ```
  
  
