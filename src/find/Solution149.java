@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
+/*
  *
  * 给定一个二维平面，平面上有 n 个点，求最多有多少个点在同一条直线上。
 
@@ -38,7 +38,8 @@ import java.util.Map;
  *
  * @author
  * @create 2018-10-25 21:31
- **/
+ */
+
 public class Solution149 {
 
     private class Point {
@@ -86,8 +87,10 @@ public class Solution149 {
 
     @Test
    public void test(){
-        /*[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]*/
-        /*[[1,1],[1,1],[2,2],[2,2]]*/
+/*[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]
+
+[[1,1],[1,1],[2,2],[2,2]]*/
+
         Point p1 = new Point(1, 1);
         Point p2 = new Point(2, 2);
         Point[] points={p1,p1,p2,p2};

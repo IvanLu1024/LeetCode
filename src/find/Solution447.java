@@ -27,6 +27,7 @@ import java.util.Map;
  * @author
  * @create 2018-10-25 20:15
  **/
+
 public class Solution447 {
 
     public int numberOfBoomerangs(int[][] points) {
@@ -57,7 +58,8 @@ public class Solution447 {
 
     @Test
     public void test(){
-        /*[[0,0],[1,0],[-1,0],[0,1],[0,-1]]*/
+/*[[0,0],[1,0],[-1,0],[0,1],[0,-1]]*/
+
         int[][] nums = new int[][]{{0,0},{1,0},{-1,0},{0,1},{0,-1}};
         int res = numberOfBoomerangs(nums);
         System.out.println(res);
