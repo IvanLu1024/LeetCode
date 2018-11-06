@@ -37,10 +37,119 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 ## 简单的面试题
 
 相关题目：
- * [283]()
+ * [283](#283)
  * [27](#)
  * [26](#)
  * [80](#)
+ 
+ #### 283
+ -  移动零
+ 
+ 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+ 
+ 示例:
+ 
+ 输入: [0,1,0,3,12]
+ 输出: [1,3,12,0,0]
+ 说明:
+ 
+ 必须在原数组上操作，不能拷贝额外的数组。
+ 尽量减少操作次数。
+ - 分析：
+ 
+ 1. 解法1：
+  
+  利用额外的空间，首先遍历一遍数组将数组中的非零元素放入list中，再次遍历数组将list（集合）中的数字依次放入数组中，最后将数组的剩余部分补充0即可。
+  
+ 2. 解法2：
+ 
+ 利用一个k来记录非零元素的下标，数组nums[0,...,k)表示非零元素的范围，**注意区间为左闭右开。**
+ 先遍历一遍数组，将非零元素依次放入前k个位置，再从k开始遍历数组，此时只需要填充0即可。
+ 
+ 3. 解法3：
+ 
+ 与解法2类似，在遍历的时候遇到非零元素则将其与k位置的元素交换，遇到零元素则直接跳过。
+ 这样操作以后，将nums[0,k)保证为非零元素，保证[0,k)中所有的非零元素都按照顺序排列在[0,k)中。
+ 这种解法只需要一次遍历数组，即可。
+ 
+ 
+ 
+ - 实现：
+ 
+ 
+ 
+ 解法1：
+ ```java
+    //时间复杂度：O(n)
+    //空间复杂度：O(n)
+    public void moveZeroes(int[] nums) {
+        if (nums==null)
+            return;
+        List<Integer> temp=new ArrayList<>();
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=0)
+                temp.add(nums[i]);
+        }
+        for (int i=0;i<temp.size();i++){
+            nums[i]=temp.get(i);
+        }
+        for (int i=temp.size();i<nums.length;i++){
+            nums[i]=0;
+        }
+
+    }
+```
+解法2：
+```java
+    //时间复杂度：O(n)
+    //空间复杂度：O(1)
+    public void moveZeroes(int[] nums) {
+        if (nums==null)
+            return;
+        int k=0;//k:表示[0,k)区间内均为非零元素
+        //遍历数组，当遇到非零元素时，将其放入[0,k)期间
+        //保证[0,k)中所有的非零元素都按照顺序排列在[0,k)中
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=0)
+                nums[k++]=nums[i];
+        }
+        for (int i=k;i<nums.length;i++){
+            nums[i]=0;
+        }
+
+
+
+    }
+
+```
+解法3：
+```java
+    //时间复杂度：O(n)
+    //空间复杂度：O(1)
+    public void moveZeroes2(int[] nums) {
+        if (nums==null)
+            return;
+        int k=0;//k:表示[0,k)区间内均为非零元素
+        //遍历数组，当遇到非零元素时，将其放入[0,k)期间
+        //保证[0,k)中所有的非零元素都按照顺序排列在[0,k)中
+        //同时保证[k，i）为0
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]!=0){
+                if (k!=i){
+                    int t=nums[i];
+                    nums[i]=nums[k];
+                    nums[k]=t;
+                    k++;
+                }else
+                    k++;
+            }
+
+        }
+    }
+
+```
+ 
+ 
 ## 三路快排思想的应用
 当数组中有大量元素重复出现的时候，普通的快排算法会退化为O(n^2)，这样我们可以考虑使用三路快排算法。
 三路快排要做的事情，其实就是将数组分成三部分：小于v，等于v和大于v，之后递归的对小于v和大于v部分进行排序就好了。
@@ -281,7 +390,8 @@ public String minWindow(String s, String t) {
 
 空间复杂度：O(1)
 
-#参考资料
+# 参考资料
+
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
 
 
