@@ -252,11 +252,56 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 使用对撞指针的前提是数组的有序的，分别设置一个头指针和一个尾指针来遍历数组，当满足一定条件来分别移动两个指针的位置，最终完成任务。
 
 相关题目：
- * [167](#)
- * [125]()
- * [344]()
- * [345]()
+ * [167](#167)
+ * [125](#125)
+ * [344](#344)
+ * [345](#345)
  * [11]()
+ 
+ #### 167
+ - 两数之和 II - 输入有序数组
+ 
+ 给定一个已按照升序排列 的有序数组，找到两个数使得它们相加之和等于目标数。
+ 
+ 函数应该返回这两个下标值 index1 和 index2，其中 index1 必须小于 index2。
+ 
+ 说明:
+ 
+ 返回的下标值（index1 和 index2）不是从零开始的。
+ 你可以假设每个输入只对应唯一的答案，而且你不可以重复使用相同的元素。
+ 示例:
+ 
+ 输入: numbers = [2, 7, 11, 15], target = 9
+ 输出: [1,2]
+ 解释: 2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+ 
+ - 分析：
+ 
+ 本题是经典的对撞指针的思想，由于数组有序，所以设置头尾指针。
+ 遍历数组，如果头尾指针的和等于target则记录下标；如果大于，这时需要减小，则将尾指针向前移动；如果小于，这时需要增加，则将头指针向后移动。
+ 
+ 
+ 
+ - 实现：
+ ```java
+public int[] twoSum(int[] numbers, int target) {
+        int l=0,h=numbers.length-1;
+        int[] res = new int[2];
+        while (l<h){
+            if (numbers[l]+numbers[h]==target)
+            {
+                res[0]=l+1;
+                res[1]=h+1;
+            }
+            if (numbers[l]+numbers[h]<target)
+                l++;
+            else h--;
+        }
+        return res;
+
+    }
+
+```
  
  #### 125
  - 验证回文串
@@ -313,6 +358,68 @@ public boolean isPalindrome(String s) {
         return false;
     }
 
+```
+#### 344
+- 反转字符串
+
+编写一个函数，其作用是将输入的字符串反转过来。
+- 分析：
+
+设置头尾指针，遍历的时候，将头尾指针两两交换，即可。
+- 实现
+```java
+public String reverseString(String s) {
+        if (s==null){
+            return null;
+        }
+        char[] chars = s.toCharArray();
+        int l=0,h=chars.length-1;
+        while (l<h){
+            char t=chars[l];
+            chars[l]=chars[h];
+            chars[h]=t;
+            l++;
+            h--;
+        }
+        return new String(chars);
+    }
+```
+#### 345
+- 反转字符串中的元音字母
+
+编写一个函数，以字符串作为输入，反转该字符串中的元音字母。
+- 分析：
+
+思路和125题有些类似，同样设置对撞指针，一个头指针和一个尾指针，关键在于搜索的时候，**判断待搜索的字符是否为元音字母，**
+如果为元音字母则交换头尾指针的值，与344题中同理；如果不为元音字母，则继续遍历——头指针后移和尾指针前移。
+>判断待搜索字符是否为元音，可以使用额外的空间，用一个频率数组存放元音字母的频率。搜索的时候，查询字符的下标对应的频率数组的数值，如果为1则表示为元音，反之则不是。
+
+
+- 实现：
+```java
+//时间复杂度O(n)
+//空间复杂度O(1)
+public String reverseVowels(String s) {
+        char[] vowels={'a','e','i','o','u','A','E','I','O','U'};
+        int[] freq=new int[256];
+        for (char c:vowels) {
+            freq[c]=1;
+        }
+        char[] chars = s.toCharArray();
+        int l=0,h=chars.length-1;
+        while (l<h){
+            while (l<h&&freq[chars[l]]!=1)l++;
+            while (l<h&&freq[chars[h]]!=1)h--;
+            if (l<h){
+                char t=chars[l];
+                chars[l]=chars[h];
+                chars[h]=t;
+                l++;
+                h--;
+            }
+        }
+        return new String(chars);
+    }
 ```
 ### 滑动窗口
 当求解的时候，需要获得数组或者字符串的连续子部分的时候，就可以考虑使用滑动窗口的思想。
