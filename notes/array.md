@@ -252,12 +252,68 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 使用对撞指针的前提是数组的有序的，分别设置一个头指针和一个尾指针来遍历数组，当满足一定条件来分别移动两个指针的位置，最终完成任务。
 
 相关题目：
- * [167-Two Sum II - Input Array is Sorted](#)
+ * [167](#)
  * [125]()
  * [344]()
  * [345]()
  * [11]()
+ 
+ #### 125
+ - 验证回文串
+ 
+ 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+ 
+ 说明：本题中，我们将空字符串定义为有效的回文串。
+ 
+ 示例 1:
+ 
+ 输入: "A man, a plan, a canal: Panama"
+ 输出: true
+ - 分析：
+ 
+ 本可以使用对撞指针的思想，设置两个指针，一个头指针和一个尾指针。遍历字符串，若头尾指针相等的时候，则将头指针向后移动一位，将尾指针向前移动一位。若不相等则返回false,
+ 当头尾指针指向同一个位置的时候，则为true。
+ 
+ **注意：**
+ > 由于只考虑字母和数字字符，所以指针的值需要做判断
+ 
+ > 大小写字符的转化差值为32，如果用差值来判断会有bug  
+ 
+ - 实现：
+ ```java
+public boolean isPalindrome(String s) {
+        if (s==null||s.length()==0){
+            return true;
+        }
+        char[] chars = s.toLowerCase().toCharArray();
+        int l=0,h=chars.length-1;
+        while (l<h){
+            while (l<h&&!isNumApl(chars[l])) l++;
+            while (l<h&&!isNumApl(chars[h])) h--;
 
+            if (chars[l]==chars[h]){
+                l++;
+                h--;
+            }else {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean isNumApl(char c){
+        if (c>='a'&&c<='z'){
+            return true;
+        }
+        if (c>='A'&&c<='Z'){
+            return true;
+        }
+        if (c>='0'&&c<='9'){
+            return true;
+        }
+        return false;
+    }
+
+```
 ### 滑动窗口
 当求解的时候，需要获得数组或者字符串的连续子部分的时候，就可以考虑使用滑动窗口的思想。
 num[l,h]为滑动窗口，根据具体的要求，通过遍历的时候，来改变l和h的大小，从而完成任务。
