@@ -48,15 +48,12 @@
 </div>
 
 * 遍历右子树
+
 <div align="center">
 
 ![遍历右子树](../pict/stack_03.png)
 
 <div>
-
-
-
-
 
 
 
