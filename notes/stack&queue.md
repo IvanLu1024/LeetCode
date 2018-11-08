@@ -33,11 +33,11 @@
 递归调用的时候，模拟系统栈的情况如下，下面忽略了结点为null的情况：
 <div align="center">
 
-![](../pict/stack_01.png)
+![遍历根结点](../pict/stack_01.png)
 
-![](../pict/stack_02.png)
+![遍历左子树](../pict/stack_02.png)
 
-![](../pict/stack_03.png)
+![遍历右子树](../pict/stack_03.png)
 
 </div>
 
@@ -84,3 +84,8 @@
     }
 ```
 >这样不管是二叉树的前序、中序还是后序遍历的实现，只需要和递归一样调换操作的次序就可以方便的转化，更便于理解。题144和94同理即可得，下面不赘述其过程。
+
+
+# 参考资料
+[玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
+
