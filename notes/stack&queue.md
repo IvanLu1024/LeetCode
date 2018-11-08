@@ -35,11 +35,13 @@
 
 ![遍历根结点](../pict/stack_01.png)
 
+</div>
+
 ![遍历左子树](../pict/stack_02.png)
 
 ![遍历右子树](../pict/stack_03.png)
 
-</div>
+
 
 - 实现：
 ```java
