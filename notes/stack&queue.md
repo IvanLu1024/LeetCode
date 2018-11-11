@@ -102,10 +102,76 @@
 队列的基本应用-广度优先遍历
 
 - 树：层序遍历
-- 图：无权图的最短路径
+
 
 相关题目：
 * [102]()
+* [103]()
+* [107]()
+* [199]()
+
+### 102
+- 二叉树的层次遍历
+
+给定一个二叉树，返回其按层次遍历的节点值。 （即逐层地，从左到右访问所有节点）。
+
+例如:
+给定二叉树: [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回其层次遍历结果：
+
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+- 分析：
+
+二叉树的层序遍历的变式，为了处理层数，使用了Pair类（相当于一个元组）来处理。
+队列中存放的是<node,level>，node：表示当前遍历的结点，level：表示当前遍历的层数。
+当当层数和结果的集合大小相等的时候，说明集合中还不存在这一层，所以需要新创建一个List。
+随后分别将左右子树入队操作，注意此时level需要加1操作。
+- 实现：
+```java
+public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res=new ArrayList<>();
+        if (root==null){
+            return res;
+        }
+        Queue<Pair<TreeNode,Integer>> queue=new LinkedList<>();
+        queue.add(new Pair<>(root,0));
+        while (!queue.isEmpty()){
+            Pair<TreeNode, Integer> poll = queue.poll();
+            TreeNode node = poll.getKey();
+            Integer level = poll.getValue();
+            //当层数和结果的集合大小相等的时候，说明集合中还不存在这一层，所以需要新创建一个List
+            if (level==res.size()){
+                res.add(new ArrayList<Integer>());
+            }
+            res.get(level).add(node.val);
+            //分别将左右子树入队
+            if (node.left!=null){
+                queue.offer(new Pair<>(node.left,level+1));
+            }
+            if (node.right!=null){
+                queue.offer(new Pair<>(node.right,level+1));
+            }
+
+        }
+        return res;
+    }
+```
+ - 图：无权图的最短路径
+ 
+相关题目：
+* [279]()
+* []()
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
