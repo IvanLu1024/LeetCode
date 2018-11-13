@@ -205,8 +205,8 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 ![](../pict/queue_03.png)
 
 <div>
-
 - 实现：
+   
 ```java
 //使用图论的解法
     public int numSquares(int n)  {
