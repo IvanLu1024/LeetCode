@@ -241,10 +241,163 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 当数组中有大量元素重复出现的时候，普通的快排算法会退化为O(n^2)，这样我们可以考虑使用三路快排算法。
 三路快排要做的事情，其实就是将数组分成三部分：小于v，等于v和大于v，之后递归的对小于v和大于v部分进行排序就好了。
 
+<div align=center>
+
+![](../pict/array_02.png)
+
+<div>
+
 相关题目：
  * [75](#75)
  * [88](#)
  * [215](#)
+ 
+ #### 75
+ - 颜色分类
+ 
+ 给定一个包含红色、白色和蓝色，一共 n 个元素的数组，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。
+ 
+ 此题中，我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。
+ 
+ 注意:
+ 不能使用代码库中的排序函数来解决这道题。
+ 
+ 示例:
+ 
+ 输入: [2,0,2,1,1,0]
+ 输出: [0,0,1,1,2,2]
+ - 分析
+ 
+ 由于这道题目中需要排序的数字只有0、1和2三个数字，这说明待排序的数字中存在着大量
+ 重复的数字，这时可以考虑使用计数排序和三向快排。
+ 1. 计数排序
+ 首先，第一次遍历数组分别记录下三个数字的出现次数n0，n1和n2；接下来，就是用0 1 2这三个数字重新填充数组；
+ [0,n0)填充0，[n0,n1+n0)填充1，[n1+n0，n0+n1+n2)填充2，即可。
+  >注意：n0+n1+n2=n,n为数组长度
+ 2. 三向快排
+ 
+ 首先，设置三个指针分别来指向0 1 2这三个数字。注意其初始值的设置，zero设置为-1，one设置为0，two设置为n,
+ 因为nums[0,zero]=0，则不能将初始值nums[0]设为0，nums[two,n-1]=2,与上同理；
+ 接着，开始遍历数组，当遇到0时，将指向0的指针向前移动一位，并将这个0交换到该位置；当遇到
+ 1时，不做交换操作，继续遍历；当遇到2时，与0的时候同理，将指向2的指针后移一位，并将这个2交换到该位置，
+ 注意此时num[two-1]为未知元素，则交换以后指向1的指针不必向前移动。
+ 
+
+ 
+ - 实现
+ 1. 计数排序
+ ```java
+    //时间复杂度：O(n)
+    //空间复杂度：O(1)
+    public void sortColors(int[] nums) {
+        int[] colors=new int[3];
+        for (int i=0;i<nums.length;i++){
+            if (nums[i]==0)
+                colors[0]++;
+            else if (nums[i]==1)
+                colors[1]++;
+            else if (nums[i]==2)
+                colors[2]++;
+
+        }
+        for (int i=0;i<nums.length;i++){
+            if (i<colors[0])
+                nums[i]=0;
+            else if (i>=colors[0]&&i<colors[0]+colors[1])
+                nums[i]=1;
+            else nums[i]=2;
+        }
+
+    }
+```
+ 2. 三向快排
+ ```java
+    //使用三向快排的思想来实现
+    public void sortColors(int[] nums) {
+        int zero=-1,n=nums.length;            //nums[0,zero]=0,则不能将初始值nums[0]设为0
+        int two=n;                            //nums[two,n-1]=2,与上同理
+        int one=0;
+        while (one<two){
+            if (nums[one]==0&&zero<n-1){
+                zero++;
+                swap(nums,one++,zero);//**num[zero+1]=0,one从下一个位置开始
+            }
+            else if (nums[one]==1){
+                one++;
+            }else {
+                two--;
+                swap(nums,two,one);//由于num[two-1]元素未知
+            }
+
+        }
+
+    }
+
+    private void swap(int[] a,int i,int j){
+        int t=a[i];
+        a[i]=a[j];
+        a[j]=t;
+
+    }
+```
+ 
+ 
+ #### 88
+ - 合并两个有序数组
+ 
+ 给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
+ 
+ 说明:
+ 
+ 初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
+ 你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
+ 示例:
+ 
+ 输入:
+ nums1 = [1,2,3,0,0,0], m = 3
+ nums2 = [2,5,6],       n = 3
+ 
+ 输出: [1,2,2,3,5,6]
+ 
+ - 分析：
+ 
+ 因为nums1有足够的空间来保存nums1和nums2中的所有元素，那么可以从nums1的n1+n2-1的位置开始
+ 填充元素；从后开始遍历两个数组，设置两个指针index1和index2分别指向nums1和nums2的元素尾部,num2取出较大的元素放入nums1的尾部，循环结束后，
+ 如果index1和index2同时为0，则已经将全部元素排序好；
+ 
+ 如果index1为0，说明nums1中的元素已经排序完成，那么
+ 需要继续将num2的剩余元素填充到num1的相应位置中；
+ 
+ 如果index2为0，说明num2中的元素已经排序完成，那么剩余的nums1的元素保存初始位置即可。
+ 
+ - 实现：
+ ```java
+public void merge(int[] nums1, int m, int[] nums2, int n) {
+        if (nums2.length==0||nums1.length==0)
+            return;
+        if (nums1.length==1)
+            nums1[0]=nums2[0];
+
+        int index1=m-1,index2=n-1;
+        int last=m+n-1;
+
+
+        while (index1>=0&&index2>=0){
+            if (nums1[index1]<nums2[index2])
+                nums1[last--]=nums2[index2--];
+            else
+                nums1[last--]=nums1[index1--];
+        }
+        //当index2<0时，说明nums2数组已经排序结束，剩余的nums1数组元素保持初始位置
+
+        //当index1<0,则说明num1的元素都取完了，那剩下的num2的元素可一次全部写进nums1。
+        while (index2>=0){
+            nums1[last--]=nums2[index2--];
+        }
+    }
+```
+ #### 215
+ 
 ## 双指针
 双指针主要用于遍历数组，两个指针指向不同的元素，从而协同完成任务。
 ### 对撞指针
@@ -255,7 +408,7 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
  * [125](#125)
  * [344](#344)
  * [345](#345)
- * [11]()
+ * [11](#11)
  
  #### 167
  - 两数之和 II - 输入有序数组
