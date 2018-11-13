@@ -194,17 +194,13 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 
 这一题可以通过建模转化为一道图的广度遍历的题目，分析过程如下：
 
-<div align="center">
-
 ![](../pict/queue_01.png)
-
-
 
 ![](../pict/queue_02.png)
 
 ![](../pict/queue_03.png)
 
-<div>
+
 - 实现：
    
 ```java
@@ -340,11 +336,11 @@ wordList = ["hot","dot","dog","lot","log"]
 输出: [1]
 - 分析：
 
-<div align="center">
+
 
 ![](../pict/queue_05.png)
 
-<div>
+
 
 - 实现：
 ```java
