@@ -52,32 +52,37 @@ public class Solution127 {
         }
         Queue<String> queue=new LinkedList<>();
         queue.offer(beginWord);
-        int step=0;
+        int level=0;    //层数
         while (!queue.isEmpty()){
-            step++;
+            level++;
+            //记录这一层的大小
             int size = queue.size();
+            //遍历这一层
             while (size-->0){
                 String word = queue.poll();
                 char[] chars = word.toCharArray();
+                //分别变换单词的每一个字母搜索字典中的单词
                 for (int i = 0; i < chars.length; i++) {
+                    //记录初始值
                     char ch = chars[i];
+                    //每一个字母都从a-z变换搜索
                     for (char c = 'a'; c <= 'z'; ++c) {
-                        if (c == ch) continue;
+                        if (c == ch) continue;  //出现相同的单词就跳过
                         chars[i] = c;
                         String t = new String(chars);
-                        if (t.equals(endWord)) return step + 1;
+                        if (t.equals(endWord)) return level + 1;    //搜索到目标，步数为层数+1
+                        //查找到字典中的单词
                         if (dict.contains(t))
                         {
-                        dict.remove(t);
-                        queue.offer(t);
+                        dict.remove(t);     //将字典中该单词删除，避免重复查找
+                        queue.offer(t);     //将该单词入队
                         }
                     }
+                    //还原初始值
                     chars[i]=ch;
                 }
-
             }
         }
-
         return 0;
 
     }
