@@ -34,14 +34,14 @@
 >红色：已经遍历过；蓝色：未遍历
 * 遍历根结点
 
-<div align="center">
+<div align=center>
 
 ![遍历根结点](../pict/stack_01.png)
 
 </div>
 
 * 遍历左子树
-<div align="center">
+<div align=center>
 
 ![遍历左子树](../pict/stack_02.png)
 
@@ -49,7 +49,7 @@
 
 * 遍历右子树
 
-<div align="center">
+<div align=center>
 
 ![遍历右子树](../pict/stack_03.png)
 
@@ -193,11 +193,17 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 
 这一题可以通过建模转化为一道图的广度遍历的题目，分析过程如下：
 
+<div align=center>
+
 ![](../pict/queue_01.png)
+
+
 
 ![](../pict/queue_02.png)
 
 ![](../pict/queue_03.png)
+
+<div>
 
 - 实现：
 ```java
@@ -231,7 +237,9 @@ public List<List<Integer>> levelOrder(TreeNode root) {
         return n;
     }
 ```
+
 - 优先队列
+
 相关题目：
 
 * [347](#347)
@@ -249,7 +257,12 @@ public List<List<Integer>> levelOrder(TreeNode root) {
 输出: [1]
 - 分析：
 
+<div align=center>
+
 ![](../pict/queue_05.png)
+
+<div>
+
 - 实现：
 ```java
 private List<Integer> res=new ArrayList<>();
