@@ -86,13 +86,70 @@ public class Solution127 {
         return 0;
 
     }
+
+    //双向BFS
+    public int ladderLength1(String beginWord, String endWord, List<String> wordList) {
+        //首先建立一个字典，将每个单词放入其中
+        Set<String> dict=new HashSet<>();
+        for (String word : wordList) {
+            dict.add(word);
+        }
+        if (!dict.contains(endWord)){
+            return 0;
+        }
+        //建立头尾队列
+        Set<String> beginSet=new HashSet<>();
+        Set<String> endSet=new HashSet<>();
+        beginSet.add(beginWord);
+        endSet.add(endWord);
+
+        int level=0;
+        //遍历队列
+        while (!beginSet.isEmpty()&&!endSet.isEmpty()){
+            level++;
+            //确保头集合较小，保持平衡
+            if (beginSet.size()>endSet.size()){
+                Set<String> t=endSet;
+                endSet=beginSet;
+                beginSet=t;
+            }
+
+            //建立一个临时集合
+            Set<String> temp=new HashSet<>();
+
+            for (String word : beginSet) {
+                char[] chars = word.toCharArray();
+                for (int i = 0; i < chars.length; i++) {
+                    char ch=chars[i];
+                    for (char j = 'a'; j <='z' ; j++) {
+                        chars[i]=j;
+                        String s = new String(chars);
+                        if (endSet.contains(s)){
+                            return level+1;
+                        }
+                        if (dict.contains(s)){
+                            dict.remove(s);
+                            temp.add(s);
+                        }
+                    }
+                    chars[i]=ch;
+                    
+                }
+            }
+            beginSet=temp;
+
+        }
+        return 0;
+
+
+    }
     @Test
     public void test(){
-        String[] arr={"hot","dot","dog","lot","log","cog"};
+        String[] arr={"hot","dot","dog","lot","log"};
         List<String> wordList = Arrays.asList(arr);
         String bWord="hit";
         String eWord="cog";
-        int step = ladderLength(bWord, eWord, wordList);
+        int step = ladderLength1(bWord, eWord, wordList);
         System.out.println(step);
     }
 
