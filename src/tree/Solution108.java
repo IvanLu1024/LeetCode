@@ -1,5 +1,10 @@
 package tree;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
  *
@@ -24,22 +29,27 @@ public class Solution108 {
         if (nums==null||nums.length==0){
             return null;
         }
-        int l=0;
-        int h = nums.length - 1;
-        return createTreeNode(nums,l,h);
-
-
+        return createTreeNode(nums,0,nums.length-1);
     }
     private TreeNode createTreeNode(int[]nums,int l,int h){
-        if (l==h){
+        //特别注意，边界条件
+        if (l>h){
             return null;
         }
-        int mid=l+(h-l)>>1;
-        TreeNode root = new TreeNode(nums[mid]);
-        root.left=createTreeNode(nums,l+1,mid-1);
-        root.right=createTreeNode(nums,mid+1,h-1);
+        int mid=l+(h-l)/2;
+        TreeNode root=new TreeNode(nums[mid]);
+        root.left=createTreeNode(nums,l,mid-1);
+        root.right=createTreeNode(nums,mid+1,h);
         return root;
     }
 
+    @Test
+    public void test(){
+        int[] arr={-10,-3,0,5,9};
+        TreeNode treeNode = sortedArrayToBST(arr);
+        ArrayList<Integer> integers = tree.Test.PrintFromTopToBottom1(treeNode);
+        System.out.println(integers);
+
+    }
 
 }
