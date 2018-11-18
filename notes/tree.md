@@ -91,7 +91,70 @@ public int minDepth(TreeNode root) {
 ```
 
 ## 翻转二叉树 
-## 注意递归的终止条件 
+## 注意递归的终止条件
+
+## 定义递归问题
+- 相关题目：
+<!-- GFM-TOC -->
+   * [二叉树的所有路径](#257)
+   * [路径总和（2）](#113)
+   * [路径总和（2）](#129)
+<!-- GFM-TOC --> 
+### 257
+给定一个二叉树，返回所有从根节点到叶子节点的路径。
+
+说明: 叶子节点是指没有子节点的节点。
+
+- 分析：
+
+我们需要关注递归调用的**语义**，在本题中：
+首先确定递归的终止条件，当二叉树为空的时候，那么直接返回一个空的集合，当二叉树为叶子结点的时候，那么将该节点的值
+加入集合中；
+
+接着是递归的过程，分别递归调用获得左右子树以其为根结点到叶子结点的路径，将当前路径加上以其孩子结点为根结点到叶子结点的路径，即可。
+- 实现：
+```java
+/**
+* 示例:
+  
+  输入:
+  
+     1
+   /   \
+  2     3
+   \
+    5
+  
+  输出: ["1->2->5", "1->3"]
+  
+  解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
+* 
+*/
+public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res=new LinkedList<>();
+        if (root==null){
+            return res;
+        }
+        //当寻找到叶子结点的时候，就将叶子结点加入集合
+        if (root.left==null&&root.right==null){
+            res.add(String.valueOf(root.val));
+        }
+        //分别添加左右子树，注意递归调用的语义！
+
+        //获得左子树结点从根到叶子所有的路径
+        List<String> leftStr = binaryTreePaths(root.left);
+        for (String s : leftStr) {
+            res.add(String.valueOf(root.val)+"->"+s);
+        }
+        //获得右子树结点从根到叶子所有的路径
+        List<String> rightStr = binaryTreePaths(root.right);
+        for (String s : rightStr) {
+            res.add(String.valueOf(root.val)+"->"+s);
+        }
+        return res;
+    }
+```
+ 
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
