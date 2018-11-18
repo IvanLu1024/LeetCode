@@ -36,7 +36,7 @@ public class Solution257 {
         if (root.left==null&&root.right==null){
             res.add(String.valueOf(root.val));
         }
-        //分别添加左右子树
+        //分别添加左右子树，注意递归调用的语义！
 
         //获得左子树结点从根到叶子所有的路径
         List<String> leftStr = binaryTreePaths(root.left);
