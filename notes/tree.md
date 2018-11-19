@@ -92,13 +92,104 @@ public int minDepth(TreeNode root) {
 
 ## 翻转二叉树 
 ## 注意递归的终止条件
+- 相关题目：
+<!-- GFM-TOC -->
+   * [路径总和（1）](#112)
+   * [左叶子之和](#404)
+<!-- GFM-TOC --> 
+### 112
+给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
 
+说明: 叶子节点是指没有子节点的节点。
+
+- 分析：
+
+首先，需要注意递归的终止条件，当树为空的时候，返回结果为false；
+
+然后，需要确定递归的过程，当遇到叶子结点的时候需要验证结果是否为待搜索的目标（sum），如果搜索到目标即可返回true，
+如果没有搜索到目标就继续搜索，递归最终得到结果。
+- 实现：
+```java
+示例:
+     给定如下二叉树，以及目标和 sum = 22，
+
+      5
+     / \
+     4   8
+     /   / \
+     11  13  4
+     /  \      \
+     7    2      1
+     返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
+ * 
+ **/
+public class Solution112 {
+    public boolean hasPathSum(TreeNode root, int sum) {
+        //注意递归的终止条件
+        if (root==null){
+            return false;
+        }
+        if (root.left==null&&root.right==null){
+            if (root.val==sum){
+            return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return hasPathSum(root.right,sum-root.val)||hasPathSum(root.left,sum-root.val);
+    }
+```
+### 404
+计算给定二叉树的所有左叶子之和。
+
+- 分析：
+
+这一题的难度在于如何确定一个结点为左叶子结点，
+首先，递归的终止条件为当树为空时候，返回的结果为0；然后，递归的过程为寻找到左叶子结点后累加即可。
+当一个结点的左子树不为空，并且这个子树为叶子结点的时候则为左叶子结点。
+
+- 实现：
+```java
+/**
+ *计算给定二叉树的所有左叶子之和。
+
+     示例：
+
+      3
+     / \
+    9  20
+     /  \
+   15   7
+
+     在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+ *
+ *
+ */
+public class Solution404 {
+    public int sumOfLeftLeaves(TreeNode root) {
+        if (root==null){
+            return 0;
+        }
+        //如何判断一个结点是否为左叶子结点，当其父亲结点的左孩子不空
+        if (root.left!=null){
+            //并且为叶子结点，则此时为左叶子结点
+            if (root.left.left==null&&root.left.right==null){
+                return
+                        //继续遍历右边累积结果
+                        sumOfLeftLeaves(root.right)+root.left.val;
+            }
+        }
+        return sumOfLeftLeaves(root.left)+sumOfLeftLeaves(root.right);
+
+    }
+```
 ## 定义递归问题
 - 相关题目：
 <!-- GFM-TOC -->
    * [二叉树的所有路径](#257)
    * [路径总和（2）](#113)
-   * [路径总和（2）](#129)
+   * [求根到叶子节点数字之和](#129)
 <!-- GFM-TOC --> 
 ### 257
 给定一个二叉树，返回所有从根节点到叶子节点的路径。
@@ -154,7 +245,9 @@ public List<String> binaryTreePaths(TreeNode root) {
         return res;
     }
 ```
- 
+### 113
+
+### 129 
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
