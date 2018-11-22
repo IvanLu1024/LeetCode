@@ -2,7 +2,9 @@ package find;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,6 +28,17 @@ public class Solution217 {
         return false;
 
     }
+    public boolean containsDuplicate1(int[] nums) {
+        List<Integer> record=new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (record.contains(nums[i])){
+                return true;
+            }else {
+                record.add(nums[i]);
+            }
+        }
+        return false;
+    }
 
     @Test
     public void test(){
@@ -34,4 +47,5 @@ public class Solution217 {
         boolean res = containsDuplicate(nums);
         System.out.println(res);
     }
+
 }

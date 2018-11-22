@@ -1,5 +1,6 @@
 package array;
 
+
 import org.junit.Test;
 
 /**
@@ -18,46 +19,53 @@ import org.junit.Test;
 public class Solution76 {
 
     public String minWindow(String s, String t) {
-        int[] freq=new int[128];
+        int[] freq = new int[128];
         int sLen = s.length();
         int tLen = t.length();
-        if (sLen==0||tLen==0)
+        if (sLen == 0 || tLen == 0) {
             return "";
-        int minLen=Integer.MAX_VALUE;
+        }
+        int minLen = Integer.MAX_VALUE;
         //首先统计t中出现的字符的频率
-        for (int i=0;i<t.length();i++){
+        for (int i = 0; i < t.length(); i++) {
             freq[t.charAt(i)]++;
         }
-        int l=0;//起始位置
-        int total=0;//记录当前包含的字符数量
-        for (int i=0,j=0;i<sLen;i++){
+        //起始位置
+        int l = 0;
+        //记录当前包含的字符数量
+        int total = 0;
+        for (int i = 0, j = 0; i < sLen; i++) {
             //当t中的字符出现的时候
-            if (freq[s.charAt(i)]-->0)
+            if (freq[s.charAt(i)]-- > 0) {
                 total++;
+            }
             //此时说明已经包含了t
-            while (total==tLen){
-                if (i-j+1<minLen){
-                    minLen=i-j+1;
-                    l=j;
+            while (total == tLen) {
+                if (i - j + 1 < minLen) {
+                    minLen = i - j + 1;
+                    l = j;
                 }
-                if (++freq[s.charAt(j++)]>0)
+                if (++freq[s.charAt(j++)] > 0) {
                     total--;
+                }
             }
 
         }
-        if (minLen==Integer.MAX_VALUE)
+        if (minLen == Integer.MAX_VALUE) {
             return "";
-        else
-            return s.substring(l,l+minLen);
+        } else {
+            return s.substring(l, l + minLen);
+        }
 
     }
 
 
     @Test
-    public void test(){
+    public void test() {
         String count = minWindow("ADOBECODEBANC", "ABC");
         System.out.println(count);
 
 
     }
 }
+

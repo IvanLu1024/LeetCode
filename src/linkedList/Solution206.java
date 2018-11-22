@@ -1,5 +1,7 @@
 package linkedList;
 
+import org.junit.Test;
+
 /**
  * 反转链表
  *
@@ -23,6 +25,15 @@ public class Solution206 {
 
         }
         return pre;
+    }
+    @Test
+    public void test(){
+        int[] arr={1,2,3,4,5};
+        int n=arr.length;
+        ListNode head = linkedList.Test.createLinkedList(arr, n);
+        linkedList.Test.printLinkedList(head);
+        ListNode res = reverseList(head);
 
+        linkedList.Test.printLinkedList(res);
     }
 }

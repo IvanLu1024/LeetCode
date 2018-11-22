@@ -43,13 +43,6 @@ public class Solution108 {
         return root;
     }
 
-    @Test
-    public void test(){
-        int[] arr={-10,-3,0,5,9};
-        TreeNode treeNode = sortedArrayToBST(arr);
-        ArrayList<Integer> integers = tree.Test.PrintFromTopToBottom1(treeNode);
-        System.out.println(integers);
 
-    }
 
 }
