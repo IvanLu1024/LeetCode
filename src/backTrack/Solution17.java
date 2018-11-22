@@ -1,5 +1,10 @@
 package backTrack;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
  *
@@ -14,4 +19,46 @@ package backTrack;
  *
  */
 public class Solution17 {
+
+    private String letterMap[] = {
+            " ",    //0
+            "",     //1
+            "abc",  //2
+            "def",  //3
+            "ghi",  //4
+            "jkl",  //5
+            "mno",  //6
+            "pqrs", //7
+            "tuv",  //8
+            "wxyz"  //9
+    };
+
+    private List<String> res;
+
+    private void findCombination(String digits, int index, String s){
+        if (digits.length()==index){
+            res.add(s);
+            return;
+        }
+
+        char c = digits.charAt(index);
+        String letters = letterMap[c - '0'];
+        for (int i = 0; i < letters.length(); i++) {
+            findCombination(digits,index+1,s+letters.charAt(i));
+        }
+    }
+    public List<String> letterCombinations(String digits) {
+        res=new ArrayList<>();
+        if (digits.equals("")){
+            return res;
+        }
+        findCombination(digits,0,"");
+        return res;
+    }
+    @Test
+    public void test(){
+        String digits="23";
+        List<String> re = letterCombinations(digits);
+        System.out.println(re);
+    }
 }
