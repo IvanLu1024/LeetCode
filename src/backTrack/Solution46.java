@@ -59,7 +59,7 @@ public class Solution46 {
                 used[i]=true;
                 System.out.println(nums[i]+" -> p: "+p);
                 generatePermute(nums,index+1,p);
-                //回溯
+                //回溯，递归中改变的变量需要恢复之前的状态
                 p.remove(p.size()-1);
                 used[i]=false;
                 System.out.println("backTracking ... current P:"+p);
