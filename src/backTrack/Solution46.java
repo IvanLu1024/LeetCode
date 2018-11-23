@@ -57,7 +57,7 @@ public class Solution46 {
                 //将nums[i]添加到p中
                 p.add(nums[i]);
                 used[i]=true;
-                System.out.println(nums[i]+" -> p");
+                System.out.println(nums[i]+" -> p: "+p);
                 generatePermute(nums,index+1,p);
                 //回溯
                 p.remove(p.size()-1);
