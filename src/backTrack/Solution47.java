@@ -38,21 +38,26 @@ public class Solution47 {
 
     private void generatePermuteUnique(int[] nums, int index, List<Integer> p) {
         if (index==nums.length){
+            System.out.println("permute completed : "+p);
             res.add(new ArrayList<>(p));
         }
         for (int i = 0; i < nums.length; i++) {
             if(i>0 && ( nums[i]==nums[i-1]) && !used[i-1]){
                 //避免重复值,由于数组已经排序过了，所以只需要比较相邻的元素
+                System.out.println("skip ... ");
                 continue;
             }
             if(used[i]){//避免重复值
+                System.out.println("skip ... ");
                 continue;
             }
             p.add(nums[i]);
             used[i]=true;
+            System.out.println(nums[i]+" -> p: "+p);
             generatePermuteUnique(nums,index+1,p);
             p.remove(p.size()-1);
             used[i]=false;
+            System.out.println("backTracking ... current P:"+p);
         }
 
     }
