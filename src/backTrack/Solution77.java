@@ -42,6 +42,9 @@ public class Solution77 {
             res.add(new ArrayList<>(c));
             return;
         }
+        //此时有(k-c.size())个空位需要填充，那么[i...n]中至少要有(k-c.size())个元素
+        //则n-i>=(k-c.size())-1确保[i...n]中至少要有(k-c.size())个元素
+        // --> i<=n-(k-c.size())+1
         for (int i = start; i <=n-(k-c.size())+1; i++) {
             c.add(i);
             System.out.println(i+"-> c:"+c);
