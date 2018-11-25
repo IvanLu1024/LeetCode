@@ -4,6 +4,11 @@
     * [排列问题](#排列问题)
     * [组合问题](#组合问题)
     * [回溯法解决组合问题的优化](#回溯法解决组合问题的优化)  
+    * [二维平面上的回溯法](#二维平面上的回溯法)
+    * [floodfill算法](#floodfill算法)
+    * [回溯法是人工智能的基础](#回溯法是人工智能的基础)
+    
+    
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 
@@ -228,6 +233,10 @@ private List<List<Integer>> res=new ArrayList<>();
 ```
 ## 组合问题
 ## 回溯法解决组合问题的优化
+## 二维平面上的回溯法
+## floodfill算法
+## 回溯法是人工智能的基础
+
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
 
