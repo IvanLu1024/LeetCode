@@ -37,7 +37,7 @@ public class Solution93 {
             String curStr = s.substring(0, i);
             if (isValid(curStr)){
                 System.out.println("CurStr:"+curStr+"  ip:"+ip);
-                //从s[i...n]中寻找
+                //从s[i...n]中搜索
                 generateIpAddress(s.substring(i),count+1,ip+curStr+".");
             }
 
@@ -57,10 +57,47 @@ public class Solution93 {
         }
     }
 
+    public List<String> restoreIpAddresses1(String s){
+        if (s.length() < 4 || s.length() > 12){
+            return res;
+        }
+        generateIp(s,"",0);
+        return res;
+
+    }
+    private void generateIp(String s,String temp,int n){
+        // 剪枝，因ip不会超过三位
+        if (s.length()>3*(4-n)){
+            return;
+        }
+        if (n==4){
+            if (s.length()==0) {
+                //去除最后一个"."
+                System.out.println("ip completed ->"+temp.substring(0, temp.length() - 1));
+                res.add(temp.substring(0, temp.length() - 1));
+            }
+        }
+        for (int i = 1; i < 4; i++) {
+            // 如果剩余的长度还不够i那么说明不能排列成ip
+            if (s.length()<i){
+                break;
+            }
+            if (isValid(s.substring(0,i))){
+                System.out.println("current s:"+s.substring(i)+" last temp:"+temp+" current temp:"+s.substring(0,i));
+                generateIp(s.substring(i),temp+s.substring(0,i)+".",n+1);
+            }else {
+                System.out.println("backTracking ...");
+            }
+
+
+
+        }
+    }
+
     @Test
     public void test(){
         String s="25525511135";
-        List<String> r = restoreIpAddresses(s);
+        List<String> r = restoreIpAddresses1(s);
         System.out.println(r);
     }
 }
