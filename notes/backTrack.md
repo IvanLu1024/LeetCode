@@ -74,8 +74,9 @@ private String letterMap[] = {
 ```
 ## 排列问题
 <!-- GFM-TOC -->
+相关题目：
 * [46.全排列](#46)  
-* [47.全排列（2）](#46) 
+* [47.全排列（2）](#47) 
 <!-- GFM-TOC -->
 ### 46
 给定一个没有重复数字的序列，返回其所有可能的全排列。
@@ -232,7 +233,229 @@ private List<List<Integer>> res=new ArrayList<>();
     }
 ```
 ## 组合问题
+相关题目：
+<!-- GFM-TOC -->
+* [77.组合](#77)  
+<!-- GFM-TOC -->
+### 77
+给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+
+示例:
+
+输入: n = 4, k = 2
+输出:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> combine(int n, int k) {
+        if (n<=0||n<k||k<=0){
+            return res;
+        }
+        List<Integer> c=new ArrayList<>();
+        generateCombine(n,k,1,c);
+        return res;
+
+    }
+
+    private void generateCombine(int n, int k, int start, List<Integer> c) {
+        if (c.size()==k){
+            System.out.println("Completed "+c);
+            res.add(new ArrayList<>(c));
+            return;
+        }
+        //此时有(k-c.size())个空位需要填充，那么[i...n]中至少要有(k-c.size())个元素
+        //则n-i>=(k-c.size())-1确保[i...n]中至少要有(k-c.size())个元素
+        // --> i<=n-(k-c.size())+1
+        for (int i = start; i <=n-(k-c.size())+1; i++) {
+            c.add(i);
+            System.out.println(i+"-> c:"+c);
+            generateCombine(n,k,i+1,c);
+            c.remove(c.size()-1);
+            System.out.println("backTracking..."+c);
+        }
+    }
+```
 ## 回溯法解决组合问题的优化
+
+相关题目：
+<!-- GFM-TOC -->
+* [39.组合总和](#39)  
+* [40.组合总和（2）](#40) 
+* [216.组合总和（3）](#216) 
+<!-- GFM-TOC -->
+### 39
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+所有数字（包括 target）都是正整数。
+解集不能包含重复的组合。 
+示例 1:
+
+输入: candidates = [2,3,6,7], target = 7,
+所求解集为:
+[
+  [7],
+  [2,2,3]
+]
+示例 2:
+
+输入: candidates = [2,3,5], target = 8,
+所求解集为:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        if (candidates==null||candidates.length==0){
+            return res;
+        }
+        generateCS(candidates,target,0,new ArrayList<>());
+        return res;
+
+    }
+    private void generateCS(int[] c,int target,int start, List<Integer> list){
+        if (target==0){
+            System.out.println("completed :"+list);
+            res.add(new ArrayList<>(list));
+        }
+        for (int i = start; i < c.length; i++) {
+            //剪枝，由于待搜索的数组都是正整数，则当前搜索位置元素大于目标则直接跳过
+           if (c[i]<=target){
+               list.add(c[i]);
+               System.out.println("current :"+c[i]+" target:"+target);
+               //由于candidates 中的数字可以无限制重复被选取，所以每次开始位置为当前位置
+               generateCS(c,target-c[i],i,list);
+               System.out.println("backTracking..."+list);
+               list.remove(list.size()-1);
+           }else {
+               System.out.println("step over");
+           }
+        }
+    }
+```
+### 40
+给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的每个数字在每个组合中只能使用一次。
+
+说明：
+
+所有数字（包括目标数）都是正整数。
+解集不能包含重复的组合。 
+示例 1:
+
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+所求解集为:
+[
+  [1, 7],
+  [1, 2, 5],
+  [2, 6],
+  [1, 1, 6]
+]
+示例 2:
+
+输入: candidates = [2,5,2,1,2], target = 5,
+所求解集为:
+[
+  [1,2,2],
+  [5]
+]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        if (candidates==null||candidates.length==0){
+            return res;
+        }
+        Arrays.sort(candidates);
+        generateCS(candidates,target,0,new ArrayList<>());
+        return res;
+
+    }
+    private void generateCS(int[] c,int target,int start, List<Integer> list){
+        if (target==0){
+            System.out.println("completed :"+list);
+            res.add(new ArrayList<>(list));
+        }
+        for (int i = start; i < c.length; i++) {
+            //去重
+            if (i>start&&c[i]==c[i-1]){
+                System.out.println("repeat...");
+                continue;
+            }
+            //剪枝，由于待搜索的数组都是正整数，则当前搜索位置元素大于目标则直接跳过
+           if (c[i]<=target){
+               list.add(c[i]);
+               System.out.println("current :"+c[i]+"->"+list+" target:"+target);
+               //由于candidates 中的数字可以无限制重复被选取，所以每次开始位置为当前位置
+               generateCS(c,target-c[i],i+1,list);
+               System.out.println("backTracking..."+list);
+               list.remove(list.size()-1);
+           }else {
+               System.out.println("step over");
+           }
+        }
+    }
+```
+### 216
+找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
+
+说明：
+
+所有数字都是正整数。
+解集不能包含重复的组合。 
+示例 1:
+
+输入: k = 3, n = 7
+输出: [[1,2,4]]
+示例 2:
+
+输入: k = 3, n = 9
+输出: [[1,2,6], [1,3,5], [2,3,4]]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        if (k==0||n==0){
+            return res;
+        }
+        generate(k,n,0,1,new ArrayList<>());
+        return res;
+
+    }
+    private void generate(int k,int target,int index,int start,List<Integer> list){
+        if (index==k&&target==0){
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = start; i <= 9; i++) {
+            if (i<=target){
+                list.add(i);
+                generate(k,target-i,index+1,i+1,list);
+                list.remove(list.size()-1);
+            }
+        }
+    }
+```
 ## 二维平面上的回溯法
 ## floodfill算法
 ## 回溯法是人工智能的基础
