@@ -42,7 +42,6 @@ public class Solution401 {
         return res;
 
     }
-
     /**
      * 获得0-n范围内二进制中1的个数为count的所有数字
      * @param n
@@ -58,9 +57,33 @@ public class Solution401 {
         }
         return list;
     }
+
+    public List<String> readBinaryWatch1(int num){
+        int[] time={1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
+        generateTime(num,time,0,0,0,0);
+        return res;
+    }
+
+    private void generateTime(int num,int[] time,int index,int start,int hour,int min){
+        if (index==num){
+            String hs = String.valueOf(hour);
+            String ms = min <= 9 ? "0" + min : String.valueOf(min);
+            String t=hs+":"+ms;
+            res.add(t);
+            return;
+        }
+        for (int i = start; i <time.length ; i++) {
+            int newHour = i<4?hour+time[i]:hour;//前四位表示小时
+            int newMin = i<4?min:min+time[i];//后六位表示分钟
+            if (newHour<=11&&newMin<=59){
+                generateTime(num,time,index+1,i+1,newHour,newMin);
+            }
+            
+        }
+    }
     @Test
     public void test(){
-        List<String> strings = readBinaryWatch(1);
+        List<String> strings = readBinaryWatch1(1);
         System.out.println(strings);
     }
 }
