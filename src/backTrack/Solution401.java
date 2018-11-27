@@ -30,10 +30,7 @@ public class Solution401 {
             for (int j = 0; j < hours.size(); j++) {
                 String hour = String.valueOf(hours.get(j));
                 for (int k = 0; k < mins.size(); k++) {
-                    String min= String.valueOf(mins.get(k));
-                    if (mins.get(k)<10){
-                        min="0"+min;
-                    }
+                    String min=mins.get(k)<=9?"0"+mins.get(k):String.valueOf(mins.get(k));
                     time=hour+":"+min;
                     res.add(time);
                 }
@@ -83,7 +80,7 @@ public class Solution401 {
     }
     @Test
     public void test(){
-        List<String> strings = readBinaryWatch1(1);
+        List<String> strings = readBinaryWatch(1);
         System.out.println(strings);
     }
 }
