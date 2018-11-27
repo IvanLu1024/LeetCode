@@ -24,7 +24,7 @@ public class Solution88 {
             nums1[0]=nums2[0];
 
         int index1=m-1,index2=n-1;
-        int last=nums1.length-1;
+        int last=m+n-1;
 
 
         while (index1>=0&&index2>=0){
@@ -51,9 +51,9 @@ public class Solution88 {
     }
     @Test
     public void test(){
-        int[] nums1 = {0};
-        int[] nums2 = {2};
-        merge(nums1,0,nums2,1);
+        int[] nums1 = {1,2,3,0,0,0};
+        int[] nums2 = {2,5,6};
+        merge(nums1,3,nums2,3);
         for (int i:nums1){
             System.out.print(i+" ");
         }
