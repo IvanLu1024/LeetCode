@@ -457,8 +457,244 @@ private List<List<Integer>> res=new ArrayList<>();
     }
 ```
 ## 二维平面上的回溯法
+相关题目：
+<!-- GFM-TOC -->
+* [39.组合总和](#39)  
+* [40.组合总和（2）](#40) 
+* [216.组合总和（3）](#216) 
+<!-- GFM-TOC -->
 ## floodfill算法
+相关题目：
+<!-- GFM-TOC -->
+* [39.组合总和](#39)  
+* [40.组合总和（2）](#40) 
+* [216.组合总和（3）](#216) 
+<!-- GFM-TOC -->
 ## 回溯法是人工智能的基础
+相关题目：
+<!-- GFM-TOC -->
+* [51.N皇后](#51)  
+* [52.N皇后（2）](#52) 
+* [37.解数独](#37) 
+<!-- GFM-TOC -->
+### 51
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给定一个整数 n，返回所有不同的 n 皇后问题的解决方案。
+
+每一种解法包含一个明确的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+
+示例:
+
+输入: 4
+
+输出: 
+```java
+    [
+       [".Q..",  // 解法 1
+        "...Q",
+        "Q...",
+        "..Q."],
+      
+       ["..Q.",  // 解法 2
+        "Q...",
+        "...Q",
+        ".Q.."]
+      ]
+解释: 4 皇后问题存在两个不同的解法。
+- 分析：
+- 实现：
+```java
+private List<List<String>> res=new ArrayList<>();
+    private boolean[] col,diag1,diag2;
+
+    public List<List<String>> solveNQueens(int n) {
+        if (n==0){
+            return res;
+        }
+        col=new boolean[n];
+        diag1 = new boolean[2 * n - 1];
+        diag2 = new boolean[2 * n - 1];
+        List<Integer> row=new LinkedList<>();
+        putQueue(n,0,row);
+        return res;
+
+
+    }
+
+    // 尝试在一个n皇后问题中, 摆放第index行的皇后位置
+    private void putQueue(int n,int index,List<Integer> row){
+        if (index==n){
+            res.add(new ArrayList<>(generateBoard(n,row)));
+        }
+        for (int i = 0; i < n; i++) {
+            // 尝试将第index行的皇后摆放在第i列
+            if (!col[i]&&!diag1[index+i]&&!diag2[index-i+n-1]){
+                col[i]=true;
+                diag1[index+i]=true;
+                diag2[index-i+n-1]=true;
+                row.add(i);
+                putQueue(n,index+1,row);
+                col[i]=false;
+                diag1[index+i]=false;
+                diag2[index-i+n-1]=false;
+                row.remove(row.size()-1);
+            }
+        }
+    }
+
+    private List<String> generateBoard(int n, List<Integer> row) {
+
+        assert row.size()==n;
+
+        List<String> board=new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            char[] chars = new char[n];
+            Arrays.fill(chars,'.');
+            chars[row.get(i)]='Q';
+            board.add(new String(chars));
+        }
+        return board;
+    }
+```
+### 52
+n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+给定一个整数 n，返回 n 皇后不同的解决方案的数量。
+
+示例:
+
+输入: 4
+
+输出: 2
+
+解释: 4 皇后问题存在如下两个不同的解法。
+```java
+[
+   [".Q..",  // 解法 1
+    "...Q",
+    "Q...",
+    "..Q."],
+  
+   ["..Q.",  // 解法 2
+    "Q...",
+    "...Q",
+    ".Q.."]
+  ]
+```
+- 分析：
+- 实现：
+```java
+
+    private int res=0;
+    private boolean[] col,diag1,diag2;
+
+    public int totalNQueens(int n) {
+        if (n==0){
+            return res;
+        }
+        col=new boolean[n];
+        diag1=new boolean[2*n-1];
+        diag2=new boolean[2*n-1];
+        putQueens(n,0);
+        return res;
+    }
+    private void putQueens(int n,int index){
+        if (index==n){
+            res++;
+        }
+        for (int i = 0; i < n; i++) {
+            if (!col[i]&&!diag1[i+index]&&!diag2[i-index+n-1]){
+                col[i]=true;
+                diag1[i+index]=true;
+                diag2[i-index+n-1]=true;
+                putQueens(n,index+1);
+                col[i]=false;
+                diag1[i+index]=false;
+                diag2[i-index+n-1]=false;
+            }
+        }
+    }
+```
+### 37
+编写一个程序，通过已填充的空格来解决数独问题。
+
+一个数独的解法需遵循如下规则：
+
+数字 1-9 在每一行只能出现一次。
+数字 1-9 在每一列只能出现一次。
+数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+空白格用 '.' 表示。
+
+**Note:**
+
+1. 给定的数独序列只包含数字 1-9 和字符 '.' 。
+2. 你可以假设给定的数独只有唯一解。
+3. 给定数独永远是 9x9 形式的。
+
+- 分析：
+- 实现：
+```java
+
+    private boolean[][] col;    //用于记录每一行中出现的数字（0-9）
+    private boolean[][] row;    //用于记录每一列中出现的数字
+    private boolean[][] block;  //用于记录每3*3的宫中出现的数字
+    public void solveSudoku(char[][] board) {
+        col=new boolean[9][10];
+        row=new boolean[9][10];
+        block=new boolean[9][10];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j]=='.'){
+                    continue;
+                }
+                col[i][board[i][j]-'0']=true;
+                row[j][board[i][j]-'0']=true;
+                block[i/3*3+j/3][board[i][j]-'0']=true;
+            }
+        }
+
+        for (int i = 0; i < 81; i++) {
+            if (board[i/9][i%9]=='.'){
+                if (dfs(board,i,col,row,block)){
+                    continue;
+                }
+            }
+        }
+
+    }
+
+    private boolean dfs(char[][] board,int index,boolean[][] col,boolean[][] row,boolean[][] block){
+        if (index==81){
+            return true;
+        }
+        int start=index+1;
+
+        for (; start <81 ; start++) {
+            if (board[start/9][start%9]=='.'){
+                break;
+            }
+        }
+        int x=index/9,y=index%9;
+        for (int i = 1; i <= 9; i++) {
+            if (!col[x][i]&&!row[y][i]&&!block[x/3*3+y/3][i]){
+                col[x][i]=true;
+                row[y][i]=true;
+                block[x/3*3+y/3][i]=true;
+                board[x][y]=(char)('0'+i);
+                if (dfs(board,start,col,row,block)){
+                    return true;
+                }
+                col[x][i]=false;
+                row[y][i]=false;
+                block[x/3*3+y/3][i]=false;
+                board[x][y]='.';
+            }
+        }
+        return false;
+    }
+```
+
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
