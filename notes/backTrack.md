@@ -1010,7 +1010,9 @@ n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并
         ".Q.."]
       ]
 解释: 4 皇后问题存在两个不同的解法。
+```
 - 分析：
+
 - 实现：
 ```java
 private List<List<String>> res=new ArrayList<>();
