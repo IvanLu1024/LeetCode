@@ -291,6 +291,9 @@ private List<List<Integer>> res=new ArrayList<>();
 * [39.组合总和](#39)  
 * [40.组合总和（2）](#40) 
 * [216.组合总和（3）](#216) 
+* [78.子集](#78)  
+* [90.子集（2）](#90) 
+* [401.二进制手表](#401) 
 <!-- GFM-TOC -->
 ### 39
 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
@@ -459,17 +462,522 @@ private List<List<Integer>> res=new ArrayList<>();
 ## 二维平面上的回溯法
 相关题目：
 <!-- GFM-TOC -->
-* [39.组合总和](#39)  
-* [40.组合总和（2）](#40) 
-* [216.组合总和（3）](#216) 
+* [79.单词搜索](#79)  
 <!-- GFM-TOC -->
+### 79
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+示例:
+```java
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+给定 word = "ABCCED", 返回 true.
+给定 word = "SEE", 返回 true.
+给定 word = "ABCB", 返回 false.
+```
+- 分析：
+- 实现：
+```java
+private boolean[][] visited;
+    //用来表示上右下左这四个方向
+    private int[][] d={{-1,0},{0,1},{1,0},{0,-1}};
+    private int m,n;
+
+
+    public boolean exist(char[][] board, String word) {
+        visited=new boolean[board.length][board[0].length];
+        m=board.length;
+        n=board[0].length;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                if (search(board,word,0,i,j)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean search(char[][] board,String word,int index,int startX,int startY ){
+        if (index==word.length()-1){
+            if (board[startX][startY]==word.charAt(index)) {
+                System.out.println("found completed x:"+startX+" y:"+startY);
+                return true;
+            }
+        }
+        if (board[startX][startY]==word.charAt(index)){
+            visited[startX][startY]=true;
+            //按照上右下左（顺时针）的顺序搜索
+            for (int i = 0; i < 4; i++) {
+                int newStartX = startX + d[i][0];
+                int newStartY = startY + d[i][1];
+                System.out.println("seraching x:"+newStartX+" y:"+newStartY+" target:"+word.charAt(index));
+                if (inArea(newStartX,newStartY)&&!visited[newStartX][newStartY]){
+                    System.out.println("seraching x:"+newStartX+" y:"+newStartY+" current :"+board[newStartX][newStartY]);
+                    if (search(board,word,index+1,newStartX,newStartY)){
+                        return true;
+                    }
+                }
+            }
+            //回溯
+            System.out.println("backTracking ... x:"+startX+" y:"+startY);
+            visited[startX][startY]=false;
+        }
+        return false;
+
+    }
+
+    //判断当前坐标是否在给定区域内
+    private boolean inArea(int x,int y){
+        return x>=0&&x<m&&y>=0&&y<n;
+    }
+```
+### 78
+给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+说明：解集不能包含重复的子集。
+
+示例:
+
+输入: nums = [1,2,3]
+输出:
+[
+  [3],
+  [1],
+  [2],
+  [1,2,3],
+  [1,3],
+  [2,3],
+  [1,2],
+  []
+]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> subsets(int[] nums) {
+        if (nums==null||nums.length==0){
+            return res;
+        }
+        generate(nums,0,new ArrayList<>());
+        return res;
+
+    }
+    private void generate(int[] nums,int index,List<Integer> list){
+        //当满足条件就加入结果的集合中，确保子集的长度不超过原始集合
+        if (index<=nums.length){
+            System.out.println(list+"-> res");
+            res.add(new ArrayList<>(list));
+        }
+        for (int i = index; i <nums.length ; i++) {
+            list.add(nums[i]);
+            System.out.println("current index:"+i+" "+nums[i]+"->"+list);
+            generate(nums,i+1,list);
+            list.remove(list.size()-1);
+            System.out.println("backTracking..."+list);
+        }
+        return;
+    }
+```
+### 90
+给定一个可能包含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+
+说明：解集不能包含重复的子集。
+
+示例:
+
+输入: [1,2,2]
+输出:
+[
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]
+- 分析：
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        if (nums==null||nums.length==0){
+            return res;
+        }
+        Arrays.sort(nums);
+        generate(nums,0,new ArrayList<>());
+        return res;
+    }
+
+    private void generate(int[] nums,int index,List<Integer> list){
+        //当满足条件就加入结果的集合中，确保子集的长度不超过原始集合
+        if (index<=nums.length){
+            res.add(new ArrayList<>(list));
+        }
+        for (int i = index; i <nums.length ; i++) {
+            //去重
+            if (i>index&&nums[i]==nums[i-1]){
+                continue;
+            }
+            list.add(nums[i]);
+            generate(nums,i+1,list);
+            list.remove(list.size()-1);
+        }
+        return;
+    }
+```
+### 401
+二进制手表顶部有 4 个 LED 代表小时（0-11），底部的 6 个 LED 代表分钟（0-59）。
+
+每个 LED 代表一个 0 或 1，最低位在右侧。
+
+例如，上面的二进制手表读取 “3:25”。
+
+给定一个非负整数 n 代表当前 LED 亮着的数量，返回所有可能的时间。
+
+案例:
+
+输入: n = 1
+返回: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+ 
+
+注意事项:
+
+输出的顺序没有要求。
+小时不会以零开头，比如 “01:00” 是不允许的，应为 “1:00”。
+分钟必须由两位数组成，可能会以零开头，比如 “10:2” 是无效的，应为 “10:02”。
+- 分析：
+- 实现：
+
+解法一（迭代解法）：
+```java
+private List<String> res=new ArrayList<>();
+    public List<String> readBinaryWatch(int num) {
+        String time;
+        for (int i = 0; i <= num; i++) {
+            List<Integer> hours = binCount(11, i);
+            List<Integer> mins = binCount(59, num - i);
+            for (int j = 0; j < hours.size(); j++) {
+                String hour = String.valueOf(hours.get(j));
+                for (int k = 0; k < mins.size(); k++) {
+                    String min=mins.get(k)<=9?"0"+mins.get(k):String.valueOf(mins.get(k));
+                    time=hour+":"+min;
+                    res.add(time);
+                }
+            }
+        }
+        return res;
+
+    }
+    /**
+     * 获得0-n范围内二进制中1的个数为count的所有数字
+     * @param n
+     * @param count
+     * @return
+     */
+    private List<Integer> binCount(int n,int count){
+        List<Integer> list=new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            if (Integer.bitCount(i)==count){
+                list.add(i);
+            }
+        }
+        return list;
+    }
+```
+解法二（回溯法）：
+```java
+private List<String> res=new ArrayList<>();
+public List<String> readBinaryWatch(int num){
+        int[] time={1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
+        generateTime(num,time,0,0,0,0);
+        return res;
+    }
+
+    private void generateTime(int num,int[] time,int index,int start,int hour,int min){
+        if (index==num){
+            String hs = String.valueOf(hour);
+            String ms = min <= 9 ? "0" + min : String.valueOf(min);
+            String t=hs+":"+ms;
+            res.add(t);
+            return;
+        }
+        for (int i = start; i <time.length ; i++) {
+            int newHour = i<4?hour+time[i]:hour;//前四位表示小时
+            int newMin = i<4?min:min+time[i];//后六位表示分钟
+            if (newHour<=11&&newMin<=59){
+                generateTime(num,time,index+1,i+1,newHour,newMin);
+            }
+            
+        }
+    }
+```
+
 ## floodfill算法
 相关题目：
 <!-- GFM-TOC -->
-* [39.组合总和](#39)  
-* [40.组合总和（2）](#40) 
-* [216.组合总和（3）](#216) 
+* [200.岛屿的个数](#200)  
+* [130.被围绕的区域](#130) 
+* [417.太平洋大西洋水流问题](#417) 
 <!-- GFM-TOC -->
+### 200
+给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。
+一个岛被水包围，并且它是通过水平方向或垂直方向上相邻的陆地连接而成的。你可以假设网格的四个边均被水包围。
+
+```java
+示例 1:
+
+输入:
+11110
+11010
+11000
+00000
+
+输出: 1
+示例 2:
+
+输入:
+11000
+11000
+00100
+00011
+
+输出: 3
+```
+- 分析：
+- 实现：
+```java
+private int m,n;
+    private boolean[][] visited;
+    private int[][] d={{-1,0},{0,1},{1,0},{0,-1}};
+
+    public int numIslands(char[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        m=grid.length;
+        n=grid[0].length;
+        int res=0;
+        visited=new boolean[m][n];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j]=='1'&&!visited[i][j]){
+                    dfs(grid,i,j);
+                    res++;
+
+                }
+            }
+        }
+        return res;
+    }
+
+    // 从grid[x][y]的位置开始,进行floodfill
+    // 保证(x,y)合法,且grid[x][y]是没有被访问过的陆地
+    private void dfs(char[][] grid,int x,int y){
+        visited[x][y]=true;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            if (inArea(newX,newY)&&!visited[newX][newY]&&grid[newX][newY]=='1'){
+                dfs(grid,newX,newY);
+            }
+        }
+        return;
+
+    }
+    //判断当前坐标是否在给定区域内
+    private boolean inArea(int x,int y){
+        return x>=0&&x<m&&y>=0&&y<n;
+    }
+```
+### 130
+给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
+
+找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+
+示例:
+
+```java
+X X X X
+X O O X
+X X O X
+X O X X
+
+运行你的函数后，矩阵变为：
+
+X X X X
+X X X X
+X X X X
+X O X X
+```
+解释:
+
+被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+- 分析：
+- 实现：
+```java
+private int m,n;
+    private boolean[][] isO;
+    private int[][] d={{-1,0},{0,1},{1,0},{0,-1}};
+
+    //判断当前坐标是否在给定区域内
+    private boolean inArea(int x,int y){
+        return x>=0&&x<m&&y>=0&&y<n;
+    }
+
+
+    //将所有和边界O相连的O都标记出来。
+    public void solve(char[][] board) {
+        m=board.length;
+        if (m==0){
+            return;
+        }
+        n=board[0].length;
+        isO =new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            if (board[i][0]=='O'&&!isO[i][0]){
+                dfs(board,i,0);
+            }
+            if (board[i][n-1]=='O'&&!isO[i][n-1]){
+                dfs(board,i,n-1);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (board[0][i]=='O'&&!isO[0][i]){
+                dfs(board,0,i);
+            }
+            if (board[m-1][i]=='O'&&!isO[m-1][i]){
+                dfs(board,m-1,i);
+            }
+        }
+        for (int i = 1; i < m-1; i++) {
+            for (int j = 1; j < n-1; j++) {
+                if (!isO[i][j]&&board[i][j]=='O'){
+                    board[i][j]='X';
+                }
+            }
+        }
+    }
+    private void dfs(char[][] board,int x,int y){
+        System.out.println("x:"+x+","+"y:"+y);
+        isO[x][y]=true;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            if (inArea(newX,newY)&&board[newX][newY]=='O'&&!isO[newX][newY]){
+                dfs(board,newX,newY);
+            }
+        }
+    }
+```
+### 417
+给定一个 m x n 的非负整数矩阵来表示一片大陆上各个单元格的高度。“太平洋”处于大陆的左边界和上边界，而“大西洋”处于大陆的右边界和下边界。
+
+规定水流只能按照上、下、左、右四个方向流动，且只能从高到低或者在同等高度上流动。
+
+请找出那些水流既可以流动到“太平洋”，又能流动到“大西洋”的陆地单元的坐标。
+
+ 
+
+提示：
+
+输出坐标的顺序不重要
+m 和 n 都小于150
+ 
+
+示例：
+```java
+给定下面的 5x5 矩阵:
+
+  太平洋 ~   ~   ~   ~   ~ 
+       ~  1   2   2   3  (5) *
+       ~  3   2   3  (4) (4) *
+       ~  2   4  (5)  3   1  *
+       ~ (6) (7)  1   4   5  *
+       ~ (5)  1   1   2   4  *
+          *   *   *   *   * 大西洋
+
+返回:
+
+[[0, 4], [1, 3], [1, 4], [2, 2], [3, 0], [3, 1], [4, 0]] (上图中带括号的单元).
+```
+- 分析：
+- 实现：
+```java
+private List<int[]> res=new ArrayList<>();
+    private int m,n;
+    private int[][] d={{-1,0},{0,1},{1,0},{0,-1}};
+    private boolean[][] pFlag;
+    private boolean[][] aFlag;
+
+
+    //判断当前坐标是否在给定区域内
+    private boolean inArea(int x,int y){
+        return x>=0&&x<m&&y>=0&&y<n;
+    }
+
+    public List<int[]> pacificAtlantic(int[][] matrix) {
+        m=matrix.length;
+        if (m==0){
+            return res;
+        }
+        n=matrix[0].length;
+        pFlag=new boolean[m][n];
+        aFlag=new boolean[m][n];
+        //太平洋
+        for (int i = 0; i < m; i++) {
+            if (!pFlag[i][0]){
+                dfs(matrix,pFlag,i,0);
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (!pFlag[0][i]){
+                dfs(matrix,pFlag,0,i);
+            }
+        }
+        //大西洋
+        for (int i = 0; i < m; i++) {
+            if (!aFlag[i][n-1]){
+                dfs(matrix,aFlag,i,n-1);
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (!aFlag[m-1][i]){
+                dfs(matrix,aFlag,m-1,i);
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (pFlag[i][j]&&aFlag[i][j]){
+                    res.add(new int[]{i,j});
+                }
+            }
+        }
+        return res;
+
+    }
+
+    private void dfs(int[][] matrix,boolean[][] used,int x,int y){
+        used[x][y]=true;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            if (inArea(newX,newY)&&!used[newX][newY]&&matrix[newX][newY]>=matrix[x][y]){
+                dfs(matrix,used,newX,newY);
+            }
+        }
+    }
+```
 ## 回溯法是人工智能的基础
 相关题目：
 <!-- GFM-TOC -->
