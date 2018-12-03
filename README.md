@@ -14,6 +14,7 @@
 ## [树](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md)
 ## [回溯法](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md)
 ## [动态规划](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md)
+## [贪心算法](https://github.com/IvanLu1024/LeetCode/blob/master/notes/greedy.md)
 
 
 
@@ -26,6 +27,7 @@
 ## [树](https://github.com/IvanLu1024/LeetCode/tree/master/src/tree)
 ## [回溯法](https://github.com/IvanLu1024/LeetCode/tree/master/src/backTrack)
 ## [动态规划](https://github.com/IvanLu1024/LeetCode/tree/master/src/dp)
+## [贪心算法](https://github.com/IvanLu1024/LeetCode/tree/master/src/greedy)
 
  
 
