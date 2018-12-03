@@ -32,6 +32,8 @@ import java.util.List;
 public class Solution139 {
     private boolean[] memo;
     /*
+    由于dict中的元素的使用次数不限制，那么这是一个完全背包问题
+
     dp[i]表示字符串s[0...i)能否拆分成符合要求的子字符串。
     如果S能够被“字典集合”（dict）中的单词拼接而成，所以满足下列方程：
     状态转移方程：
