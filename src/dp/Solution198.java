@@ -65,7 +65,7 @@ public class Solution198 {
         memo[n-1]=nums[n-1];
         /**
          * 状态转移方程：
-         * f(0)=max{ v(0)+f(2), v(1)+f(3),v(2)+f(4),...，v(n-3)+f(n-1),v(n-2),v(n-1)}
+         * f(n-1)=max{ v(0)+f(2), v(1)+f(3),v(2)+f(4),...，v(n-3)+f(n-1),v(n-2),v(n-1)}
          */
         for (int i = n-2; i >=0 ; i--) {
             //抢劫nums[i,n-1]
