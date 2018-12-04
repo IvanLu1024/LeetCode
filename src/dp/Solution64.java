@@ -20,7 +20,6 @@ import org.junit.Test;
  *
  */
 public class Solution64 {
-    //记忆化搜索
     public int minPathSum(int[][] grid) {
         int m = grid.length;
         if (m==0){
