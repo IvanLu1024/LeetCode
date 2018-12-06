@@ -26,17 +26,18 @@ import java.util.Map;
  */
 public class Solution350 {
     public int[] intersect(int[] nums1, int[] nums2) {
-        Map<Integer,Integer> map=new HashMap<>();
+        //K:数组元素；V：出现次数
+        Map<Integer,Integer> record=new HashMap<>();
         for (int i:nums1){
-            Integer count = map.get(i);
-            map.put(i,count==null?1:count+1);
+            Integer count = record.get(i);
+            record.put(i,count==null?1:count+1);
         }
         List<Integer> res=new ArrayList<>();
         for (int i:nums2){
-            int c=map.get(i)==null?0:map.get(i);
+            int c=record.get(i)==null?0:record.get(i);
             if (c>0){
                 res.add(i);
-                map.put(i,map.get(i)-1);
+                record.put(i,record.get(i)-1);
             }
         }
         int[] reslut = new int[res.size()];
