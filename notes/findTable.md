@@ -12,7 +12,8 @@
 ![](../pict/find_01.png)
 ## set的使用
 相关题目：
-* [349. 两个数组的交集](#349)
+* [349.两个数组的交集](#349)
+* [202.快乐数](#202)
 ### 349
 给定两个数组，编写一个函数来计算它们的交集。
 
@@ -56,6 +57,51 @@ public int[] intersection(int[] nums1, int[] nums2) {
 
     }
 ```
+### 202
+编写一个算法来判断一个数是不是“快乐数”。
+
+一个“快乐数”定义为：对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和，然后重复这个过程直到这个数变为 1，也可能是无限循环但始终变不到 1。如果可以变为 1，那么这个数就是快乐数。
+
+示例: 
+
+输入: 19
+输出: true
+解释: 
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+- 分析：
+
+使用set来避免死循环的出现，当n重复出现的时候表明出现了环路（死循环），这就表明n不可能转化为1了。
+
+- 实现：
+```java
+public boolean isHappy(int n) {
+        if (n<1){
+            return false;
+        }
+        Set<Integer> set=new HashSet<>();
+        while (!set.contains(n)){
+            if (n==1){
+                return true;
+            }
+            set.add(n);
+            n=getHappy(n);
+        }
+        return false;
+    }
+
+    private int getHappy(int n) {
+        int t,sum=0;
+        while (n>0){
+            t=n%10;
+            n/=10;
+            sum+=t*t;
+        }
+        return sum;
+    }
+```
 ## map的使用
 相关题目：
 * [350. 两个数组的交集（2）](#350)
@@ -86,21 +132,25 @@ public int[] intersection(int[] nums1, int[] nums2) {
 
 因为题目中要求出现次数和原数组中一致，那么这是一个键值对（K-V）查找问题。
 
+创建一个map来统计nums1中元素出现的频次，然后再遍历一遍nums2，当元素频次大于0便记录下来并且使得频次减一。
+
+
 
 - 实现:
 ```java
 public int[] intersect(int[] nums1, int[] nums2) {
-        Map<Integer,Integer> map=new HashMap<>();
+        //K:数组元素；V：出现次数
+        Map<Integer,Integer> record=new HashMap<>();
         for (int i:nums1){
-            Integer count = map.get(i);
-            map.put(i,count==null?1:count+1);
+            Integer count = record.get(i);
+            record.put(i,count==null?1:count+1);
         }
         List<Integer> res=new ArrayList<>();
         for (int i:nums2){
-            int c=map.get(i)==null?0:map.get(i);
+            int c=record.get(i)==null?0:record.get(i);
             if (c>0){
                 res.add(i);
-                map.put(i,map.get(i)-1);
+                record.put(i,record.get(i)-1);
             }
         }
         int[] reslut = new int[res.size()];
@@ -111,7 +161,6 @@ public int[] intersect(int[] nums1, int[] nums2) {
     }
 ```
 
-## set和map不同底层实现的区别
 ## 灵活选择键值
 ## 查找表和滑动窗口
 ## 二分搜索树底层实现的顺序性
