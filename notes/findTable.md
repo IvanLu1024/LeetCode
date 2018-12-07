@@ -1,14 +1,14 @@
 <!-- GFM-TOC -->
-* [查找表部分笔记总结](#查找表部分笔记总结)
+* [查找部分笔记总结](#查找表部分笔记总结)
     * [set的使用](#set的使用)
     * [map的使用](#map的使用)
-    * [set和map不同底层实现的区别](#set和map不同底层实现的区别)
+    * [使用查找表(map)的经典问题](#使用查找表(map)的经典问题)
     * [灵活选择键值 ](#灵活选择键值)
     * [查找表和滑动窗口](#查找表和滑动窗口)
     * [二分搜索树底层实现的顺序性 ](#二分搜索树底层实现的顺序性)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
-# 查找表部分笔记总结
+# 查找部分笔记总结
 ![](../pict/find_01.png)
 ## set的使用
 相关题目：
@@ -373,7 +373,217 @@ public String frequencySort(String s) {
         return sb.toString();
     }
 ```
-## 使用查找表的经典问题
+## 使用查找表(map)的经典问题
+相关题目：
+* [1.两数之和](#1)
+* [15.三数之和](#15)
+* [18.四数之和](#18)
+* [16.最接近的三数之和](#16)
+### 1
+给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
+
+你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
+
+示例:
+
+给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+
+- 分析：
+
+查找的过程中，不需要一次性将数组中的所有元素全部放入map中，这样可能会造成数值相同的元素下标丢失的问题。
+
+而是在查找的过程中，每次都查找当前元素对应的另一半元素（target-nums[i]）,
+如果不存在则将当前的元素放入map中；如果存在则查找结束，将其放入结果的集合中并返回。
+![](../pict/find_03.png)
+- 实现：
+```java
+public int[] twoSum(int[] nums, int target) {
+        int[] res = new int[2];
+        if (nums==null||nums.length==0){
+            return res;
+        }
+        //Key：nums[i]数值中的数值，Value:i,下标
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int com = target - nums[i];
+            //每次搜索当前的情况，避免了一次性放入所有的元素，导致覆盖了相同元素的下标
+            if (map.containsKey(com)) {
+                //获取到目标下标
+                res[0] = map.get(com);
+                res[1] = i;
+                return res;
+            }
+            map.put(nums[i], i);
+        }
+        return res;
+    }
+```
+
+### 15
+给定一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+例如, 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+- 分析：
+
+1. 使用对撞指针：
+
+将3 sum转化成2 sum
+
+2. 使用map：
+
+创建一个map存储数组中的元素和频数（K：元素；V：频次）
+
+
+遍历map，分别按照3个重复的数字，2个重复的数字和没有重复数字的情况来考虑（注意过程中的去重）。
+
+- 实现：
+```java
+//使用对撞指针的方法
+    public List<List<Integer>> threeSum1(int[] nums) {
+        List<List<Integer>> res=new ArrayList<>();
+        //首先做排序处理
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length-2; i++) {
+            if (i>0&&nums[i]==nums[i-1]) continue;
+            int l=i+1,h=nums.length-1,target=-nums[i];
+            while (l<h){
+                if (nums[l]+nums[h]==target){
+                   res.add(Arrays.asList(nums[l],nums[h],nums[i]));
+                   while (l<h&&nums[l]==nums[l+1]) l++;
+                   while (l<h&&nums[h]==nums[h-1]) h--;
+                   l++;
+                   h--;
+                }else if (nums[l]+nums[h]>target){
+                    h--;
+                }else {
+                    l++;
+                }
+            }
+
+        }
+        return res;
+    }
+
+    //使用Map的方式
+    public List<List<Integer>> threeSum2(int[] nums){
+        List<List<Integer>> res=new ArrayList<>();
+        //用于记录nums数组中各元素出现的次数
+        Map<Integer,Integer> countMap=new HashMap<>();
+        for (int i:nums){
+            countMap.put(i,countMap.getOrDefault(i,0)+1);
+        }
+        for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
+            Integer v0 = entry.getKey();
+            Integer count0 = entry.getValue();
+            //如果出现次数超过3次，那么结果只能为0
+            if (count0>=3){
+                if (v0==0){
+                    res.add(Arrays.asList(0,0,0));
+                }
+            }
+            //如果出现次数超过2次
+            if (count0==2){
+                int v2=0-2*v0;
+                if (v2!=v0) {
+                    if (countMap.containsKey(v2)) {
+                        res.add(Arrays.asList(v0, v0, v2));
+                    }
+                }
+            }
+            //剩余的就是只出现一次的元素
+            for (int v1:countMap.keySet()){
+                int v2=0-v0-v1;
+                //确保[[v0,v1,v2]...]内部有序，去重
+                if (v2<=v1||v1<=v0||countMap.get(v2)==null)
+                    continue;
+                //v0<v1<v2
+                res.add(Arrays.asList(v0,v1,v2));
+            }
+
+
+        }
+        return res;
+    }
+```
+
+### 18
+给定一个包含 n 个整数的数组 nums 和一个目标值 target，判断 nums 中是否存在四个元素 a，b，c 和 d ，使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。
+
+注意：
+
+答案中不可以包含重复的四元组。
+
+示例：
+
+给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+
+满足要求的四元组集合为：
+[
+  [-1,  0, 0, 1],
+  [-2, -1, 1, 2],
+  [-2,  0, 0, 2]
+]
+- 分析：
+使用对撞指针，将4 sum转化为3 sum 进一步转化成2 sum。
+- 实现：
+```java
+//对撞指针法，将问题简化为3->2
+    public List<List<Integer>> fourSum1(int[] nums, int target){
+        List<List<Integer>> res=new ArrayList<>();
+        if (nums==null||nums.length<4){
+            return res;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 3; i++) {
+            //去重
+            if (i==0||nums[i]!=nums[i-1]){
+                //转化为three sum
+                for (int j =i+1; j <nums.length-2; j++) {
+                    //去重
+                    if (j==i+1||nums[j]!=nums[j-1]){
+                        //设置对撞指针
+                        int l=j+1,h=nums.length-1;
+                        //设置新的搜索目标
+                        int newTarget=target-nums[i]-nums[j];
+                        //转化为two sum
+                        while (l<h){
+                            if (nums[l]+nums[h]==newTarget){
+                                res.add(Arrays.asList(nums[i],nums[j],nums[l],nums[h]));
+                                //去重操作
+                                while (l<h&&nums[l]==nums[l+1]) l++;
+                                while (l<h&&nums[h]==nums[h-1]) h--;
+                                l++;
+                                h--;
+                            }else if (nums[l]+nums[h]<newTarget){
+                                //增大
+                                l++;
+                            }else {
+                                //减小
+                                h--;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        return res;
+
+    }
+```
+
+### 16
 
 ## 灵活选择键值
 ## 查找表和滑动窗口
