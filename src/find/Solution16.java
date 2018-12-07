@@ -33,7 +33,7 @@ public class Solution16 {
                     if (nums[l]+nums[h]+v1>target){
                         h--;
                     }
-                    if (nums[l]+nums[h]+v1<target)
+                    else
                     l++;
                 }
             }
