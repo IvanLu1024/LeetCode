@@ -25,31 +25,9 @@ import java.util.*;
 
 public class Solution15 {
 
-    //*得到的结果没有去重
-    public List<List<Integer>> threeSum(int[] nums) {
-        if (nums==null||nums.length==0){
-            return null;
-        }
-        List<List<Integer>> res=new ArrayList<>();
-        Map<Integer,Integer> numMap=new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            int target=-nums[i];
-            for (int j = 0; j <nums.length ; j++) {
-                int cmp=target-nums[j];
-                if (numMap.containsKey(cmp)){
-                    List<Integer> list=new LinkedList<>();
-                    list.add(-target);
-                    list.add(cmp);
-                    list.add(nums[j]);
-                    res.add(list);
-                }
-                numMap.put(nums[j],j);
-            }
-        }
-        return  res;
 
-    }
 
+    //使用二分搜索
     public List<List<Integer>> threeSum1(int[] nums) {
         List<List<Integer>> res=new ArrayList<>();
         //首先做排序处理
@@ -72,9 +50,7 @@ public class Solution15 {
             }
 
         }
-
         return res;
-
     }
 
     //使用Map的方式
@@ -95,7 +71,7 @@ public class Solution15 {
                 }
             }
             //如果出现次数超过2次
-            if (count0>=2){
+            if (count0==2){
                 int v2=0-2*v0;
                 if (v2!=v0) {
                     if (countMap.containsKey(v2)) {
@@ -109,12 +85,12 @@ public class Solution15 {
                 //确保[[v0,v1,v2]...]内部有序，去重
                 if (v2<=v1||v1<=v0||countMap.get(v2)==null)
                     continue;
+                //v0<v1<v2
                 res.add(Arrays.asList(v0,v1,v2));
             }
 
 
         }
-
         return res;
     }
 
@@ -124,8 +100,10 @@ public class Solution15 {
     @Test
     public void test(){
         int[] nums={-1, 0, 1, 2, -1, -4};
-        List<List<Integer>> lists = threeSum2(nums);
-        System.out.println(lists);
+        Arrays.sort(nums);
+        List<List<Integer>> res = threeSum2(nums);
+        System.out.println(res);
+
 
     }
 
