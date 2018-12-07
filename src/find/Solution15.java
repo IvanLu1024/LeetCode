@@ -27,7 +27,7 @@ public class Solution15 {
 
 
 
-    //使用二分搜索
+    //使用对撞指针的方法
     public List<List<Integer>> threeSum1(int[] nums) {
         List<List<Integer>> res=new ArrayList<>();
         //首先做排序处理
