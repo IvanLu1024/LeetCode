@@ -584,8 +584,190 @@ public int[] twoSum(int[] nums, int target) {
 ```
 
 ### 16
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+
+与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+- 分析：
+
+这里可以使用对撞指针的方法，首先将数组做排序处理，然后将3 sum转化为2 sum问题。
+
+这里的对撞指针解法和3 sum的对撞指针解法是类似的，但是需要注意的就是这里需要找到的是3 sum最接近的数，那么可以分为两种情况来考虑：
+3 sum和target的距离是0和距离大于0的两种情况，这里需要设置一个min来记录距离的最小值并且记录3 sum的数值。
+
+- 实现：
+```java
+public int threeSumClosest(int[] nums, int target) {
+        int min=Integer.MAX_VALUE;
+        int res=Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length; i++) {
+            int l=i+1,h=nums.length-1;
+            int v1=nums[i];
+            while (l<h){
+                if (nums[l]+nums[h]+v1==target){
+                    return nums[l]+nums[h]+v1;
+                }else {
+                    int d = Math.abs(target - v1 - nums[l] - nums[h]);
+                    if (d < min) {
+                        res = v1 + nums[l] + nums[h];
+                        min = d;
+                    }
+                    if (nums[l]+nums[h]+v1>target){
+                        h--;
+                    }
+                    else
+                    l++;
+                }
+            }
+        }
+        return res;
+    }
+```
 
 ## 灵活选择键值
+相关题目：
+* [454.四数之和（2）](#454)
+* [49.字母异位词分组](#49)
+* [447.回旋镖的数量](#447)
+* [149.直线上最多的点数](#149)
+* [719.找出第k小的距离对](#719)
+
+### 454
+给定四个包含整数的数组列表 A , B , C , D ,计算有多少个元组 (i, j, k, l) ，使得 A[i] + B[j] + C[k] + D[l] = 0。
+
+为了使问题简单化，所有的 A, B, C, D 具有相同的长度 N，且 0 ≤ N ≤ 500 。所有整数的范围在 -2^28 到 2^28 - 1 之间，最终结果不会超过 2^31 - 1 。
+
+例如:
+
+输入:
+A = [ 1, 2]
+B = [-2,-1]
+C = [-1, 2]
+D = [ 0, 2]
+
+输出:
+2
+
+解释:
+两个元组如下:
+1. (0, 0, 0, 1) -> A[0] + B[0] + C[0] + D[1] = 1 + (-2) + (-1) + 2 = 0
+2. (1, 1, 0, 0) -> A[1] + B[1] + C[0] + D[0] = 2 + (-1) + (-1) + 0 = 0
+- 分析：
+
+由于题目中给出了明确的数据规模，那么我们可以根据数据规模来推测出求解的时间复杂度的要求。
+因为0<=N<=500,所以O（n^2）的时间复杂度是完全可以接受的
+
+从这个角度出发，我们可以想到利用一个双重循环将两个数组的和存在一个查找表（map）中，然后再另外两个数组中的和去查找表中去查找。
+
+对于查找表的使用，**需要查找什么是十分重要的**
+
+- 实现：
+```java
+//使用查找表的方式
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        //首先初始化map
+        //K：sum；V：count
+        Map<Integer,Integer> record=new HashMap<>();
+        for (int i = 0; i <C.length ; i++) {
+            for (int j = 0; j < D.length; j++) {
+                int sumCD = C[i] + D[j];
+                record.put(sumCD,record.getOrDefault(sumCD,0)+1);
+            }
+        }
+        //统计符合要求的元组个数
+        int res=0;
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B.length; j++) {
+                int target=0-A[i]-B[j];
+                if (record.containsKey(target)){
+                    res+=record.get(target);
+                }
+            }
+        }
+        return res;
+    }
+```
+
+### 49
+给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+
+示例:
+
+输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
+输出:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+说明：
+
+所有输入均为小写字母。
+不考虑答案输出的顺序。
+- 分析：
+
+这里的关键是怎么使用查找表，字母异位词有一个性质就是每个单词的所有字母是相同的，
+那么这里只需要将这些字母作为键，字母异位词作为值就可以将
+这些单词做分类了。
+
+其中这里有一个小技巧就是将每个单词做排序处理重新构建一个新的字符串，这样就可以保证字母异位词能够被映射到一起
+
+- 实现：
+```java
+//使用查找表的方式，搞明白需要找出的是什么--字符串
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res=new ArrayList<>();
+        if (strs==null||strs.length==0){
+            return res;
+        }
+        //用于记录字母异位词集合的map
+        Map<String,List<String>> record=new HashMap<>();
+        for (String s:strs){
+            char[] chars = s.toCharArray();
+            //将字符串做排序处理后，字母异位词就可以映射到一起
+            Arrays.sort(chars);
+            String sortedStr = String.valueOf(chars);
+            if (record.containsKey(sortedStr)){
+                record.get(sortedStr).add(s);
+            }else {
+                List<String> list=new ArrayList<>();
+                list.add(s);
+                record.put(sortedStr,list);
+            }
+        }
+        res.addAll(record.values());
+        return res;
+
+    }
+```
+### 447
+
+### 149
+
+
+### 719
+给定一个整数数组，返回所有数对之间的第 k 个最小距离。一对 (A, B) 的距离被定义为 A 和 B 之间的绝对差值。
+
+示例 1:
+
+输入：
+nums = [1,3,1]
+k = 1
+输出：0 
+解释：
+所有数对如下：
+(1,3) -> 2
+(1,1) -> 0
+(3,1) -> 2
+因此第 1 个最小距离的数对是 (1,1)，它们之间的距离为 0。
+提示:
+
+2 <= len(nums) <= 10000.
+0 <= nums[i] < 1000000.
+1 <= k <= len(nums) * (len(nums) - 1) / 2.
+
 ## 查找表和滑动窗口
 ## 二分搜索树底层实现的顺序性
 # 参考资料
