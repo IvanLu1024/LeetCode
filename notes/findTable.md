@@ -769,7 +769,150 @@ k = 1
 1 <= k <= len(nums) * (len(nums) - 1) / 2.
 
 ## 查找表和滑动窗口
+相关题目：
+* [217.](#217)
+* [219.](#219)
+* [220.](#220)
+### 217
+给定一个整数数组，判断是否存在重复元素。
+
+如果任何值在数组中出现至少两次，函数返回 true。如果数组中每个元素都不相同，则返回 false。
+
+示例 1:
+
+输入: [1,2,3,1]
+输出: true
+示例 2:
+
+输入: [1,2,3,4]
+输出: false
+示例 3:
+
+输入: [1,1,1,3,3,4,3,2,4,2]
+输出: true
+- 分析：
+1. 使用set：
+使用set，遍历数组的过程中，不断判断当前的元素是否在set中，如果在则直接返回true，如果不在的话就将当前元素加入set中继续遍历；
+直到遍历结束，如果循环正常结束则表明数组中没有重复的元素，返回false。
+2. 使用排序：
+首先将数组进行排序，再遍历数组，遍历过程中如果发现前后元素相等则表明数组中存在重复的元素。
+
+- 实现：
+```java
+//使用set
+public boolean containsDuplicate(int[] nums) {
+        Set<Integer> record=new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (record.contains(nums[i])){
+                return true;
+            }else {
+                record.add(nums[i]);
+            }
+        }
+        return false;
+    }
+    
+    //通过排序的方法
+        public boolean containsDuplicate2(int[] nums){
+            Arrays.sort(nums);
+            for (int i = 1; i < nums.length; i++) {
+                if (nums[i]==nums[i-1]){
+                    return true;
+                }
+            }
+            return false;
+        }
+```
+### 219
+给定一个整数数组和一个整数 k，判断数组中是否存在两个不同的索引 i 和 j，使得 nums [i] = nums [j]，并且 i 和 j 的差的绝对值最大为 k。
+
+示例 1:
+
+输入: nums = [1,2,3,1], k = 3
+输出: true
+示例 2:
+
+输入: nums = [1,0,1,1], k = 1
+输出: true
+示例 3:
+
+输入: nums = [1,2,3,1,2,3], k = 2
+输出: false
+- 分析：
+
+使用set+滑动窗口的解法：
+
+搜索的过程中只要确保set的大小是滑动窗口的大小即可
+![](../pict/find_04.png)
+- 实现：
+```java
+public boolean containsNearbyDuplicate1(int[] nums, int k){
+        Set<Integer> record=new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (record.contains(nums[i])){
+                return true;
+            }else {
+                record.add(nums[i]);
+            }
+            //确保查找表的长度为k+1，[i,j]之间是有k+1的元素
+            if (record.size()==k+1){
+                record.remove(nums[i-k]);
+            }
+
+        }
+        return false;
+
+    }
+```
 ## 二分搜索树底层实现的顺序性
+相关题目：
+* [220.存在重复元素（3）](#220)
+### 220
+给定一个整数数组，判断数组中是否有两个不同的索引 i 和 j，使得 nums [i] 和 nums [j] 的差的绝对值最大为 t，并且 i 和 j 之间的差的绝对值最大为 ķ。
+
+示例 1:
+
+输入: nums = [1,2,3,1], k = 3, t = 0
+输出: true
+示例 2:
+
+输入: nums = [1,0,1,1], k = 1, t = 2
+输出: true
+示例 3:
+
+输入: nums = [1,5,9,1,5,9], k = 2, t = 3
+输出: false
+- 分析：
+在set中寻找大于等于v-t和小于等于v+t的元素：
+![](../pict/find_05.png)
+
+- 实现：
+```java
+public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+
+        TreeSet<Long> record=new TreeSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            long n=nums[i];
+            //n-t<=x<=n+t
+            //ceiling：返回大于或等于e的最小元素
+            //floor:返回小于或等于e的最大元素
+            if (record.ceiling(n)!=null&&record.ceiling(n)<=(long)(n+t)||
+                    record.floor(n)!=null&&record.floor(n)>=(long)(n-t)){
+                return true;
+            }else {
+                record.add((long)nums[i]);
+            }
+            //确保查找表的长度为k
+            if (record.size()==k+1){
+                record.remove((long)nums[i-k]);
+            }
+
+        }
+        return false;
+    }
+```
+
+
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
