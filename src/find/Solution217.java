@@ -2,10 +2,7 @@ package find;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
      * 给定一个整数数组，判断是否存在重复元素。
@@ -40,11 +37,22 @@ public class Solution217 {
         return false;
     }
 
+    //通过排序的方法
+    public boolean containsDuplicate2(int[] nums){
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i]==nums[i-1]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Test
     public void test(){
-        int[] nums={1,2,4,5};
+        int[] nums={1,2,4,5,1};
         int k=1;
-        boolean res = containsDuplicate(nums);
+        boolean res = containsDuplicate2(nums);
         System.out.println(res);
     }
 
