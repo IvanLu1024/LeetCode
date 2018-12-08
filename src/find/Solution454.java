@@ -35,6 +35,8 @@ import java.util.Map;
 public class Solution454 {
     //使用查找表的方式
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        //首先初始化map
+        //K：sum；V：count
         Map<Integer,Integer> record=new HashMap<>();
         for (int i = 0; i <C.length ; i++) {
             for (int j = 0; j < D.length; j++) {
@@ -42,6 +44,7 @@ public class Solution454 {
                 record.put(sumCD,record.getOrDefault(sumCD,0)+1);
             }
         }
+        //统计符合要求的元组个数
         int res=0;
         for (int i = 0; i < A.length; i++) {
             for (int j = 0; j < B.length; j++) {
@@ -52,7 +55,6 @@ public class Solution454 {
             }
         }
         return res;
-
     }
     @Test
     public void test(){
