@@ -33,6 +33,115 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
         return -1;
     }
 ```
+相关题目：
+ * [704.二分查找](#704)
+ * [34.在排序数组中查找元素的第一个和最后一个位置](#34)
+ 
+### 704
+给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
+
+
+示例 1:
+
+输入: nums = [-1,0,3,5,9,12], target = 9
+输出: 4
+解释: 9 出现在 nums 中并且下标为 4
+示例 2:
+
+输入: nums = [-1,0,3,5,9,12], target = 2
+输出: -1
+解释: 2 不存在 nums 中因此返回 -1
+ 
+
+提示：
+
+你可以假设 nums 中的所有元素是不重复的。
+n 将在 [1, 10000]之间。
+nums 的每个元素都将在 [-9999, 9999]之间。
+- 分析：
+
+二分查找的实现
+- 实现：
+```java
+public int search(int[] nums, int target) {
+        int l=0,h=nums.length-1;
+        while (l<=h){
+            int mid=(l+h)>>1;
+            if (nums[mid]==target){
+                return mid;
+            }
+            else if (nums[mid]<target){
+                l=mid+1;
+            }else {
+                h=mid-1;
+            }
+        }
+        return -1;
+    }
+```
+
+### 34
+给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+如果数组中不存在目标值，返回 [-1, -1]。
+
+示例 1:
+
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: [3,4]
+示例 2:
+
+输入: nums = [5,7,7,8,8,10], target = 6
+输出: [-1,-1]
+- 分析：
+- 实现：
+```java
+public int[] searchRange(int[] nums, int target) {
+        int[] res={-1,-1};
+        if (nums.length==0||nums==null){
+            return res;
+        }
+        int last = lastOccurance(nums, target);
+        //当target比数组中的最小值还要小的时候
+        if (last<0||nums[last]!=target){
+            return res;
+        }
+        int first = firstOccurance(nums, target);
+        res[0]=first;
+        res[1]=last;
+        return res;
+    }
+    //寻找target出现的第一个位置
+    private int firstOccurance(int[] nums,int target){
+        int l=0,h=nums.length-1;
+        while (l<=h){
+            int mid=l+(h-l)/2;
+            if (nums[mid]<target){
+                l=mid+1;
+            }else {
+                h=mid-1;
+            }
+        }
+        return l;
+    }
+    //寻找target出现的最后一个位置
+    //注意一点，如果target比数组最小值还小，那么返回-1
+    private int lastOccurance(int[] nums,int target){
+        int l=0,h=nums.length-1;
+        while (l<=h){
+            int mid=l+(h-l)/2;
+            if (nums[mid]>target){
+                h=mid-1;
+            }else {
+                l=mid+1;
+            }
+        }
+        //注意返回的是h，此时h<l
+        return h;
+    }
+```
 ## 简单的面试题
 
 相关题目：
