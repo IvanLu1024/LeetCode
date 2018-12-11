@@ -2,7 +2,7 @@
 
 欢迎各位指正出我的错误和不足之处，请积极issues吧~希望共同进步，加油！
 
-本仓库是我自己关于LeetCode的做题记录
+本仓库是我自己关于LeetCode的做题记录,代码是利用Java来进行实现的。
 
 
 其中我做了大致分类参考了bobo老师的[课程](https://coding.imooc.com/class/82.html)和[仓库](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)：
@@ -10,7 +10,7 @@
 # 笔记部分：
 ## [数组](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md)
 ## [查找](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md)
-## [链表](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md)
+## [链表](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md)
 ## [栈和队列](https://github.com/IvanLu1024/LeetCode/blob/master/notes/stack&queue.md)
 ## [树](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md)
 ## [回溯法](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md)
