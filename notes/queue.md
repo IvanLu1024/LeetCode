@@ -14,10 +14,10 @@
 
 
 相关题目：
-* [102](#102)
-* [103](#103)
-* [107](#107)
-* [199](#199)
+* [102.二叉树的层次遍历](#102)
+* [103.二叉树的锯齿形层次遍历](#103)
+* [107.二叉树的层次遍历(2)](#107)
+* [199.二叉树的右视图](#199)
 
 ### 102
 - 二叉树的层次遍历
@@ -48,6 +48,8 @@
 当层数和结果的集合大小相等的时候，说明集合中还不存在这一层，所以需要新创建一个List。
 随后分别将左右子树入队操作，注意此时level需要加1操作。
 - 实现：
+
+解法1：
 ```java
 public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> res=new ArrayList<>();
@@ -77,8 +79,153 @@ public List<List<Integer>> levelOrder(TreeNode root) {
         return res;
     }
 ```
+解法2：
+```java
+    private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> levelOrder(TreeNode root){
+        if (root==null){
+            return  res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            ArrayList<Integer> list = new ArrayList<>();
+            int size = queue.size();
+            while (size-->0){
+                TreeNode cur = queue.poll();
+                if (cur.left!=null){
+                    queue.offer(cur.left);
+                }
+                if (cur.right!=null){
+                    queue.offer(cur.right);
+                }
+                list.add(cur.val);
+            }
+            if (list.size()>0){
+                res.add(list);
+            }
+
+        }
+        return res;
+
+    }
+```
 ### 103
+- 二叉树的锯齿形层次遍历
+给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+```java
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+返回锯齿形层次遍历如下：
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+- 分析：
+
+在层次遍历的基础上，添加了一个翻转的记录用来将该层的元素翻转，从而实现锯齿形层次遍历。
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    private Queue<TreeNode> queue=new LinkedList<>();
+    private boolean flag=false;//记录是否翻转
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if (root==null){
+            return res;
+        }
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            List<Integer> list = new ArrayList<>();
+            int size = queue.size();
+            while (size-->0){
+                TreeNode cur = queue.poll();
+                if (cur==null){
+                    continue;
+                }
+                list.add(cur.val);
+                queue.add(cur.left);
+                queue.add(cur.right);
+            }
+            if (flag){
+                Collections.reverse(list);
+            }
+            flag=!flag;
+            if (list.size()>0){
+                res.add(list);
+            }
+
+
+        }
+        return res;
+    }
+```
 ### 107
+给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+
+例如：
+给定二叉树 [3,9,20,null,null,15,7],
+
+ ```java
+   3
+   / \
+  9  20
+    /  \
+   15   7
+```
+返回其自底向上的层次遍历为：
+
+[
+  [15,7],
+  [9,20],
+  [3]
+]
+- 分析：
+
+只需要将层次遍历的结果翻转一下，即可。
+
+- 实现：
+```java
+private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> levelOrderBottom(TreeNode root){
+        if (root==null){
+            return  res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            ArrayList<Integer> list = new ArrayList<>();
+            int size = queue.size();
+            while (size-->0){
+                TreeNode cur = queue.poll();
+                if (cur.left!=null){
+                    queue.offer(cur.left);
+                }
+                if (cur.right!=null){
+                    queue.offer(cur.right);
+                }
+                list.add(cur.val);
+            }
+            if (list.size()>0){
+                res.add(list);
+            }
+
+        }
+        Collections.reverse(res);
+        return res;
+    }
+```
 ### 199
 给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
 
@@ -135,11 +282,11 @@ public List<Integer> rightSideView(TreeNode root) {
 ## BFS（无权图）和图的最短路径
 
 相关题目：
-* [279](#279)
-* [127](#127)
-* [126](#126)
+* [279.完全平方数](#279)
+* [127.单词接龙](#127)
+* [126.单词接龙（2）](#126)
 ### 279
-- 完全平方数
+
 
 给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
 
@@ -322,9 +469,9 @@ wordList = ["hot","dot","dog","lot","log"]
 
 相关题目：
 
-* [347](#347)
+* [347.前K个高频元素](#347)
+* [23.合并K个排序链表](#23)
 ### 347
-- 前K个高频元素
 给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
 
 示例 1:
@@ -386,6 +533,58 @@ private List<Integer> res=new ArrayList<>();
         }
         return res;
 
+    }
+```
+### 23
+合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
+
+示例:
+
+输入:
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+输出: 1->1->2->3->4->4->5->6
+
+- 分析：
+
+- 实现：
+```java
+public ListNode mergeKLists(ListNode[] lists) {
+        if (lists.length==0){
+            return null;
+        }
+        ListNode dummyHead=new ListNode(-1);
+        ListNode cur=dummyHead;
+        //使用优先队列对链表进行排列
+        PriorityQueue<ListNode> queue=new PriorityQueue<>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode o1, ListNode o2) {
+                return o1.val-o2.val;
+            }
+        });
+        for (ListNode list:lists){
+            if (list!=null){
+                queue.offer(list);
+            }
+        }
+        while (!queue.isEmpty()){
+            //从队列中取出队首元素，就是队列中最小的元素
+            ListNode nextNode = queue.poll();
+            //将这个元素插入当前结点的后面
+            cur.next=nextNode;
+            //将这个元素的后面的结点也放入队列中
+            if (nextNode.next!=null){
+                queue.offer(nextNode.next);
+            }
+            //清理局部变量
+            nextNode.next=null;
+            //继续遍历
+            cur=cur.next;
+        }
+        return dummyHead.next;
     }
 ```
 # 参考资料
