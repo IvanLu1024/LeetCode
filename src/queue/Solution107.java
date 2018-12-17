@@ -54,6 +54,35 @@ public class Solution107 {
         Collections.reverse(res);
         return res;
     }
+
+    private List<List<Integer>> res=new ArrayList<>();
+    public List<List<Integer>> levelOrderBottom1(TreeNode root){
+        if (root==null){
+            return  res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            ArrayList<Integer> list = new ArrayList<>();
+            int size = queue.size();
+            while (size-->0){
+                TreeNode cur = queue.poll();
+                if (cur.left!=null){
+                    queue.offer(cur.left);
+                }
+                if (cur.right!=null){
+                    queue.offer(cur.right);
+                }
+                list.add(cur.val);
+            }
+            if (list.size()>0){
+                res.add(list);
+            }
+
+        }
+        Collections.reverse(res);
+        return res;
+    }
     @Test
     public void test(){
         int[] pre={3,9,20,15,7};
