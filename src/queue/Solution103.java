@@ -1,7 +1,7 @@
 package queue;
 
 import org.junit.Test;
-import queue.TreeNode;
+import tree.TreeNode;
 
 import java.util.*;
 
