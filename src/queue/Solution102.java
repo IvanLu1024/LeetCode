@@ -61,22 +61,35 @@ public class Solution102 {
         return res;
     }
     private List<List<Integer>> res=new ArrayList<>();
-    private Queue<TreeNode> queue=new LinkedList<>();
     public List<List<Integer>> levelOrder1(TreeNode root){
-        if (root==null)
-            return res;
-        queue.add(root);
+        if (root==null){
+            return  res;
+        }
+        Queue<TreeNode> queue=new LinkedList<>();
+        queue.offer(root);
         while (!queue.isEmpty()){
-            List<Integer> list=new ArrayList<>();
-            TreeNode node = queue.poll();
+            ArrayList<Integer> list = new ArrayList<>();
             int size = queue.size();
             while (size-->0){
-
+                TreeNode cur = queue.poll();
+                if (cur.left!=null){
+                    queue.offer(cur.left);
+                }
+                if (cur.right!=null){
+                    queue.offer(cur.right);
+                }
+                list.add(cur.val);
             }
+            if (list.size()>0){
+                res.add(list);
+            }
+
         }
         return res;
 
     }
+
+
 
 
 
@@ -92,7 +105,7 @@ public class Solution102 {
         n1.right=n3;
         n2.left=n4;
         n3.right=n5;
-        List<List<Integer>> lists = levelOrder(n1);
+        List<List<Integer>> lists = levelOrder1(n1);
         System.out.println(lists);
     }
 }
