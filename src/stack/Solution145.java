@@ -1,6 +1,7 @@
-package stackAndQueue;
+package stack;
 
 import org.junit.Test;
+import queue.TreeNode;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package stackAndQueue;
+package queue;
 
 import javafx.util.Pair;
 import org.junit.Test;
@@ -59,6 +59,27 @@ public class Solution102 {
         }
         return res;
     }
+    private List<List<Integer>> res=new ArrayList<>();
+    private Queue<TreeNode> queue=new LinkedList<>();
+    public List<List<Integer>> levelOrder1(TreeNode root){
+        if (root==null)
+            return res;
+        queue.add(root);
+        while (!queue.isEmpty()){
+            List<Integer> list=new ArrayList<>();
+            TreeNode node = queue.poll();
+            int size = queue.size();
+            while (size-->0){
+
+            }
+        }
+        return res;
+
+    }
+
+
+
+
     @Test
     public void test(){
         TreeNode n1 = new TreeNode(3);

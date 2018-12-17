@@ -1,4 +1,4 @@
-package stackAndQueue;
+package queue;
 
 public class TreeNode {
       int val;

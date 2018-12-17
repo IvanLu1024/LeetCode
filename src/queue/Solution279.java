@@ -1,4 +1,4 @@
-package stackAndQueue;
+package queue;
 
 import javafx.util.Pair;
 import org.junit.Test;
