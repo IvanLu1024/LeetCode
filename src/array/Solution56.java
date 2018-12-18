@@ -1,4 +1,4 @@
-package find;
+package array;
 
 import java.util.*;
 
