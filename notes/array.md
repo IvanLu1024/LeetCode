@@ -8,6 +8,7 @@
         * [滑动窗口](#滑动窗口)
     * [字符数组（字符串）](#字符数组（字符串）)    
     * [二维数组](#二维数组)
+    * [更多数组中的问题](#更多数组中的问题)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 # 数组部分总结笔记
@@ -1137,8 +1138,232 @@ public void rotate(Integer[][] matrix) {
     }
 ```
 ## 字符数组（字符串）
+相关题目：
+* []()
+
+## 更多数组中的问题
+相关题目：
+* [717.1比特与2比特字符](#717)
+* [674.最长连续递增序列](#674)
+* [268.缺失数字](#268)
+* [56.合并区间](#56)
+* [485.最大连续1的个数](#485)
+
+### 717
+有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
+
+现给一个由若干比特组成的字符串。问最后一个字符是否必定为一个一比特字符。给定的字符串总是由0结束。
+
+示例 1:
+
+输入: 
+bits = [1, 0, 0]
+输出: True
+解释: 
+唯一的编码方式是一个两比特字符和一个一比特字符。所以最后一个字符是一比特字符。
+示例 2:
+
+输入: 
+bits = [1, 1, 1, 0]
+输出: False
+解释: 
+唯一的编码方式是两比特字符和两比特字符。所以最后一个字符不是一比特字符。
+注意:
+
+1 <= len(bits) <= 1000.
+bits[i] 总是0 或 1.
+- 实现：
+```java
+//使用贪心策略：如果遇到1就将其当做2比特，若最后一位也当做2比特的话，i=n
+    public boolean isOneBitCharacter(int[] bits) {
+        int n = bits.length;
+        int i = 0;
+        for (; i < n-1; ) {
+            if (bits[i]==1){
+                i+=2;
+            }else {
+                i++;
+            }
+        }
+        return i==n-1;
+    }
+
+    //从倒数第二个位置开始看连续1的数量，如果为奇数个表明最后一位0要和倒数第二位组成2比特（10）
+    //如果是偶数个，则前面的这些1可以组成若干个2比特，最后一位组成1比特
+    public boolean isOneBitCharacter1(int[] bits){
+        int n = bits.length;
+        int count=0;
+        for (int i = n-2; i >=0; i--) {
+            if (bits[i]==1){
+                count++;
+            }else {
+                break;
+            }
+        }
+        return count%2==0;
+    }
+```
+### 674
+给定一个未经排序的整数数组，找到最长且连续的的递增序列。
+
+示例 1:
+
+输入: [1,3,5,4,7]
+输出: 3
+解释: 最长连续递增序列是 [1,3,5], 长度为3。
+尽管 [1,3,5,7] 也是升序的子序列, 但它不是连续的，因为5和7在原数组里被4隔开。 
+示例 2:
+
+输入: [2,2,2,2,2]
+输出: 1
+解释: 最长连续递增序列是 [2], 长度为1。
+注意：数组长度不会超过10000。
+- 实现：
+```java
+public int findLengthOfLCIS(int[] nums){
+        if (nums==null||nums.length==0||nums.length==1){
+            return nums.length;
+        }
+        int count=1;
+        int max=0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i]>nums[i-1]){
+                count++;
+            }else {
+                count=1;
+            }
+            max=Math.max(max,count);
+        }
+        return max;
+
+    }
+```
+### 268
+给定一个包含 0, 1, 2, ..., n 中 n 个数的序列，找出 0 .. n 中没有出现在序列中的那个数。
+
+示例 1:
+
+输入: [3,0,1]
+输出: 2
+示例 2:
+
+输入: [9,6,4,2,3,5,7,0,1]
+输出: 8
+- 实现：
+```java
+public int missingNumber(int[] nums) {
+        int n = nums.length;
+        boolean[] flag=new boolean[n+1];
+        for (int i = 0; i < n; i++) {
+            flag[nums[i]]=true;
+        }
+        for (int i = 0; i <= n; i++) {
+            if (!flag[i]){
+                return i;
+            }
+        }
+        return 0;
+    }
+```
+### 56
+给出一个区间的集合，请合并所有重叠的区间。
+
+示例 1:
+
+输入: [[1,3],[2,6],[8,10],[15,18]]
+输出: [[1,6],[8,10],[15,18]]
+解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+示例 2:
+
+输入: [[1,4],[4,5]]
+输出: [[1,5]]
+解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。
+- 实现：
+```java
+public class Interval {
+        int start;
+        int end;
+        Interval() { start = 0; end = 0; }
+        Interval(int s, int e) { start = s; end = e; }
+    }
 
 
+    private class myComparable implements Comparator<Interval> {
+        @Override
+        public int compare(Interval i1, Interval i2) {
+            if (i1.start!=i2.start){
+                return i1.start-i2.start;
+            }else {
+                return i1.end-i2.end;
+            }
+        }
+    }
+
+    public List<Interval> merge(List<Interval> intervals) {
+        List<Interval> res=new LinkedList<>();
+        int n =intervals.size();
+        if (n==0){
+            return res;
+        }
+        //将区间集合按照起始点升序排列
+        Collections.sort(intervals,new  myComparable());
+        res.add(intervals.get(0));
+        for (Interval i:intervals){
+            if (isCross(i,((LinkedList<Interval>) res).getLast())){
+                Interval newInterval = merge(i, ((LinkedList<Interval>) res).getLast());
+                //先删除旧的区间
+                ((LinkedList<Interval>) res).removeLast();
+                //再插入新的区间
+                res.add(newInterval);
+            }else {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+
+    //判断两个区间是否重叠
+    private boolean isCross(Interval i1,Interval i2){
+        return i1.start<=i2.end;
+    }
+
+    //合并两个区间，起始点取最小值，终点取最大值
+    private Interval merge(Interval i1,Interval i2){
+        return new Interval(Math.min(i1.start,i2.start),Math.max(i1.end,i2.end));
+    }
+```
+### 485
+给定一个二进制数组， 计算其中最大连续1的个数。
+
+示例 1:
+
+输入: [1,1,0,1,1,1]
+输出: 3
+解释: 开头的两位和最后的三位都是连续1，所以最大连续1的个数是 3.
+注意：
+
+输入的数组只包含 0 和1。
+输入数组的长度是正整数，且不超过 10,000。
+- 实现：
+```java
+public int findMaxConsecutiveOnes(int[] nums){
+        int n =nums.length;
+        if (n==0){
+            return 0;
+        }
+        int count=0;
+        int max=0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i]==1){
+                count++;
+            }else {
+                max=Math.max(max,count);
+                count=0;
+            }
+        }
+        return max>count?max:count;
+    }
+```
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
