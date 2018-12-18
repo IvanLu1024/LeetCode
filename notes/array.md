@@ -148,10 +148,10 @@ public int[] searchRange(int[] nums, int target) {
 ## 简单的面试题
 
 相关题目：
- * [283](#283)
- * [27](#27)
- * [26](#)
- * [80](#)
+ * [283.移动零](#283)
+ * [27.移除元素](#27)
+ * [26.删除排序数组中的重复项](#26)
+ * [80.删除排序数组中的重复项](#80)
  
  #### 283
  -  移动零
@@ -186,9 +186,6 @@ public int[] searchRange(int[] nums, int target) {
  
  
  - 实现：
- 
- 
- 
  解法1：
  ```java
     //时间复杂度：O(n)
@@ -360,9 +357,9 @@ public int[] searchRange(int[] nums, int target) {
 <div>
 
 相关题目：
- * [75](#75)
- * [88](#)
- * [215](#)
+ * [75.颜色分类](#75)
+ * [88.合并两个有序数组](#88)
+ * [215.数组中的第K个最大元素](#215)
  
  #### 75
  - 颜色分类
@@ -509,6 +506,193 @@ public void merge(int[] nums1, int m, int[] nums2, int n) {
     }
 ```
  #### 215
+ 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+ 
+ 示例 1:
+ 
+ 输入: [3,2,1,5,6,4] 和 k = 2
+ 输出: 5
+ 示例 2:
+ 
+ 输入: [3,2,3,1,2,4,5,5,6] 和 k = 4
+ 输出: 4
+ 说明:
+ 
+ 你可以假设 k 总是有效的，且 1 ≤ k ≤ 数组的长度。
+ - 实现：
+ ```java
+public int findKthLargest(int[] nums, int k) {
+        k=nums.length-k;
+        int l=0,h=nums.length-1;
+        while (l<h){
+            int pos = partition(nums, l, h);
+            if (pos>k)
+                h=pos-1;
+            else if (pos<k)
+                l=pos+1;
+            else break;
+
+        }
+        return nums[k];
+
+    }
+
+    private int partition(int[] nums,int l,int h){
+        int i=l+1,j=h;
+        int pivot=nums[l];
+        while (true){
+            while (nums[i]<pivot&&i!=h)
+                i++;
+            while (nums[j]>=pivot&&j!=l)
+                j--;
+            if (i>=j)
+                break;
+            swap(nums,i,j);
+
+        }
+        swap(nums,l,j);
+        return j;
+
+    }
+
+    private void swap(int[] nums,int i,int j){
+        int t=nums[i];
+        nums[i]=nums[j];
+        nums[j]=t;
+    }
+```
+### 26
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+
+示例 1:
+
+给定数组 nums = [1,1,2], 
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
+
+你不需要考虑数组中超出新长度后面的元素。
+示例 2:
+
+给定 nums = [0,0,1,1,1,2,2,3,3,4],
+
+函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
+
+你不需要考虑数组中超出新长度后面的元素。
+说明:
+
+为什么返回数值是整数，但输出的答案是数组呢?
+
+请注意，输入数组是以“引用”方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+
+你可以想象内部操作如下:
+```java
+// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中该长度范围内的所有元素。
+for (int i = 0; i < len; i++) {
+    print(nums[i]);
+}
+```
+- 实现：
+```java
+public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+        int count = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] != nums[i])
+                nums[count++] = nums[i - 1];
+
+
+        }
+        nums[count]=nums[nums.length-1];
+        return count+1;
+
+    }
+
+    public int removeDuplicates1(int[] nums){
+        if (nums!=null&&nums.length!=0){
+            int cur=0;
+            for (int i=1;i<nums.length;i++){
+                if (nums[i]!=nums[cur]){
+                    cur++;
+                    nums[cur]=nums[i];
+                }
+
+            }
+            return cur+1;
+        }else
+            return 0;
+
+    }
+```
+### 80
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+
+示例 1:
+
+给定 nums = [1,1,1,2,2,3],
+
+函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
+
+你不需要考虑数组中超出新长度后面的元素。
+示例 2:
+
+给定 nums = [0,0,1,1,1,1,2,3,3],
+
+函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
+
+你不需要考虑数组中超出新长度后面的元素。
+- 实现：
+```java
+public int removeDuplicates(int[] nums) {
+        if (nums!=null&&nums.length!=0){
+            int cur=0,count=1;
+            for (int i=1;i<nums.length;i++){
+                if (nums[cur]==nums[i]){
+                    count++;
+                }else {
+                    count=1;
+                }
+                if (count<=2){
+                    cur++;
+                    nums[cur]=nums[i];
+                }
+            }
+            return cur+1;
+
+
+        }
+        else
+            return 0;
+
+    }
+
+    //利用增强for循环
+    public int removeDuplicates1(int[] nums) {
+        if (nums!=null&&nums.length!=0){
+            int count=0;
+            for (int num:nums){
+                if (count<2||num>nums[count-2])
+                    nums[count++]=num;
+
+            }
+            return count;
+
+
+
+        }
+        else
+            return 0;
+
+    }
+```
  
 ## 双指针
 双指针主要用于遍历数组，两个指针指向不同的元素，从而协同完成任务。
@@ -516,11 +700,11 @@ public void merge(int[] nums1, int m, int[] nums2, int n) {
 使用对撞指针的前提是数组的有序的，分别设置一个头指针和一个尾指针来遍历数组，当满足一定条件来分别移动两个指针的位置，最终完成任务。
 
 相关题目：
- * [167](#167)
- * [125](#125)
- * [344](#344)
- * [345](#345)
- * [11](#11)
+ * [167.两数之和 II - 输入有序数组](#167)
+ * [125.验证回文串](#125)
+ * [344.反转字符串](#344)
+ * [345.反转字符串中的元音字母](#345)
+ * [11.盛最多水的容器](#11)
  
  #### 167
  - 两数之和 II - 输入有序数组
@@ -729,10 +913,11 @@ public int maxArea(int[] height) {
 当求解的时候，需要获得数组或者字符串的连续子部分的时候，就可以考虑使用滑动窗口的思想。
 num[l,h]为滑动窗口，根据具体的要求，通过遍历的时候，来改变l和h的大小，从而完成任务。
 相关题目：
- * [209](#209)
- * [3](#3)
- * [438](#438)
- * [76](#76)
+ * [209.长度最小的子数组](#209)
+ * [3.无重复字符的最长子串](#3)
+ * [438.找到字符串中所有字母异位词](#438)
+ * [76.最小覆盖子串](#76)
+ * [713.乘积小于K的子数组](#713)
  
 #### 209
 - 长度最小的子数组
@@ -944,6 +1129,61 @@ public String minWindow(String s, String t) {
 时间复杂度：O(n)
 
 空间复杂度：O(1)
+### 713
+给定一个正整数数组 nums。
+
+找出该数组内乘积小于 k 的连续的子数组的个数。
+
+示例 1:
+
+输入: nums = [10,5,2,6], k = 100
+输出: 8
+解释: 8个乘积小于100的子数组分别为: [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6]。
+需要注意的是 [10,5,2] 并不是乘积小于100的子数组。
+说明:
+
+0 < nums.length <= 50000
+0 < nums[i] < 1000
+0 <= k < 10^6
+- 实现：
+```java
+public int numSubarrayProductLessThanK(int[] nums, int k) {
+        if (nums==null||nums.length==0){
+            return 0;
+        }
+        //滑动窗口是nums[l,r),初始情况为0
+        int l=0,r=0;
+        int n=nums.length;
+        int count=0;
+        int p=1;
+        while (l<n&&l<=r){
+            if (r<n&&p*nums[r]<k){
+                p*=nums[r];
+                r++;
+            }else if (l==r){
+                l++;
+                r++;
+            }else {
+                //统计满足条件子数组
+                count+=r-l;
+                p/=nums[l];
+                l++;
+            }
+        }
+        return count;
+
+    }
+    private boolean isLessThanK(int[] nums,int l,int r,int k){
+        int res=1;
+        for (int i = l; i <= r; i++) {
+            res*=nums[i];
+            if (res>=k){
+                return false;
+            }
+        }
+        return true;
+    }
+```
 ## 二维数组
 相关题目：
 * [54.螺旋矩阵](#54)
