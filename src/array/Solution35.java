@@ -30,7 +30,7 @@ public class Solution35 {
             }
         }
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i]>target){
+            if (nums[i]>=target){
                 return i;
             }
         }
@@ -38,8 +38,8 @@ public class Solution35 {
     }
     @Test
     public void test(){
-        int[] nums={1};
-        int t=1;
+        int[] nums={1,3,5,6};
+        int t=5;
         int i = searchInsert(nums, t);
         System.out.println(i);
 
