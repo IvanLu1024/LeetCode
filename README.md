@@ -1,4 +1,4 @@
-# LeetCode
+# :computer: LeetCode
 
 欢迎各位指正出我的错误和不足之处，请积极issues吧~希望共同进步，加油！
 
