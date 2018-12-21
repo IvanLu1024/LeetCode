@@ -57,7 +57,7 @@ public class Solution235 {
         int[] in={0,2,3,4,5,6,7,8,9};
         TreeNode root = TreeNodeUtils.ConstructBinaryTree(pre, in);
 
-        
+
 
 
 
