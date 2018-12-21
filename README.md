@@ -7,7 +7,7 @@
 
 其中我做了大致分类参考了bobo老师的[课程](https://coding.imooc.com/class/82.html)和[仓库](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)：
 
-# 笔记部分：
+# :memo: 笔记部分：
 ## [数组](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md)
 ## [查找](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md)
 ## [链表](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md)
@@ -21,7 +21,7 @@
 
 
 
-# 代码实现部分：
+# :hammer: 代码实现部分：
 ## [数组](https://github.com/IvanLu1024/LeetCode/tree/master/src/array)
 ## [查找](https://github.com/IvanLu1024/LeetCode/tree/master/src/find)
 ## [链表](https://github.com/IvanLu1024/LeetCode/tree/master/src/linkedList)
