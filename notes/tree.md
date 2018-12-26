@@ -323,6 +323,7 @@ root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
    * [98.验证二叉搜索树](#98)
    * [450.删除二叉搜索树中的节点](#450)
    * [108.将有序数组转换为二叉搜索树](#108)
+   * [109.有序链表转换二叉搜索树](#109)
    * [230.二叉搜索树中第K小的元素](#230)
    * [236.二叉树的最近公共祖先](#236)
    * [530.二叉搜索树的最小绝对差](#530)
@@ -470,6 +471,70 @@ key = 3
    -3   9
    /   /
  -10  5
+```
+- 实现：
+```java
+public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums==null||nums.length==0){
+            return null;
+        }
+        return createTreeNode(nums,0,nums.length-1);
+    }
+    private TreeNode createTreeNode(int[]nums,int l,int h){
+        //特别注意，边界条件
+        if (l>h){
+            return null;
+        }
+        int mid=l+(h-l)/2;
+        TreeNode root=new TreeNode(nums[mid]);
+        root.left=createTreeNode(nums,l,mid-1);
+        root.right=createTreeNode(nums,mid+1,h);
+        return root;
+    }
+```
+### 109
+给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+
+本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+
+示例:
+```java
+给定有序数组: [-10,-3,0,5,9],
+
+一个可能的答案是：[0,-3,9,-10,null,5]，它可以表示下面这个高度平衡二叉搜索树：
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+```
+- 实现：
+```java
+//首先将链表转化为数组或者集合，这样就转化为了108题
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head==null){
+            return null;
+        }
+        List<Integer> list=new ArrayList<>();
+        ListNode cur = head;
+        while (cur!=null){
+            list.add(cur.val);
+            cur=cur.next;
+        }
+        return createTree(list,0,list.size()-1);
+    }
+    private TreeNode createTree(List<Integer> list,int l,int r){
+        //此时表明已经不存在这个结点
+        if (l>r){
+            return null;
+        }
+        int mid = l+(r-l)/2;
+        TreeNode root = new TreeNode(list.get(mid));
+        root.left=createTree(list,l,mid-1);
+        root.right=createTree(list,mid+1,r);
+        return root;
+    }
 ```
 ### 230
 给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
