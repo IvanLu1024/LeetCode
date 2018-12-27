@@ -20,10 +20,11 @@ public class Solution204 {
         boolean[] memo=new boolean[n];
         Arrays.fill(memo,true);
         for (int i = 2; i*i<n ; i++) {
-            if (!memo[i])
-                continue;
-            for (int j = i*i; j <n ; j+=i) {
-                memo[j]=false;
+            if (memo[i]) {
+                //将素数的倍数都标记成合数
+                for (int j = i * i; j < n; j += i) {
+                    memo[j] = false;
+                }
             }
         }
         int count=0;
