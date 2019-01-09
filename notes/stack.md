@@ -176,8 +176,8 @@ private List<Integer> res=new ArrayList<>();
 ##更多栈的题目
 
 相关题目：
-   * [20.](#20)            
-   * [71.]()
+   * [20.有效的括号](#20)            
+   * [71.简化路径](#71)
    * [84.]()
    * [133.]()
    * [150.]()            
@@ -241,12 +241,183 @@ public boolean isValid(String s) {
 
     }
 ```
-
 ### 71
+简化路径
 
+给定一个文档 (Unix-style) 的完全路径，请进行路径简化。
+
+例如，
+path = "/home/", => "/home"
+path = "/a/./b/../../c/", => "/c"
+
+边界情况:
+
+你是否考虑了 路径 = "/../" 的情况？
+
+在这种情况下，你需返回 "/" 。
+
+此外，路径中也可能包含多个斜杠 '/' ，如 "/home//foo/" 。
+
+在这种情况下，你可忽略多余的斜杠，返回 "/home/foo" 。
+
+- 分析：
+
+使用一个LinkedList来模拟栈，因为为了方便最后的顺序遍历。
+
+首先将路径（字符串）按照/来切分， 接着遍历数组，如果遇到..，则将栈顶元素弹出。遍历的过程中，如果遇到
+""或者"."则直接跳过。最后，按照顺序遍历这个栈，用/分割，重新构建一个新的字符串。
+
+- 实现：
+```java
+public String simplifyPath(String path) {
+        if (path==null||path.length()==0){
+            return null;
+        }
+        StringBuilder res=new StringBuilder("/");
+        String[] paths = path.split("/");
+        //为了方便遍历结果使用链表来模拟栈的结构
+        LinkedList<String> stack=new LinkedList<>();
+        for (int i = 0; i < paths.length; i++) {
+            //..：表示上一级目录，此时需要弹栈，返回上一级目录
+            if (paths[i].equals("..")){
+                if (!stack.isEmpty()){
+                    stack.removeLast();
+                }
+            }
+            //跳过路径名为//（重复的/），和路径名为.
+            else if (!paths[i].equals("")&&!paths[i].equals(".")){
+                stack.add(paths[i]);
+            }
+        }
+        for (int i = 0; i < stack.size(); i++) {
+            if (i!=stack.size()-1){
+                res.append(stack.get(i)+"/");
+            }else {
+                res.append(stack.get(i));
+            }
+        }
+        return res.toString();
+
+    }
+```
 ### 84
+给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
 
+求在该柱状图中，能够勾勒出来的矩形的最大面积。
+
+示例:
+
+输入: [2,1,5,6,2,3]
+输出: 10
+
+分析：
+
+用栈来维护一个递增序列，当遍历到比栈顶元素的高度大的时候，将该元素入栈；反之，将栈顶出栈，计算构成的矩形面积。
+
+实现：
+```java
+    //基本思想就是，将数值压栈，直到这些数值代表的高度的柱子不能向右再扩展长度了，
+    // 就计算其面积大小，pop出来，留下还可以拓展的，一直到最后
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        if (n==0){
+            return 0;
+        }
+        if (n==1){
+            return heights[0];
+        }
+        //栈来记录从栈顶到栈底递增序列的下标
+        Stack<Integer> stack = new Stack<>();
+        int res=0;
+        //处理的柱子宽度为0-n
+        for (int i = 0; i <= n; i++) {
+            //为了避免数组越界，将高度进行了统一处理
+            int num=i==n?0:heights[i];
+            //如果当前遍历的栈为空或者高度大于或等于栈顶元素的值的时候，入栈
+            if (stack.empty()||num>=heights[stack.peek()]){
+                stack.push(i);
+            }//当前遍历的高度小于栈顶的值的时候，出栈
+            else {
+                int top = stack.pop();
+                //计算当前的宽度
+                //当栈为空的时候表明，当前高度为最小高度
+                int w = stack.empty()?i:i-1-stack.peek();
+                //记录最大面积
+                res=Math.max(res,w*heights[top]);
+
+                //为了从当前位置继续开始
+                i--;
+            }
+        }
+        return res;
+    }
+```
 ### 133
+克隆图
+
+克隆一张无向图，图中的每个节点包含一个 label （标签）和一个 neighbors （邻接点）列表 。
+
+OJ的无向图序列化：
+
+节点被唯一标记。
+
+我们用 # 作为每个节点的分隔符，用 , 作为节点标签和邻接点的分隔符。
+
+例如，序列化无向图 {0,1,2#1,2#2,2}。
+
+该图总共有三个节点, 被两个分隔符  # 分为三部分。 
+
+第一个节点的标签为 0，存在从节点 0 到节点 1 和节点 2 的两条边。
+第二个节点的标签为 1，存在从节点 1 到节点 2 的一条边。
+第三个节点的标签为 2，存在从节点 2 到节点 2 (本身) 的一条边，从而形成自环。
+我们将图形可视化如下：
+```java
+       1
+      / \
+     /   \
+    0 --- 2
+         / \
+         \_/
+```
+
+- 实现：
+```java
+class UndirectedGraphNode {
+          int label;
+          List<UndirectedGraphNode> neighbors;
+          UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
+      }
+
+    //实现深拷贝
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node==null){
+            return null;
+        }
+        UndirectedGraphNode ret = new UndirectedGraphNode(node.label);
+        //使用栈来遍历原始的结点
+        Stack<UndirectedGraphNode> stack=new Stack<>();
+        //K：原始结点；V：复制生成的新结点
+        Map<UndirectedGraphNode,UndirectedGraphNode> nodeMap=new HashMap<>();
+        stack.push(node);
+        nodeMap.put(node,ret);
+        while (!stack.empty()){
+            UndirectedGraphNode cur = stack.pop();
+            //遍历邻居结点，克隆邻居结点
+            for (UndirectedGraphNode next:cur.neighbors){
+                if (nodeMap.get(next)==null){
+                    //克隆结点
+                    UndirectedGraphNode graphNode = new UndirectedGraphNode(next.label);
+                    nodeMap.put(next,graphNode);
+                    stack.push(next);
+                }
+                //将克隆的邻居结点加入该结点的邻居集合中
+                nodeMap.get(cur).neighbors.add(nodeMap.get(next));
+            }
+
+        }
+        return ret;
+    }
+```
 
 ### 150
 
