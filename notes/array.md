@@ -355,7 +355,7 @@ public int[] searchRange(int[] nums, int target) {
 
 ![](../pict/array_02.png)
 
-<div>
+</div>
 
 相关题目：
  * [75.颜色分类](#75)
