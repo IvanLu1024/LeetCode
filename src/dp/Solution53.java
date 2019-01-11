@@ -27,12 +27,14 @@ public class Solution53 {
         }
         int[] memo=new int[n];
         int sum=0;
+        //用数组记录从0到i的连续子序和
         for (int i = 0; i < n; i++) {
             sum+=nums[i];
             memo[i]=sum;
         }
         int max=memo[n-1];
         for (int i = 0; i < n; i++) {
+            //最大值只可能出现在0到i的子序和，i到j的子序和
             max=Math.max(max,memo[i]);
             for (int j = i+1; j <n ; j++) {
                 max=Math.max(max,memo[j]-memo[i]);
@@ -41,10 +43,11 @@ public class Solution53 {
         return max;
     }
 
+    //时间复杂度：O(n)
     public int maxSubArray1(int[] nums){
         //全局最大值
         int max=nums[0];
-        //局部最大值
+        //局部最大值:当前的连续子序和
         int curMax=nums[0];
         for (int i = 1; i < nums.length; i++) {
             //继续累加
