@@ -1379,7 +1379,131 @@ public void rotate(Integer[][] matrix) {
 ```
 ## 字符数组（字符串）
 相关题目：
-* []()
+* [151.翻转字符串里的单词](#151)
+* [541.翻转字符串里的单词](#541)
+* [557.翻转字符串里的单词](#557)
+### 151
+给定一个字符串，逐个翻转字符串中的每个单词。
+
+示例:  
+
+输入: "the sky is blue",
+输出: "blue is sky the".
+说明:
+
+无空格字符构成一个单词。
+输入字符串可以在前面或者后面包含多余的空格，但是反转后的字符不能包括。
+
+如果两个单词间有多余的空格，将反转后单词间的空格减少到只含一个。
+
+进阶: 请选用C语言的用户尝试使用 O(1) 空间复杂度的原地解法。
+
+- 分析：
+
+遍历一遍字符串，将该字符串中的单词记录在一个集合中，最后再将集合从后向前重新构建一个新的字符串
+
+- 实现：
+```java
+public String reverseWords(String s) {
+        //为了去除字符串首尾两边的空格
+        String trim = s.trim();
+        int n = trim.length();
+        if (n==0){
+            return "";
+        }
+        char[] chars = trim.toCharArray();
+        //定义一个起始位置，为了方便后面截取字符串
+        int start=0;
+        //存放单词的集合
+        List<String> list = new ArrayList<>();
+        //*这里需要注意subString的起始位置和终止位置的细节！
+        for (int i = start; i < n; ) {
+            //当遍历到尾部的时候，直接截取
+            if (i==n-1){
+                String substring = trim.substring(start, i+1);
+                list.add(substring);
+            }
+            //当不为空格的时候，继续向前移动
+            if (chars[i]!=' '){
+                i++;
+            }else   //当前位置为空格的时候，此时需要截取字符串
+                {
+                    //subString：trim[start,i),前闭后开
+                String substring = trim.substring(start, i);
+                list.add(substring);
+                start=i+1;
+                //为了处理连续空格，确保下次循环的起始位置为字符
+                while (chars[start]==' '){
+                    start++;
+                }
+                i=start;
+            }
+
+        }
+        //将集合从后向前重新构建新的字符串
+        StringBuilder sb= new StringBuilder();
+        for (int i = list.size()-1; i >=0; i--) {
+            if (i!=0){
+                sb.append(list.get(i)+" ");
+            }else {
+                sb.append(list.get(i));
+            }
+        }
+        return sb.toString();
+    }
+```
+### 541
+给定一个字符串和一个整数 k，你需要对从字符串开头算起的每个 2k 个字符的前k个字符进行反转。如果剩余少于 k 个字符，则将剩余的所有全部反转。如果有小于 2k 但大于或等于 k 个字符，则反转前 k 个字符，并将剩余的字符保持原样。
+
+示例:
+
+输入: s = "abcdefg", k = 2
+输出: "bacdfeg"
+要求:
+
+该字符串只包含小写的英文字母。
+给定字符串的长度和 k 在[1, 10000]范围内。
+
+- 分析：
+
+直接使用一个循环，而循环的增量为2k，每次翻转从i到开始的k个字符。
+
+- 实现：
+```java
+public String reverseStr(String s, int k) {
+        char[] chars = s.toCharArray();
+        int n = s.length();
+        if (n==0){
+            return "";
+        }
+        //每个 2k 个字符, 翻转前k个字符
+        for (int i = 0; i <n ; i+=(2*k)) {
+            reverse(chars,i,i+k-1);
+        }
+        return new String(chars);
+    }
+
+    /**
+     * 翻转字符数组
+     *
+     * @param chars
+     * @param l 起始坐标
+     * @param r 终止坐标
+     */
+    private void reverse(char[] chars,int l,int r){
+        //为了避免传进来的r可能会大于数组长度,最后一个i+k-1可能>=n-1
+        r=Math.min(r,chars.length-1);
+        while (l<r){
+            char c = chars[l];
+            chars[l]=chars[r];
+            chars[r]=c;
+            l++;
+            r--;
+        }
+    }
+```
+
+### 557
 
 ## 更多数组中的问题
 相关题目：
