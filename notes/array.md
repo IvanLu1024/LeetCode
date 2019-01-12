@@ -14,6 +14,7 @@
 # 数组部分总结笔记
 ## 二分查找
 二分搜索（英语：binary search），也称折半搜索（英语：half-interval search）、对数搜索（英语：logarithmic search），是一种在有序数组中查找某一**特定元素**的搜索算法。搜索过程从数组的中间元素开始，如果中间元素正好是要查找的元素，则搜索过程结束；如果某一特定元素大于或者小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。如果在某一步骤数组为空，则代表找不到。这种搜索算法每一次比较都使搜索范围缩小一半。
+
 <div align=center>
 
 ![](../pict/array_01.png)
@@ -354,7 +355,7 @@ public int[] searchRange(int[] nums, int target) {
 
 ![](../pict/array_02.png)
 
-<div>
+</div>
 
 相关题目：
  * [75.颜色分类](#75)
@@ -874,6 +875,7 @@ public String reverseVowels(String s) {
 给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
 
 说明：你不能倾斜容器，且 n 的值至少为 2。
+
 <div align=center>
 
 ![](../pict/question_11.jpg)
@@ -1189,6 +1191,8 @@ public int numSubarrayProductLessThanK(int[] nums, int k) {
 * [54.螺旋矩阵](#54)
 * [59.螺旋矩阵（2）](#59)
 * [48.旋转图像](#48)
+* [74.搜索二维矩阵（1）](#74)
+* [240.搜索二维矩阵（2）](#240)
 ### 54
 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
 
@@ -1375,6 +1379,80 @@ public void rotate(Integer[][] matrix) {
                 matrix[j][i]=t;
             }
         }
+    }
+```
+### 74
+
+### 240
+编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target。该矩阵具有以下特性：
+
+每行的元素从左到右升序排列。
+每列的元素从上到下升序排列。
+示例:
+
+现有矩阵 matrix 如下：
+```java
+
+[
+  [1,   4,  7, 11, 15],
+  [2,   5,  8, 12, 19],
+  [3,   6,  9, 16, 22],
+  [10, 13, 14, 17, 24],
+  [18, 21, 23, 26, 30]
+]
+```
+给定 target = 5，返回 true。
+
+给定 target = 20，返回 false。
+
+- 分析：
+
+这一题关键在于设置初始位置，使得在搜索的过程中**能够根据当前值来确定下一个需要的搜索位置。**
+
+- 实现：
+```java
+//时间复杂度O(n^2)
+public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length;
+        if (m==0){
+            return false;
+        }
+        int n = matrix[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j]==target){
+                    return true;
+                }else if (matrix[i][j]>target){
+                    break;
+                }
+            }
+        }
+        return false;
+    }
+    //时间复杂度O(n)
+    public boolean searchMatrix1(int[][] matrix, int target){
+        int m = matrix.length;
+        if (m==0){
+            return false;
+        }
+        int n = matrix[0].length;
+        //关键在于初始值的设置，
+        int i=m-1,j=0;
+        while (i>=0&&j<n){
+            //搜索的当前值大于目标值的时候继续向上搜索
+            if (matrix[i][j]>target){
+                i--;
+            }
+            //搜素的当前值小于目标值的时候继续向右搜索
+            else if (matrix[i][j]<target){
+                j++;
+            }
+            //相等的时候则直接返回true
+            else {
+                return true;
+            }
+        }
+        return false;
     }
 ```
 ## 字符数组（字符串）
