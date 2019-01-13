@@ -1458,8 +1458,8 @@ public boolean searchMatrix(int[][] matrix, int target) {
 ## 字符数组（字符串）
 相关题目：
 * [151.翻转字符串里的单词](#151)
-* [541.翻转字符串里的单词](#541)
-* [557.翻转字符串里的单词](#557)
+* [541.翻转字符串里的单词(2)](#541)
+* [557.翻转字符串里的单词(3)](#557)
 ### 151
 给定一个字符串，逐个翻转字符串中的每个单词。
 
@@ -1580,9 +1580,116 @@ public String reverseStr(String s, int k) {
         }
     }
 ```
-
 ### 557
+给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
 
+示例 1:
+
+输入: "Let's take LeetCode contest"
+
+输出: "s'teL ekat edoCteeL tsetnoc" 
+
+注意：在字符串中，每个单词由单个空格分隔，并且字符串中不会有任何额外的空格。
+
+- 实现：
+```java
+public String reverseWords(String s) {
+        if (s==null||s.length()==0){
+            return "";
+        }
+        //在字符串中，每个单词由单个空格分隔，并且字符串中不会有任何额外的空格
+        //所以按照空格来切分原字符串
+        String[] strs = s.split(" ");
+        StringBuilder sb = new StringBuilder();
+        //将每个单词都翻转，并且按照空格来分割重新构建一个新的字符串
+        for (String str:strs){
+            char[] chars = str.toCharArray();
+            reverse(chars);
+            String reStr = new String(chars);
+            sb.append(reStr+" ");
+        }
+        String res = sb.toString();
+        //为了去除最后一个单词后面的空格
+        return res.trim();
+    }
+    private void reverse(char[] chars){
+        int l=0,h=chars.length-1;
+        while (l<h){
+            char c=chars[l];
+            chars[l]=chars[h];
+            chars[h]=c;
+            l++;
+            h--;
+        }
+    }
+```
+### 387
+给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+
+案例:
+
+s = "leetcode"
+返回 0.
+
+s = "loveleetcode",
+返回 2.
+
+- 分析：
+
+解法1：
+
+利用辅助空间，首先遍历一遍字符串来记录各字符的出现频率，再遍历一遍字符串，发现第一个字符频率为1的就直接返回，
+没有则循环结束，返回-1；
+
+解法2：
+
+按照小写字母的顺序遍历，在字符串中查找出现的第一次和最后一次的下标，如果下标相同则表明只出现了一次，取其中的最小值
+就是第一次出现的字符。
+
+- 实现：
+```java
+public int firstUniqChar(String s) {
+        if (s.length()==0){
+            return -1;
+        }
+        int[] freq=new int[26];
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            freq[chars[i]-'a']++;
+        }
+        for (int i = 0; i < chars.length; i++) {
+            int j = chars[i]-'a';
+            if (freq[j]==1){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int firstUniqChar1(String s){
+        int n = s.length();
+        if (n==0){
+            return -1;
+        }
+        //用于记录第一个出现字符的下标
+        int index=n;
+        char[] chars = s.toCharArray();
+        for (int i = 'a'; i <= 'z'; i++) {
+            int first = s.indexOf(i);
+            int last = s.lastIndexOf(i);
+            //如果第一次出现和最后一次出现的下标相等的话
+            // 说明是只出现一次的字符
+            if (first==last&&first!=-1){
+                //取最小值，则是寻找第一个出现的字符
+                index=Math.min(index,first);
+            }
+        }
+        if (index==n){
+            return -1;
+        }
+        return index;
+    }
+```
 ## 更多数组中的问题
 相关题目：
 * [717.1比特与2比特字符](#717)
