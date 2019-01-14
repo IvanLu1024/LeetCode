@@ -227,6 +227,220 @@ public class Interval {
         return intervals.length-res;
     }
 ```
+## 更多贪心算法的题目
+相关题目：
+* [860.柠檬水找零](#860)
+* [861.翻转矩阵后的得分](#861)
+
+### 860
+
+在柠檬水摊上，每一杯柠檬水的售价为 5 美元。
+
+顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
+
+每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+
+注意，一开始你手头没有任何零钱。
+
+如果你能给每位顾客正确找零，返回 true ，否则返回 false 。
+
+示例 1：
+
+输入：[5,5,5,10,20]
+输出：true
+解释：
+前 3 位顾客那里，我们按顺序收取 3 张 5 美元的钞票。
+
+第 4 位顾客那里，我们收取一张 10 美元的钞票，并返还 5 美元。
+
+第 5 位顾客那里，我们找还一张 10 美元的钞票和一张 5 美元的钞票。
+
+由于所有客户都得到了正确的找零，所以我们输出 true。
+
+示例 2：
+
+输入：[5,5,10]
+输出：true
+
+示例 3：
+
+输入：[10,10]
+输出：false
+
+示例 4：
+
+输入：[5,5,10,10,20]
+输出：false
+解释：
+前 2 位顾客那里，我们按顺序收取 2 张 5 美元的钞票。
+
+对于接下来的 2 位顾客，我们收取一张 10 美元的钞票，然后返还 5 美元。
+
+对于最后一位顾客，我们无法退回 15 美元，因为我们现在只有两张 10 美元的钞票。
+
+由于不是每位顾客都得到了正确的找零，所以答案是 false。
+ 
+
+提示：
+
+0 <= bills.length <= 10000
+
+bills[i] 不是 5 就是 10 或是 20 
+
+- 分析：
+
+贪心策略：尽量使用少的零钱去找零，所以每次找零的时候，尽量选择面额大的零钱来进行找零。
+
+- 实现：
+```java
+public boolean lemonadeChange(int[] bills) {
+        int five=0,ten=0;
+        int n = bills.length;
+        if (n==0){
+            return true;
+        }
+        for (int i = 0; i < n; i++) {
+            if (bills[i]==5){
+                five++;
+            }else if (bills[i]==10){
+                if (five>0){
+                    five--;
+                    ten++;
+                }else {
+                    return false;
+                }
+            }else {
+                //bills[i]==20
+                if (ten>0){
+                    if (five>0){
+                        ten--;
+                        five--;
+                    }else {
+                        return false;
+                    }
+                }else {
+                    if (five>=3){
+                        five-=3;
+                    }else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+```
+### 861
+有一个二维矩阵 A 其中每个元素的值为 0 或 1 。
+
+移动是指选择任一行或列，并转换该行或列中的每一个值：将所有 0 都更改为 1，将所有 1 都更改为 0。
+
+在做出任意次数的移动后，将该矩阵的每一行都按照二进制数来解释，矩阵的得分就是这些数字的总和。
+
+返回尽可能高的分数。
+
+ 
+
+示例：
+
+输入：[[0,0,1,1],[1,0,1,0],[1,1,0,0]]
+
+输出：39
+
+解释：
+
+转换为 [[1,1,1,1],[1,0,0,1],[1,1,1,1]]
+0b1111 + 0b1001 + 0b1111 = 15 + 9 + 15 = 39
+ 
+
+提示：
+
+1 <= A.length <= 20
+
+1 <= A[0].length <= 20
+
+A[i][j] 是 0 或 1
+
+- 分析：
+
+这一题如果不使用贪心算法的话，求解会比较麻烦，因为穷举是指数级别的。
+
+贪心策略：**尽可能将高位填充1**，将每一行看做是一个二进制数，分数是这些数字之和，那么高位中有尽可能多
+的1就能确保加和会尽量地大。
+
+- 实现：
+```java
+public int matrixScore(int[][] A) {
+        int row = A.length;
+        if (row==0){
+            return 0;
+        }
+        int col = A[0].length;
+        for (int i = 0; i < row; i++) {
+            if (A[i][0]==0){
+                reverseCol(A,i);
+            }
+        }
+        for (int i = 1; i < col; i++) {
+            int zero=colZeros(A,i);
+            if (zero>row/2){
+                reverseRow(A,i);
+            }
+        }
+        int res=scores(A);
+        return res;
+    }
+
+    //按列来进行 行翻转
+    private void reverseRow(int[][] a,int col){
+        for (int i = 0; i < a.length; i++) {
+            if (a[i][col]==1){
+                a[i][col]=0;
+            }else {
+                a[i][col]=1;
+            }
+        }
+    }
+
+    //按行来进行列翻转
+    private void reverseCol(int[][] a,int row){
+        for (int i = 0; i < a[0].length; i++) {
+            if (a[row][i]==1){
+                a[row][i]=0;
+            }else {
+                a[row][i]=1;
+            }
+        }
+    }
+
+    //统计一列中
+    private int colZeros(int[][] a,int col){
+        int zero=0;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i][col]==0){
+                zero++;
+            }
+        }
+        return zero;
+    }
+
+    //计算分数
+    private int scores(int[][] a){
+        int res=0;
+        for (int i = 0; i < a.length; i++) {
+            int rowNum=0;
+            int col = a[0].length-1;
+            for (int j = 0; j <= col; j++) {
+                int bit = a[i][j];
+                rowNum+=bit<<(col-j);
+            }
+            res+=rowNum;
+        }
+        return res;
+    }
+```
+
+
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
