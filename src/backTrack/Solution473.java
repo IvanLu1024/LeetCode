@@ -1,4 +1,4 @@
-package array;
+package backTrack;
 
 import org.junit.Test;
 
@@ -29,6 +29,7 @@ import java.util.Arrays;
  *
  */
 public class Solution473 {
+    //回溯法
     public boolean makesquare(int[] nums) {
         if (nums==null||nums.length==0){
             return false;
