@@ -19,8 +19,8 @@
 | 动态规划 | [动态规划笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md)| [动态规划代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/dp)|
 | 贪心算法 | [贪心算法笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/greedy.md)| [贪心算法代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/greedy)|
 
-# :penguin: 腾讯精选练习（50题）
-## 题目列表
+## :penguin: 腾讯精选练习（50题）
+### 题目列表
 | 题号 | 名称 | 笔记 | 代码 |
 | :--: | :--: | :--: | :--: |
 | [2](https://leetcode-cn.com/problems/add-two-numbers/description/) | 两数相加 | [笔记]() | [代码]() |
@@ -33,5 +33,6 @@
 >不断更新中……
 # :bookmark: 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
+
 [LeetCode中文站](https://leetcode-cn.com/)
 
