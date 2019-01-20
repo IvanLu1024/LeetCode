@@ -23,11 +23,16 @@
 ## 题目列表
 | 题号 | 名称 | 笔记 | 代码 |
 | :--: | :--: | :--: | :--: |
-| [2](https://leetcode-cn.com/problems/add-two-numbers/description/) | 两数相加 | [笔记]() | [代码]() |
-| [4]() | 寻找两个有序数组的中位数 | [笔记]() | [代码]() |
-| [5]() | 最长回文子串 |  [笔记]() | [代码]() |
-| [7](https://leetcode-cn.com/problems/reverse-integer/description/) | 整数反转 | [笔记]() | [代码]() |
-| [8]() | 字符串转换整数(atoi) |  [笔记]() | [代码]() |
+| [2](https://leetcode-cn.com/problems/add-two-numbers/description/) | 两数相加 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#2) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
+| [4](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/description/) | 寻找两个有序数组的中位数 | [笔记] | [代码] |
+| [5](https://leetcode-cn.com/problems/longest-palindromic-substring/description/) | 最长回文子串 |  [笔记] | [代码] |
+| [7](https://leetcode-cn.com/problems/reverse-integer/description/) | 整数反转 | [笔记] | [代码] |
+| [8](https://leetcode-cn.com/problems/string-to-integer-atoi/description/) | 字符串转换整数(atoi) |  [笔记] | [代码] |
+| [9](https://leetcode-cn.com/problems/palindrome-number/description/) | 回文数 |  [笔记] | [代码] |
+| [11](https://leetcode-cn.com/problems/container-with-most-water/description/) | 盛最多水的容器 |  [笔记] | [代码] |
+| [14](https://leetcode-cn.com/problems/longest-common-prefix/description/) | 最长公共前缀 |  [笔记] | [代码] |
+| [15](https://leetcode-cn.com/problems/3sum/description/) | 三数之和 |  [笔记] | [代码] |
+| [16](https://leetcode-cn.com/problems/3sum-closest/description/) | 最接近的三数之和 |  [笔记] | [代码] |
 
 
 >不断更新中……
