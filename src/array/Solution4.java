@@ -91,15 +91,15 @@ public class Solution4 {
             return Math.min(nums1[l1],nums2[l2]);
         }
 
-        int min1 = Integer.MAX_VALUE;
-        int min2 = Integer.MAX_VALUE;
+        int mid1 = Integer.MAX_VALUE;
+        int mid2 = Integer.MAX_VALUE;
         if (l1+k/2-1<nums1.length){
-            min1 = nums1[l1+k/2-1];
+            mid1 = nums1[l1+k/2-1];
         }
         if (l2+k/2-1<nums2.length){
-            min2 = nums2[l2+k/2-1];
+            mid2 = nums2[l2+k/2-1];
         }
-        if (min1<min2){
+        if (mid1<mid2){
             return findKnum(nums1,l1+k/2,nums2,l2,k-k/2);
         }else {
             return findKnum(nums1,l1,nums2,l2+k/2,k-k/2);
