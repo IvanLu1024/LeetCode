@@ -1461,6 +1461,7 @@ public boolean searchMatrix(int[][] matrix, int target) {
 * [268.缺失数字](#268)
 * [56.合并区间](#56)
 * [485.最大连续1的个数](#485)
+* [4.寻找两个有序数组的中位数](#4)
 
 ### 717
 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
@@ -1675,6 +1676,156 @@ public int findMaxConsecutiveOnes(int[] nums){
             }
         }
         return max>count?max:count;
+    }
+```
+### 4
+
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+
+请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+
+你可以假设 nums1 和 nums2 不会同时为空。
+
+示例 1:
+
+nums1 = [1, 3]
+
+nums2 = [2]
+
+则中位数是 2.0
+示例 2:
+
+nums1 = [1, 2]
+
+nums2 = [3, 4]
+
+则中位数是 (2 + 3)/2 = 2.5
+
+- 分析：
+
+解法1：
+
+时间复杂度O(m+n)
+
+因为操作的是**两个有序数组**，这里可以考虑使用归并排序。
+
+归并排序得到的一个新的数组nums[],再从nums[]中取中位数。
+
+解法2：
+
+时间复杂度O(log(m+n))
+
+[参考](https://segmentfault.com/a/1190000013027222)
+
+假设第k个数是我们要找的中位数，那么前k-1个数应该都比这个第k个数要小。后面的数都比这个第k个数大。（像变形的用二分法找第K个数）。
+
+如果我们每次在nums1数组中找前(k/2) = m个数，在nums2数组中找剩下的(k-k/2) = n个数。
+
+然后对a[p + k/2 - 1]和b[q + k - k/2 -1]进行比较，记为a[i]和b[j]。
+
+a[i] < b[j]： 说明我们可以扔掉0-i之间的（i+ 1）个数。为什么？
+**因为a数组中的前m个数的最大值都比b数组中的前n个数要小**，那么这前m个数一定是在我们想要的中位数之前的，并且对找到中位数没有说明影响。所以为了缩小搜索范围，我们可以扔掉这些数，在a的剩下来的数中和b的数组中接着找。
+
+i>=a.length: 说明a中没有m个数可以寻找。
+
+那么第K个数要么在b剩下的数组[n ~ b.length]中，要么就在a的前m个数中。
+
+一直搜索到什么时候为止呢？
+
+k=1代表的是，当前的这个是就是我们想要的值，我们应该在如何选择? Math.min(a[p], b[q]).
+
+
+- 实现：
+
+解法1：
+```java
+private int[] nums;
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        double m;
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        nums=new int[n1+n2];
+        nums=merge(nums1,nums2);
+        if ((n1+n2)%2!=0){
+            //奇数的情况
+            m=nums[(n1+n2)/2];
+        }else {
+            //偶数的情况
+            m=((double) nums[(n1+n2)/2]+(double) nums[(n1+n2)/2-1])/2;
+        }
+        return m;
+    }
+    //归并排序--将两个已经排序好的数组合并为一个新的排序数组
+    private int[] merge(int[] nums1,int[] nums2){
+        if (nums1.length==0){
+            return nums2;
+        }
+        if (nums2.length==0){
+            return nums1;
+        }
+        int index1=0,index2=0,index=0;
+        while (index1<nums1.length&&index2<nums2.length){
+            if (nums1[index1]<nums2[index2]){
+                nums[index++]=nums1[index1++];
+            }else {
+                nums[index++]=nums2[index2++];
+            }
+        }
+        //若nums1排序结束，将nums2中其余元素放入nums中
+        if (index1>=nums1.length){
+            while (index2<nums2.length){
+                nums[index++]=nums2[index2++];
+            }
+        }
+        //同理将nums1中其余元素放入nums中
+        if (index2>=nums2.length){
+            while (index1<nums1.length){
+                nums[index++]=nums1[index1++];
+            }
+        }
+        return nums;
+    }
+```
+解法2：
+```java
+public double findMedianSortedArrays1(int[] nums1, int[] nums2){
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        if ((n1+n2)%2==1){
+            return findKnum(nums1,0,nums2,0,(n1+n2)/2+1);
+        }else {
+            return (findKnum(nums1,0,nums2,0,(n1+n2)/2)+findKnum(nums1,0,nums2,0,(n1+n2)/2+1))/2.0;
+        }
+    }
+    private int findKnum(int[] nums1,int l1, int[] nums2,int l2,int k){
+        //递归终止条件
+        if (l1>=nums1.length){
+            return nums2[l2+k-1];
+        }
+        if (l2>=nums2.length){
+            return nums1[l1+k-1];
+        }
+        if (k==1){
+            return Math.min(nums1[l1],nums2[l2]);
+        }
+
+        int mid1 = Integer.MAX_VALUE;
+        int mid2 = Integer.MAX_VALUE;
+            if (l1+k/2-1<nums1.length)
+            {
+            mid1 = nums1[l1+k/2-1];
+            }
+            if (l2+k/2-1<nums2.length)
+            {
+                    mid2 = nums2[l2+k/2-1];
+                }
+                if (mid1<mid2){
+                    //舍弃nums1中前(k/2-1)个元素，因为中位数不可能在这部分
+                    return findKnum(nums1,l1+k/2,nums2,l2,k-k/2);
+                }else {
+                    //舍弃nums2中前(k/2-1)个元素，因为中位数不可能在这部分
+                    return findKnum(nums1,l1,nums2,l2+k/2,k-k/2);
+                }
     }
 ```
 # 参考资料
