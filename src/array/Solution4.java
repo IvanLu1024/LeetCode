@@ -69,11 +69,48 @@ public class Solution4 {
         }
         return nums;
     }
+
+    //二分搜索
+    public double findMedianSortedArrays1(int[] nums1, int[] nums2){
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        if ((n1+n2)%2==1){
+            return findKnum(nums1,0,nums2,0,(n1+n2)/2+1);
+        }else {
+            return (findKnum(nums1,0,nums2,0,(n1+n2)/2)+findKnum(nums1,0,nums2,0,(n1+n2)/2+1))/2.0;
+        }
+    }
+    private int findKnum(int[] nums1,int l1, int[] nums2,int l2,int k){
+        if (l1>=nums1.length){
+            return nums2[l2+k-1];
+        }
+        if (l2>=nums2.length){
+            return nums1[l1+k-1];
+        }
+        if (k==1){
+            return Math.min(nums1[l1],nums2[l2]);
+        }
+
+        int min1 = Integer.MAX_VALUE;
+        int min2 = Integer.MAX_VALUE;
+        if (l1+k/2-1<nums1.length){
+            min1 = nums1[l1+k/2-1];
+        }
+        if (l2+k/2-1<nums2.length){
+            min2 = nums2[l2+k/2-1];
+        }
+        if (min1<min2){
+            return findKnum(nums1,l1+k/2,nums2,l2,k-k/2);
+        }else {
+            return findKnum(nums1,l1,nums2,l2+k/2,k-k/2);
+        }
+    }
+
     @Test
     public void test(){
         int[] nums1={1,2};
         int[] nums2={3,4};
-        double r = findMedianSortedArrays(nums1, nums2);
+        double r = findMedianSortedArrays1(nums1, nums2);
         System.out.println(r);
     }
 }
