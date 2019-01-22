@@ -238,6 +238,13 @@ public ListNode partition(ListNode head, int x) {
 输出：7 -> 0 -> 8
 原因：342 + 465 = 807
 
+- 分析：
+
+根据题意，由于 这些非负的整数是**逆序的**，所以这两个“数字”的相加，可以从第一个位置开始；
+
+每一位求和并且进位来逐步进行计算，需要注意的是这里可以**设置一个虚拟头结点来更加方便地得到返回值。**
+
+
 - 实现：
 ```java
 public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
@@ -248,6 +255,7 @@ public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
         ListNode cur = new ListNode(-1);
         ListNode head=cur;
         while (l1!=null||l2!=null||sum!=0){
+            //按位累加
             if (l1!=null){
                 sum+=l1.val;
                 l1=l1.next;
@@ -256,6 +264,7 @@ public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
                 sum+=l2.val;
                 l2=l2.next;
             }
+            //取余和进位
             cur.next=new ListNode(sum%10);
             cur=cur.next;
             sum/=10;
