@@ -61,12 +61,12 @@ public class Solution5 {
         }
         int start=0,end=0;
         for (int i = 0; i < s.length(); i++) {
-            //注意i的位置
-            int len1 = expand(s, i, i);
-            int len2 = expand(s, i, i + 1);
+            //i：中间位置，若回文串为偶数则是偏左的位置
+            int len1 = expand(s, i, i);            //回文串长度为奇数
+            int len2 = expand(s, i, i + 1);     //回文串长度为偶数
             int len = Math.max(len1,len2);
             if (len>end-start){
-                //确保start和i的距离
+                //len-1：对于奇数没有影响，对于偶数位置会偏左
                 start = i - (len-1)/2;
                 end = i +(len/2);
             }
@@ -74,6 +74,7 @@ public class Solution5 {
         return s.substring(start,end+1);
     }
 
+    //从中间开始拓展
     private int expand(String s,int l ,int r){
         while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
             l--;
