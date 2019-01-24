@@ -1462,6 +1462,8 @@ public boolean searchMatrix(int[][] matrix, int target) {
 * [56.合并区间](#56)
 * [485.最大连续1的个数](#485)
 * [4.寻找两个有序数组的中位数](#4)
+* [169.众数](#169)
+* [229.众数(2)](#229)
 
 ### 717
 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
@@ -1826,6 +1828,121 @@ public double findMedianSortedArrays1(int[] nums1, int[] nums2){
                     //舍弃nums2中前(k/2-1)个元素，因为中位数不可能在这部分
                     return findKnum(nums1,l1,nums2,l2+k/2,k-k/2);
                 }
+    }
+```
+下面两题都可以使用[摩尔投票算法以及其拓展](https://www.zhihu.com/question/284969980)
+来解决
+###169
+给定一个大小为 n 的数组，找到其中的众数。众数是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。
+
+你可以假设数组是非空的，并且给定的数组总是存在众数。
+
+示例 1:
+
+输入: [3,2,3]
+输出: 3
+示例 2:
+
+输入: [2,2,1,1,1,2,2]
+输出: 2
+- 实现：
+
+```java
+///// Boyer-Moore Voting Algorithm(摩尔投票算法)
+    public int majorityElement1(int[] nums){
+        if (nums.length==0||nums==null)
+            return 0;
+        int majortiy=nums[0];
+        int count=1;
+        //遍历数组找到出现次数最多的元素
+        for (int i=1;i<nums.length;i++){
+            if (nums[i]==majortiy)
+                count++;
+            else
+                count--;
+            //此时说明，数量最多的元素不存在或者不超过半数
+            if (count==0){
+                majortiy=nums[i];
+                count=1;
+            }
+
+        }
+        //将计数器清零
+        count=0;
+        //再次遍历数组，统计出现最多元素的数量
+        for (int e:nums){
+            if (e==majortiy){
+                count++;
+            }
+        }
+        if (count>nums.length/2)
+            return majortiy;
+        else return 0;
+
+    }
+```
+
+###229
+给定一个大小为 n 的数组，找出其中所有出现超过 ⌊ n/3 ⌋ 次的元素。
+
+说明: 要求算法的时间复杂度为 O(n)，空间复杂度为 O(1)。
+
+示例 1:
+
+输入: [3,2,3]
+输出: [3]
+
+示例 2:
+
+输入: [1,1,1,3,3,2,2,2]
+输出: [1,2]
+- 实现：
+```java
+public List<Integer> majorityElement1(int[] nums){
+        int n = nums.length;
+        List<Integer> res = new ArrayList<>();
+        if (n==0){
+            return res;
+        }
+        //因为出现次数超过[n/2]的元素，最多只有2个
+        int num1,num2,count1=0,count2=0;
+        num1=num2=nums[0];
+        //首先寻找这两个众数的候选数num1和num2
+        for (int i:nums){
+            if (i==num1){
+                count1++;
+            }else if (i==num2){
+                count2++;
+            }
+            else if (count1==0){
+                num1=i;
+                count1++;
+            }
+            else if (count2==0){
+                num2=i;
+                count2++;
+            }else {
+                count1--;
+                count2--;
+            }
+        }
+        //再根据其次数确定是否为众数
+        count1=count2=0;
+        for (int i:nums){
+            if (i==num1){
+                count1++;
+            }else if (i==num2){
+                count2++;
+            }
+        }
+        //将结果加入结果集合中
+        if (count1>n/3){
+            res.add(num1);
+        }
+        if (count2>n/3){
+            res.add(num2);
+        }
+        return res;
     }
 ```
 # 参考资料
