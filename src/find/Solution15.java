@@ -33,13 +33,16 @@ public class Solution15 {
         //首先做排序处理
         Arrays.sort(nums);
         for (int i = 0; i < nums.length-2; i++) {
+            //去重操作
             if (i>0&&nums[i]==nums[i-1]) continue;
             int l=i+1,h=nums.length-1,target=-nums[i];
             while (l<h){
                 if (nums[l]+nums[h]==target){
                    res.add(Arrays.asList(nums[l],nums[h],nums[i]));
+                   //去重操作
                    while (l<h&&nums[l]==nums[l+1]) l++;
                    while (l<h&&nums[h]==nums[h-1]) h--;
+                   //继续搜索
                    l++;
                    h--;
                 }else if (nums[l]+nums[h]>target){
