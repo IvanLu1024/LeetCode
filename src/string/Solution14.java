@@ -1,4 +1,4 @@
-package array;
+package string;
 
 import org.junit.Test;
 
