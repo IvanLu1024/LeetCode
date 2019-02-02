@@ -27,8 +27,8 @@
 ### 题目分类
 | 类型 | 题号 | 
 | :--: | :--: | 
-|数组和字符串| **1,4,5** |
-|链表| -- |
+|数组和字符串| **1,4,5，** 15,16 |
+|链表| **206，2，** 21|
 |数学和数字| -- |
 |排序和搜索| -- |
 |回溯算法| -- |
@@ -43,7 +43,7 @@
 | 题号 | 名称 | 笔记 | 代码 |
 | :--: | :--: | :--: | :--: |
 | [1](https://leetcode-cn.com/problems/two-sum/) | **两数之和** | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#1) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
-| [2](https://leetcode-cn.com/problems/add-two-numbers/description/) | 两数相加 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#2) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
+| [2](https://leetcode-cn.com/problems/add-two-numbers/description/) | **两数相加** | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#2) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
 | [4](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/description/) | **寻找两个有序数组的中位数** | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#4) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution4.java) |
 | [5](https://leetcode-cn.com/problems/longest-palindromic-substring/description/) | **最长回文子串** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#5) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution5.java) |
 | [7](https://leetcode-cn.com/problems/reverse-integer/description/) | 整数反转 | [笔记]() | [代码]() |
@@ -54,7 +54,7 @@
 | [15](https://leetcode-cn.com/problems/3sum/description/) | 三数之和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#15) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution15.java) |
 | [16](https://leetcode-cn.com/problems/3sum-closest/description/) | 最接近的三数之和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#16) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution16.java) |
 | [20]() | 有效的括号 | [笔记]() | [代码]() |
-| [21]() | 合并两个有序链表| [笔记]() | [代码]() |
+| [21](https://leetcode-cn.com/problems/merge-two-sorted-lists/) | 合并两个有序链表| [笔记]() | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution21.java) |
 | [23]() | 合并K个排序链表|  [笔记]() | [代码]() |
 | [26]() | 删除排序数组中的重复项 | [笔记]() | [代码]() |
 | [33]() | 搜索旋转排序数组 |  [笔记] | [代码] |
@@ -81,7 +81,7 @@
 | [155]() | 最小栈 |  [笔记] | [代码] |
 | [160]() | 相交链表 |  [笔记] | [代码] |
 | [169]() | 求众数 |  [笔记] | [代码] |
-| [206](https://leetcode-cn.com/problems/reverse-linked-list/) | 反转链表 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#206) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution206.java) |
+| [206](https://leetcode-cn.com/problems/reverse-linked-list/) | **反转链表** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#206) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution206.java) |
 | [215]() | 数组中的第K个最大元素 |  [笔记] | [代码] |
 | [217]() | 存在重复元素 |  [笔记] | [代码] |
 | [230]() | 二叉搜素树中第K小元素 |  [笔记] | [代码] |
