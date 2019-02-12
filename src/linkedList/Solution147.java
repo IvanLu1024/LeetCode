@@ -28,21 +28,21 @@ public class Solution147 {
         ListNode sortedlisthead = new ListNode(0);
         //指向当前位置的指针
         ListNode cur = head;
-                 while (cur!=null){
-                     ListNode next=cur.next;
-                     //pre:指向待排序的部分的头指针
-                     ListNode pre=sortedlisthead;
-                     //在已排序的部分寻找可以插入的位置
-                     while (pre.next!=null&&cur.val>pre.next.val){
-                             pre=pre.next;
-                     }
-                     //将待排序的结点插入已排序的部分
-                     cur.next=pre.next;
-                     //继续指向未排序的部分
-                     pre.next=cur;
-                     cur=next;
-                 }
-                 return sortedlisthead.next;
+        while (cur != null) {
+            ListNode next = cur.next;
+            //pre:指向待排序的部分的头指针
+            ListNode pre = sortedlisthead;
+            //在已排序的部分寻找可以插入的位置
+            while (pre.next != null && cur.val > pre.next.val) {
+                pre = pre.next;
+            }
+            //将待排序的结点插入已排序的部分
+            cur.next = pre.next;
+            //继续指向未排序的部分
+            pre.next = cur;
+            cur = next;
+        }
+        return sortedlisthead.next;
     }
     @Test
     public void test(){
