@@ -344,12 +344,866 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 ```
 
 ## 设立链表的虚拟头结点
+相关题目：
+* [203.移除链表元素](#203)
+* [82.删除排序链表中的重复元素（2）](#82)
+* [21.合并两个有序链表](#21)
+### 203
+删除链表中等于给定值 val 的所有节点。
 
+示例:
+
+输入: 1->2->6->3->4->5->6, val = 6
+
+输出: 1->2->3->4->5
+
+实现：
+```java
+//虚拟头指针法
+    public ListNode removeElements(ListNode head, int val) {
+        if (head==null||head.next==null)
+            return head;
+        //设置一个虚拟头指针，这样原始链表中的头结点可以和其他结点一样处理了
+        ListNode dummyHead=new ListNode(-1);
+        dummyHead.next=head;
+        ListNode cur=dummyHead;
+        while (cur.next!=null){
+            //当遇到目标值的时候，进行删除操作
+            if (cur.next.val==val){
+                ListNode delNode=cur.next;
+                cur.next=delNode.next;
+                //释放delNode的空间
+                delNode.next=null;
+            }else {
+                //正常遍历结点
+                cur=cur.next;
+            }
+        }
+        return dummyHead.next;
+    }
+```
+### 82
+给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
+
+示例 1:
+
+输入: 1->2->3->3->4->4->5
+
+输出: 1->2->5
+
+示例 2:
+
+输入: 1->1->1->2->3
+
+输出: 2->3
+
+实现：
+```java
+//三指针的方法，搜索到需要删除的结点的前一个结点pre，将pre与后面链接
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head==null||head.next==null)
+            return head;
+
+        ListNode pre=null;
+        ListNode cur=head;
+        ListNode post=head.next;
+        boolean isDelete=false;
+        while (post!=null){
+            if (cur.val==post.val){
+                cur=post;
+                post=post.next;
+                isDelete=true;
+            }else {
+                //当前后结点不等的时候，存在需要删除结点的情况
+                if (isDelete){
+                    //当pre还没有移动的时候，直接把头部删除
+                    if (pre==null){
+                        head=post;
+                    }
+                    //常规的删除操作：将pre指向post结点
+                    else {
+                        pre.next=post;
+                    }
+                    //指针继续后移
+                    cur=post;
+                    post=post.next;
+                    isDelete=false;
+                }else {
+                    //三个指针一起后移
+                    pre=cur;
+                    cur=post;
+                    post=post.next;
+                }
+            }
+        }
+        //尾部可能存在重复未删除的结点
+        if (isDelete){
+            //删除尾部结点
+            if (pre!=null){
+                pre.next=null;
+            }
+            //此时链表中没有不重复的元素
+            else {
+                head=null;
+            }
+
+        }
+        return head;
+    }
+    
+    public ListNode deleteDuplicates1(ListNode head){
+        ListNode dummy=new ListNode(-1);
+        dummy.next=head;
+        ListNode pre=dummy;
+        ListNode cur=head;
+        while (cur!=null){
+            //当出现重复结点的时候
+            if (cur.next!=null&&cur.val==cur.next.val){
+                //跳过重复的结点
+                while (cur.next!=null&&cur.val==cur.next.val){
+                    cur=cur.next;
+                }
+            }
+            //记录不重复的结点
+            else {
+                pre=cur;
+            }
+            //正常遍历
+            cur=cur.next;
+            pre.next=cur;
+
+        }
+
+        return dummy.next;
+    }
+```
+### 21
+将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
+
+示例：
+
+输入：1->2->4, 1->3->4
+
+输出：1->1->2->3->4->4
+
+实现：
+```java
+public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        //合并的新链表
+        ListNode dummy=new ListNode(-1);
+        ListNode cur=dummy;
+        while (l1!=null&&l2!=null){
+                if (l1.val<l2.val){
+                    cur.next=l1;
+                    l1=l1.next;
+                }else {
+                    cur.next=l2;
+                    l2=l2.next;
+                }
+                cur=cur.next;
+        }
+        //当链表长度不同的时候，将剩余的链表直接插入新的链表中
+        if (l1!=null){
+            cur.next=l1;
+        }
+        if (l2!=null){
+            cur.next=l2;
+        }
+        return dummy.next;
+    }
+```
 ## 复杂的穿针引线 
+相关题目：
+* [24.两两交换链表的节点](#24)
+* [25.k个一组旋转链表](#25)
+* [147.对链表进行插入排序](#147)
+* [148.排序链表](#148)
+### 24
+给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
 
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例:
+
+给定 1->2->3->4, 你应该返回 2->1->4->3.
+
+实现：
+```java
+public ListNode swapPairs(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next=head;
+        ListNode p=dummy;
+        //注意循环的条件
+        while (p.next!=null&&p.next.next!=null){
+            ListNode n1=p.next;
+            ListNode n2=p.next.next;
+            ListNode next=n2.next;
+            p.next=n2;
+            n2.next=n1;
+            n1.next=next;
+            //p现在需要指向下一次需要交换位置的前一个
+            p=n1;
+        }
+        return dummy.next;
+
+    }
+```
+### 25
+给出一个链表，每 k 个节点一组进行翻转，并返回翻转后的链表。
+
+k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么将最后剩余节点保持原有顺序。
+
+示例 :
+
+给定这个链表：1->2->3->4->5
+
+当 k = 2 时，应当返回: 2->1->4->3->5
+
+当 k = 3 时，应当返回: 3->2->1->4->5
+
+说明 :
+
+你的算法只能使用常数的额外空间。
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+实现：
+```java
+public ListNode reverseKGroup(ListNode head, int k) {
+        if (head==null){
+            return null;
+        }
+        ListNode dummyHead=new ListNode(0);
+        dummyHead.next=head;
+        ListNode pre=dummyHead;
+        while (pre!=null){
+            pre=reverse(pre, k);
+        }
+        return dummyHead.next;
+
+    }
+    //从后向前翻转链表
+    private ListNode reverse(ListNode head,int k){
+        ListNode last=head;
+        for (int i = 0; i < k+1; i++) {
+            last=last.next;
+            if (i!=k&&last==null){
+                return null;
+            }
+        }
+        ListNode tail=head.next;
+        ListNode cur=tail.next;
+        //每次将元素提前的操作，第一个结点不动，从第二个结点开始，将其依次提前
+        //**特别注意其实现过程**
+        while (cur!=last){
+            ListNode next=cur.next;
+            cur.next=head.next;
+            head.next=cur;
+            tail.next=next;
+            cur=next;
+        }
+        return tail;
+    }
+```
+### 147
+对链表进行插入排序。
+
+插入排序算法：
+
+插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
+每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
+重复直到所有输入数据插入完为止。
+ 
+
+示例 1：
+
+输入: 4->2->1->3
+
+输出: 1->2->3->4
+
+示例 2：
+
+输入: -1->5->3->4->0
+
+输出: -1->0->3->4->5
+
+实现：
+```java
+public ListNode insertionSortList(ListNode head) {
+        if(head == null||head.next == null)
+                         return head;
+        //虚拟头节点指向已排序好的部分
+        ListNode sortedlisthead = new ListNode(0);
+        //指向当前位置的指针
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            //pre:指向待排序的部分的头指针
+            ListNode pre = sortedlisthead;
+            //在已排序的部分寻找可以插入的位置
+            while (pre.next != null && cur.val > pre.next.val) {
+                pre = pre.next;
+            }
+            //将待排序的结点插入已排序的部分
+            cur.next = pre.next;
+            //继续指向未排序的部分
+            pre.next = cur;
+            cur = next;
+        }
+        return sortedlisthead.next;
+    }
+```
+### 148
+在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。
+
+示例 1:
+
+输入: 4->2->1->3
+
+输出: 1->2->3->4
+
+示例 2:
+
+输入: -1->5->3->4->0
+
+输出: -1->0->3->4->5
+
+实现：
+```java
+//自顶向下的归并排序
+    public ListNode sortList(ListNode head) {
+        if (head==null||head.next==null){
+            return head;
+        }
+        //首先将链表折半
+        ListNode fast=head.next,slow=head;
+        while (fast!=null&&fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        ListNode head2=slow.next;
+        //将前后断开连接
+        slow.next=null;
+        head = sortList(head);  //前半部分
+        head2=sortList(head2);  //后半部分
+        return merge(head,head2);
+    }
+    //合并两个已经排序好的链表
+    private ListNode merge(ListNode a,ListNode b){
+        ListNode dummyHead=new ListNode(-1);
+        ListNode p1=a,p2=b,p=dummyHead;
+        while (p1!=null&&p2!=null){
+            if (p1.val<p2.val){
+                p.next=p1;
+                p=p.next;
+                p1=p1.next;
+                p.next=null;
+            }else {
+                p.next=p2;
+                p=p.next;
+                p2=p2.next;
+                p.next=null;
+            }
+        }
+        if (p1!=null){
+            p.next=p1;
+        }
+        if (p2!=null){
+            p.next=p2;
+        }
+        return dummyHead.next;
+
+    }
+```
 ## 不仅仅是穿针引线 
+相关题目：
+* [237.删除链表中的节点](#237)
+### 237
+请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点，你将只被给定要求被删除的节点。
+ 
+示例 1:
 
+输入: head = [4,5,1,9], node = 5
+
+输出: [4,1,9]
+
+解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+
+示例 2:
+
+输入: head = [4,5,1,9], node = 1
+
+输出: [4,5,9]
+
+解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+ 
+说明:
+
+链表至少包含两个节点。
+
+链表中所有节点的值都是唯一的。
+
+给定的节点为非末尾节点并且一定是链表中的一个有效节点。
+
+不要从你的函数中返回任何结果。
+
+实现：
+```java
+public void deleteNode(ListNode node) {
+        if (node==null)
+            return;
+        ListNode cur=node;
+        if (cur.next==null){
+            node=null;
+        }
+        ListNode next=cur.next;
+        cur.val=next.val;
+        cur.next=next.next;
+        next.next=null;
+    }
+```
 ## 链表与双指针
+相关题目：
+* [19.删除链表的倒数第N个节点](#19)
+* [61.旋转链表](#61)
+* [143.重排链表](#143)
+* [234.回文链表](#234)
+### 19
+给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+
+示例：
+
+给定一个链表: 1->2->3->4->5, 和 n = 2.
+
+当删除了倒数第二个节点后，链表变为 1->2->3->5.
+
+说明：
+
+给定的 n 保证是有效的。
+
+进阶：
+
+你能尝试使用一趟扫描实现吗？
+
+实现：
+```java
+public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummyHead=new ListNode(0);
+        dummyHead.next=head;
+        ListNode fastNode=dummyHead;
+        ListNode slowNode=dummyHead;
+        //快指针先移动n+1个位置，由于添加了一个虚拟头结点
+        for (int i = 0; i <= n; i++) {
+            fastNode=fastNode.next;
+        }
+        //两个指针同时运动
+        while (fastNode!=null){
+            fastNode=fastNode.next;
+            slowNode=slowNode.next;
+        }
+        //此时慢指针指向的则是倒数第n个元素
+        ListNode delNode=slowNode.next;
+        slowNode.next=delNode.next;
+        delNode=null;
+        return dummyHead.next;
+
+    }
+```
+### 61
+给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
+
+示例 1:
+
+输入: 1->2->3->4->5->NULL, k = 2
+
+输出: 4->5->1->2->3->NULL
+
+解释:
+向右旋转 1 步: 5->1->2->3->4->NULL
+
+向右旋转 2 步: 4->5->1->2->3->NULL
+
+示例 2:
+
+输入: 0->1->2->NULL, k = 4
+
+输出: 2->0->1->NULL
+
+解释:
+
+向右旋转 1 步: 2->0->1->NULL
+
+向右旋转 2 步: 1->2->0->NULL
+
+向右旋转 3 步: 0->1->2->NULL
+
+向右旋转 4 步: 2->0->1->NULL
+
+实现：
+```java
+public ListNode rotateRight(ListNode head, int k) {
+        if (head==null||head.next==null){
+            return head;
+        }
+        ListNode fast=head;
+        ListNode slow=head;
+        int count=0;
+        //首先计算当前链表的长度
+        while (slow!=null){
+            slow=slow.next;
+            count++;
+        }
+        slow=head;
+        //注意循环的情况，所以取模
+        k=k%count;
+        //让快指针先开始k个位置
+        for (int i = 0; i < k; i++) {
+            fast=fast.next;
+        }
+        //两个指针同时移动直到链表最后一个结点
+        while (fast.next!=null){
+            fast=fast.next;
+            slow=slow.next;
+        }
+        //遍历结束后，此时，slow便指向新的头结点
+
+        //将链表连成环路
+        fast.next=head;
+        //记录此时的头节点
+        head=slow.next;
+        //注意将尾指针置为空，不然会出现环路
+        slow.next=null;
+        return head;
+    }
+```
+### 143
+给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+
+将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+示例 1:
+
+给定链表 1->2->3->4, 重新排列为 1->4->2->3.
+
+示例 2:
+
+给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
+
+实现：
+```java
+public void reorderList(ListNode head) {
+        if (head==null||head.next==null||head.next.next==null){
+            return ;
+        }
+        //寻找链表的中间节点
+        ListNode fast=head,slow=head;
+        while (fast.next!=null&&fast.next.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        ListNode secend=slow.next;
+        slow.next=null;
+        
+        secend=reverse(secend);
+
+        ListNode first=head;
+        while (secend!=null){
+            ListNode next=first.next;
+            first.next=secend;
+            secend=secend.next;
+            first = first.next;
+            first.next = next;
+            first = first.next;
+        }
+    }
+
+    private ListNode reverse(ListNode head){
+        if (head==null||head.next==null){
+            return head;
+        }
+        ListNode pre=null;
+        ListNode cur=head;
+        while (cur!=null){
+            ListNode next=cur.next;
+            cur.next=pre;
+            pre=cur;
+            cur=next;
+        }
+        return pre;
+    }
+```
+### 234
+请判断一个链表是否为回文链表。
+
+示例 1:
+
+输入: 1->2
+
+输出: false
+
+示例 2:
+
+输入: 1->2->2->1
+
+输出: true
+
+进阶：
+你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+
+实现：
+```java
+public boolean isPalindrome(ListNode head) {
+        if (head==null||head.next==null){
+            return true;
+        }
+        //首先，将链表对半分
+        ListNode fast=head,slow=head;
+        //找到后半部分的前一个位置
+        while (fast.next!=null&&fast.next.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        //将后半部分翻转
+        slow.next=reverse(slow.next);
+        //指向后半部分的第一个结点
+        slow=slow.next;
+        ListNode cur=head;
+        //遍历链表，确保前半部分与后半部分是相同的
+        while (slow!=null){
+            if (slow.val!=cur.val){
+                return false;
+            }
+            slow=slow.next;
+            cur=cur.next;
+        }
+        return true;
+
+    }
+    private ListNode reverse(ListNode head){
+        if (head==null||head.next==null){
+            return head;
+        }
+        ListNode pre=null;
+        ListNode cur=head;
+        while (cur!=null){
+            ListNode next=cur.next;
+            cur.next=pre;
+            pre=cur;
+            cur=next;
+        }
+        return pre;
+    }
+```
+## 更多链表的问题
+相关题目：
+* [725.分隔链表](#725)
+* [817.链表组件](#817)
+* [876.链表的中间结点](#876)
+### 725 
+给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+
+这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+
+返回一个符合上述规则的链表的列表。
+
+举例： 1->2->3->4, k = 5 // 5 结果 [ [1], [2], [3], [4], null ]
+
+示例 1：
+
+输入: 
+root = [1, 2, 3], k = 5
+输出: [[1],[2],[3],[],[]]
+
+解释:
+输入输出各部分都应该是链表，而不是数组。
+
+例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = null。
+第一个输出 output[0] 是 output[0].val = 1, output[0].next = null。
+最后一个元素 output[4] 为 null, 它代表了最后一个部分为空链表。
+
+示例 2：
+
+输入: 
+root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
+
+输出: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
+
+解释:
+输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
+ 
+
+提示:
+
+root 的长度范围： [0, 1000].
+
+输入的每个节点的大小范围：[0, 999].
+
+k 的取值范围： [1, 50].
+
+实现：
+```java
+public ListNode[] splitListToParts(ListNode root, int k) {
+        int len=listNodeLen(root);
+        int average_size = len / k;
+        int left = len % k;
+        ListNode[] res=new ListNode[k];
+        List<ListNode> list=new ArrayList<>();
+        for (int i = 0; i < k; i++) {
+            //将余数均分
+            int size=average_size+(i<left?1:0);
+            if (size==0){
+                list.add(null);
+            }else {
+
+                ListNode tail = getTail(root, size);
+                //记录一下，下一次循环的起点
+                ListNode newRoot = tail.next;
+                tail.next=null;
+                list.add(root);
+                root=newRoot;
+            }
+
+        }
+        for (int i = 0; i < k; i++) {
+            res[i]=list.get(i);
+        }
+        return res;
+    }
+    private int listNodeLen(ListNode root){
+        int len=0;
+        while (root!=null){
+            len++;
+            root=root.next;
+        }
+        return len;
+    }
+
+    //获取新的头结点
+    private ListNode getTail(ListNode root,int size){
+        for (int i = 1; i < size; i++) {
+            assert root!=null;
+            root=root.next;
+        }
+        return root;
+    }
+```
+### 817 
+给定一个链表（链表结点包含一个整型值）的头结点 head。
+
+同时给定列表 G，该列表是上述链表中整型值的一个子集。
+
+返回列表 G 中组件的个数，这里对组件的定义为：链表中一段最长连续结点的值（该值必须在列表 G 中）构成的集合。
+
+示例 1：
+
+输入: 
+head: 0->1->2->3
+G = [0, 1, 3]
+
+输出: 2
+
+解释: 
+链表中,0 和 1 是相连接的，且 G 中不包含 2，所以 [0, 1] 是 G 的一个组件，同理 [3] 也是一个组件，故返回 2。
+
+示例 2：
+
+输入: 
+head: 0->1->2->3->4
+G = [0, 3, 1, 4]
+
+输出: 2
+
+解释: 
+链表中，0 和 1 是相连接的，3 和 4 是相连接的，所以 [0, 1] 和 [3, 4] 是两个组件，故返回 2。
+注意:
+
+如果 N 是给定链表 head 的长度，1 <= N <= 10000。
+链表中每个结点的值所在范围为 [0, N - 1]。
+1 <= G.length <= 10000
+G 是链表中所有结点的值的一个子集.
+
+实现：
+```java
+public int numComponents(ListNode head, int[] G) {
+        Set<Integer> gSet=new HashSet<>();
+        for (int i = 0; i < G.length; i++) {
+            gSet.add(G[i]);
+        }
+        ListNode cur=head;
+        int count=0,curCount=0;
+        //遍历链表
+        while (cur!=null){
+            //当G中包含当前结点的时候
+            if (gSet.contains(cur.val)){
+                //如果当前组件的长度为0，证明是一个新的组件，则组件的计数器加1
+                if (curCount==0){
+                    count++;
+                }
+                //统计当前组件的长度
+                curCount++;
+            }else {
+                //如果G中不包含当前结点的时候，则将组件长度置为0
+                curCount=0;
+            }
+            cur=cur.next;
+        }
+        return count;
+    }
+```
+### 876
+给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
+
+如果有两个中间结点，则返回第二个中间结点。
+
+ 
+
+示例 1：
+
+输入：[1,2,3,4,5]
+
+输出：此列表中的结点 3 (序列化形式：[3,4,5])
+
+返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。
+注意，我们返回了一个 ListNode 类型的对象 ans，这样：
+ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
+
+示例 2：
+
+输入：[1,2,3,4,5,6]
+
+输出：此列表中的结点 4 (序列化形式：[4,5,6])
+
+由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
+ 
+
+提示：
+
+给定链表的结点数介于 1 和 100 之间。
+
+实现：
+```java
+public ListNode middleNode(ListNode head) {
+        int len = listNodeLen(head);
+        int mid=len/2+1;
+        ListNode res=head;
+        for (int i = 1; i < mid; i++) {
+            res=res.next;
+        }
+        return res;
+    }
+    private int listNodeLen(ListNode root){
+        int len=0;
+        while (root!=null){
+            len++;
+            root=root.next;
+        }
+        return len;
+    }
+```
 
 ## Floyd环检测算法
 相关题目：
