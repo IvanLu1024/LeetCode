@@ -566,6 +566,50 @@ public TreeNode sortedArrayToBST(int[] nums) {
 进阶：
 如果二叉搜索树经常被修改（插入/删除操作）并且你需要频繁地查找第 k 小的值，你将如何优化 kthSmallest 函数？
 
+- 思路：
+
+利用中序遍历的结果为从小到大排列的性质。
+
+- 实现：
+```java
+private List<Integer> res=new ArrayList<>();
+    public int kthSmallest(TreeNode root, int k) {
+        inOrder(root);
+        return res.get(k-1);
+    }
+    private void inOrder(TreeNode root){
+        if (root==null){
+            return ;
+        }
+        inOrder(root.left);
+        res.add(root.val);
+        inOrder(root.right);
+    }
+    public int kthSmallest1(TreeNode root, int k){
+        InOrder(root, k);
+        return result;
+
+    }
+    private int count=0;
+    private int result;
+
+    private void InOrder(TreeNode root,int k){
+
+        if (root.left!=null){
+            InOrder(root.left,k);
+        }
+        count++;
+        if (count==k){
+            result=root.val;
+            return;
+        }
+        if (root.right!=null){
+            InOrder(root.right,k);
+        }
+
+    }
+```
+
 ### 236
 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
 
