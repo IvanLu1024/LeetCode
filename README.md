@@ -30,7 +30,7 @@
 |数组和字符串| **1,4,5，** 15,16 |
 |链表| **206，2，** 21|
 |数学和数字| -- |
-|排序和搜索| **148,** |
+|排序和搜索| **148,** 33,215,230,104, |
 |回溯算法| -- |
 |动态规划| -- |
 |设计| -- |
@@ -57,7 +57,7 @@
 | [21](https://leetcode-cn.com/problems/merge-two-sorted-lists/) | 合并两个有序链表| [笔记]() | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution21.java) |
 | [23]() | 合并K个排序链表|  [笔记]() | [代码]() |
 | [26]() | 删除排序数组中的重复项 | [笔记]() | [代码]() |
-| [33]() | 搜索旋转排序数组 |  [笔记] | [代码] |
+| [33](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) | 搜索旋转排序数组 |  [笔记] | [代码] |
 | [43]() | 字符串相乘 |  [笔记] | [代码] |
 | [46]() | 全排列 |  [笔记] | [代码] |
 | [53]() | 最大子序和 |  [笔记] | [代码] |
@@ -69,7 +69,7 @@
 | [78]() | 子集 | [笔记]() | [代码]() |
 | [88]() | 合并两个有序数组 |  [笔记] | [代码] |
 | [89]() | 格雷编码 |  [笔记] | [代码] |
-| [104]() | 二叉树的最大深度 |  [笔记] | [代码] |
+| [104](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) | 二叉树的最大深度 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#104) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution104.java) |
 | [121]() | 买卖股票的最佳时机 |  [笔记] | [代码] |
 | [122]() | 买卖股票的最佳时机（2） |  [笔记] | [代码] |
 | [124]() | 二叉树中的最大路径和 |  [笔记] | [代码] |
@@ -82,9 +82,9 @@
 | [160]() | 相交链表 |  [笔记] | [代码] |
 | [169]() | 求众数 |  [笔记] | [代码] |
 | [206](https://leetcode-cn.com/problems/reverse-linked-list/) | **反转链表** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#206) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution206.java) |
-| [215]() | 数组中的第K个最大元素 |  [笔记] | [代码] |
+| [215](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/) | 数组中的第K个最大元素 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#215) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution215.java) |
 | [217]() | 存在重复元素 |  [笔记] | [代码] |
-| [230]() | 二叉搜素树中第K小元素 |  [笔记] | [代码] |
+| [230](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/) | 二叉搜索树中第K小元素 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#230) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution230.java) |
 | [231]() | 2的幂 |  [笔记] | [代码] |
 | [235]() | 二叉搜索树的最近公共祖先 |  [笔记] | [代码] |
 | [236]() | 二叉树的最近公共祖先 | [笔记]() | [代码]() |
