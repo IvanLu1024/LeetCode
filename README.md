@@ -31,7 +31,7 @@
 |链表| **206，2，** 21|
 |数学和数字| -- |
 |排序和搜索| **148,** 33,215,230,104, |
-|回溯算法| -- |
+|回溯算法| 22,**78,46,** 89 |
 |动态规划| -- |
 |设计| -- |
 
@@ -55,20 +55,21 @@
 | [16](https://leetcode-cn.com/problems/3sum-closest/description/) | 最接近的三数之和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#16) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution16.java) |
 | [20]() | 有效的括号 | [笔记]() | [代码]() |
 | [21](https://leetcode-cn.com/problems/merge-two-sorted-lists/) | 合并两个有序链表| [笔记]() | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution21.java) |
+| [22](https://leetcode-cn.com/problems/generate-parentheses/) | 括号生成 |  [笔记]() | [代码]() |
 | [23]() | 合并K个排序链表|  [笔记]() | [代码]() |
 | [26]() | 删除排序数组中的重复项 | [笔记]() | [代码]() |
 | [33](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) | 搜索旋转排序数组 |  [笔记] | [代码] |
 | [43]() | 字符串相乘 |  [笔记] | [代码] |
-| [46]() | 全排列 |  [笔记] | [代码] |
+| [46](https://leetcode-cn.com/problems/permutations/) | 全排列 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#46) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution46.java) |
 | [53]() | 最大子序和 |  [笔记] | [代码] |
 | [54]() | 螺旋矩阵 |  [笔记] | [代码] |
 | [59]() | 螺旋矩阵（2） |  [笔记] | [代码] |
 | [61]() | 旋转链表 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#2) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
 | [62]() | 不同路径 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#4) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution4.java) |
 | [70]() | 爬楼梯 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#5) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution5.java) |
-| [78]() | 子集 | [笔记]() | [代码]() |
+| [78](https://leetcode-cn.com/problems/subsets/) | 子集 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#78) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution78.java) |
 | [88]() | 合并两个有序数组 |  [笔记] | [代码] |
-| [89]() | 格雷编码 |  [笔记] | [代码] |
+| [89](https://leetcode-cn.com/problems/gray-code/) | 格雷编码 |  [笔记] | [代码] |
 | [104](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) | 二叉树的最大深度 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#104) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution104.java) |
 | [121]() | 买卖股票的最佳时机 |  [笔记] | [代码] |
 | [122]() | 买卖股票的最佳时机（2） |  [笔记] | [代码] |
