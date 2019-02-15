@@ -22,6 +22,9 @@
 | 设计 | [设计笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/design.md)| [设计代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/design)|
 | 字符串 | [字符串笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/string.md)| [字符串代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/string)|
 
+## :fire: 常见的Leetcode问题--Top 100 
+[点击查看详细](https://github.com/IvanLu1024/LeetCode/blob/master/notes/top100.md)
+
 
 ## :penguin: 腾讯精选练习
 ### 题目分类
@@ -110,9 +113,6 @@
 | 题号 | 名称 | 笔记 | 代码 |
 | :--: | :--: | :--: | :--: |
 |暂无| | | |
-
-## :fire: 常见的Leetcode问题--Top 100 
-[点击查看详细](https://github.com/IvanLu1024/LeetCode/blob/master/notes/top100.md)
 
 >不断更新中……
 # :bookmark: 参考资料
