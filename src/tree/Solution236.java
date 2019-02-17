@@ -35,28 +35,29 @@ import org.junit.Test;
  */
 public class Solution236 {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if (root==null){
-            return null;
-        }
-        if (root==q||root==p){
+        //寻找到最近公共祖先
+        if (root==null||root==q||root==p){
             return root;
         }
-
+        //在左侧继续寻找
         TreeNode left = lowestCommonAncestor(root.left, p, q);
+        //在右侧继续寻找
         TreeNode right = lowestCommonAncestor(root.right, p, q);
 
+        //说明p,q分布在两侧
         if (left!=null&&right!=null){
             return root;
         }
+        //在左侧上寻找到结果
         if (left!=null){
             return left;
         }
+        //在右侧上寻找到结果
         if (right!=null){
             return right;
         }
+        //否则，没有结果返回null
         return null;
-
-
     }
 
     @Test
