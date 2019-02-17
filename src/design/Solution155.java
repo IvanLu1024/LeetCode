@@ -37,7 +37,7 @@ public class Solution155 {
             }
 
         }
-
+        //用于记录栈顶元素
         private Ele top;
 
 
@@ -48,17 +48,20 @@ public class Solution155 {
         }
 
         public void push(int x) {
+            //当栈为空的时候，直接新建一个元素
             if (top==null){
                 top = new Ele(x, x);
             }else {
+                //当栈不为空的时候
+                //新创建的元素要确保其最小值
                 Ele ele = new Ele(x, Math.min(x, top.min));
+                //并且连接上栈顶元素
                 ele.next = top;
+                //最后将其作为栈顶元素
                 top = ele;
             }
-
         }
-
-
+        //弹栈的时候，只需要将栈顶元素下移一个位置即可
         public void pop() {
             if (top==null){
                 return;
@@ -81,6 +84,44 @@ public class Solution155 {
             }
             return top.min;
         }
+    }
+
+    //利用两个栈实现
+    class MinStack1{
+        //用于记录最小值的栈
+        private Stack<Integer> minStack;
+        //主栈
+        private Stack<Integer> stack;
+
+        /** initialize your data structure here. */
+        public MinStack1() {
+            minStack=new Stack<>();
+            stack=new Stack<>();
+        }
+
+        public void push(int x) {
+            stack.push(x);
+            //当最小值栈为空或者有最小值入栈的时候，加入最小值栈中
+            if (minStack.empty()||x<=minStack.peek()){
+                minStack.push(x);
+            }
+        }
+
+        public void pop() {
+            int t = stack.pop();
+            if (t==minStack.peek()){
+                minStack.pop();
+            }
+        }
+
+        public int top() {
+            return stack.peek();
+        }
+
+        public int getMin() {
+            return minStack.peek();
+        }
+
     }
 
     @Test
