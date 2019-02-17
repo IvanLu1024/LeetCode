@@ -29,15 +29,17 @@
 
 ## :penguin: 腾讯精选练习
 ### 题目分类
+>加粗字体的题目表示推荐，常见于面试中。
+
 | 类型 | 题号 | 
 | :--: | :--: | 
 |数组和字符串| **1,4,5，** 15,16 |
 |链表| **206，2，** 21|
 |数学和数字| -- |
-|排序和搜索| **148,** 33,215,230,104, |
+|排序和搜索| **148,** 33,215,230,104,124,235,236 |
 |回溯算法| 22,**78,46,** 89 |
 |动态规划| -- |
-|设计| -- |
+|设计| 146,155 |
 
 
 ### 题目列表
@@ -77,13 +79,13 @@
 | [104](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) | 二叉树的最大深度 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#104) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution104.java) |
 | [121]() | 买卖股票的最佳时机 |  [笔记] | [代码] |
 | [122]() | 买卖股票的最佳时机（2） |  [笔记] | [代码] |
-| [124]() | 二叉树中的最大路径和 |  [笔记] | [代码] |
+| [124](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/) | 二叉树中的最大路径和 |  [笔记] | [代码] |
 | [136]() | 只出现一次的数字 | [笔记]() | [代码]() |
 | [141]() | 环形链表| [笔记]() | [代码]() |
 | [142]() | 环形链表（2）|  [笔记]() | [代码]() |
-| [146]() | LRU缓存机制 | [笔记]() | [代码]() |
+| [146](https://leetcode-cn.com/problems/lru-cache/) | LRU缓存机制 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/design.md#146) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/design/Solution146.java) |
 | [148](https://leetcode-cn.com/problems/sort-list/) | **排序链表** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#148) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution148.java) |
-| [155]() | 最小栈 |  [笔记] | [代码] |
+| [155](https://leetcode-cn.com/problems/min-stack/) | 最小栈 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/design.md#155) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/design/Solution155.java) |
 | [160]() | 相交链表 |  [笔记] | [代码] |
 | [169]() | 求众数 |  [笔记] | [代码] |
 | [206](https://leetcode-cn.com/problems/reverse-linked-list/) | **反转链表** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#206) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution206.java) |
@@ -91,8 +93,8 @@
 | [217]() | 存在重复元素 |  [笔记] | [代码] |
 | [230](https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/) | 二叉搜索树中第K小元素 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#230) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution230.java) |
 | [231]() | 2的幂 |  [笔记] | [代码] |
-| [235]() | 二叉搜索树的最近公共祖先 |  [笔记] | [代码] |
-| [236]() | 二叉树的最近公共祖先 | [笔记]() | [代码]() |
+| [235](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/) | 二叉搜索树的最近公共祖先 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#235) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution235.java) |
+| [236](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/) | 二叉树的最近公共祖先 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#236) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution236.java) |
 | [237]() | 删除链表中的节点| [笔记]() | [代码]() |
 | [238]() | 除自身以外数组的乘积|  [笔记]() | [代码]() |
 | [292]() | Nim游戏 | [笔记]() | [代码]() |
