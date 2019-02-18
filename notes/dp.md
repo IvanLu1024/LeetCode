@@ -6,7 +6,8 @@
     * [面试中的0-1背包问题 ](#面试中的0-1背包问题)
     * [LIS问题  ](#LIS问题)
     * [LCS，最短路，求动态规划的具体解以及更多 ](#LCS，最短路，求动态规划的具体解以及更多)
-    * [更多动态规划的问题]()
+    * [股票交易问题](#股票交易问题)
+    * [更多动态规划的问题](#更多动态规划的问题)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 # 动态规划部分笔记总结
@@ -284,6 +285,347 @@ public String longestPalindrome1(String s){
             r++;
         }
         return r-l-1;
+    }
+```
+## 股票交易问题
+相关题目：
+* [121.买卖股票的最佳时机](#121)
+* [122.买卖股票的最佳时机(2)](#122)
+* [123.买卖股票的最佳时机(3)](#123)
+* [188.买卖股票的最佳时机(4)](#188)
+* [309.买卖股票时机含冷冻期](#309)
+* [714.买卖股票时机含手续费](#714)
+### 121
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+
+注意你不能在买入股票前卖出股票。
+
+示例 1:
+
+输入: [7,1,5,3,6,4]
+输出: 5
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
+
+示例 2:
+
+输入: [7,6,4,3,1]
+输出: 0
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+- 实现：
+```java
+public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if (n==0){
+            return 0;
+        }
+        int max=0;  //记录最大利润
+        for (int i = 1; i <n ; i++) {
+            for (int j = 0; j < i; j++) {
+                //prices[i]-prices[j]:一次买卖的利润
+                max=Math.max(max,prices[i]-prices[j]);
+            }
+        }
+        return max;
+    }
+```
+### 122
+给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。**你可以尽可能地完成更多的交易（多次买卖一支股票）**。
+
+注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [7,1,5,3,6,4]
+输出: 7
+
+解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+
+示例 2:
+
+输入: [1,2,3,4,5]
+输出: 4
+
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+
+输入: [7,6,4,3,1]
+输出: 0
+
+解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+
+- 实现：
+```java
+//贪心策略：只要有上升就进行交易
+    public int maxProfit(int[] prices) {
+        int n = prices.length;
+        if (n==0||n==1){
+            return 0;
+        }
+        int max=0;
+        for (int i = 1; i < n; i++) {
+            if (prices[i]>prices[i-1]){
+                max+=prices[i]-prices[i-1];
+            }
+        }
+        return max;
+    }
+```
+### 123
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。**你最多可以完成 两笔 交易。**
+
+注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [3,3,5,0,0,3,1,4]
+输出: 6
+
+解释: 在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+     随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+
+示例 2:
+
+输入: [1,2,3,4,5]
+输出: 4
+
+解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。   
+     注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。   
+     因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+
+示例 3:
+
+输入: [7,6,4,3,1] 
+输出: 0 
+
+解释: 在这个情况下, 没有交易完成, 所以最大利润为 0。
+
+- 实现：
+```java
+public int maxProfit(int[] prices) {
+        int n=prices.length;
+        if (n==0||n==1){
+            return 0;
+        }
+        //第一次交易
+        int hold1=Integer.MIN_VALUE;
+        int unhold1=0;
+        //第二次交易
+        int hold2=Integer.MIN_VALUE;
+        int unhold2=0;
+        for (int i = 0; i < n; i++) {
+            hold1=Math.max(hold1,-prices[i]);
+            unhold1=Math.max(unhold1,hold1+prices[i]);
+            hold2=Math.max(hold2,unhold1-prices[i]);
+            unhold2=Math.max(unhold2,hold2+prices[i]);
+        }
+        return unhold2;
+    }
+```
+### 188
+给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+
+设计一个算法来计算你所能获取的最大利润。**你最多可以完成 k 笔交易。**
+
+注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+示例 1:
+
+输入: [2,4,1], k = 2
+输出: 2
+
+解释: 在第 1 天 (股票价格 = 2) 的时候买入，在第 2 天 (股票价格 = 4) 的时候卖出，这笔交易所能获得利润 = 4-2 = 2 。
+
+示例 2:
+
+输入: [3,2,6,5,0,3], k = 2
+输出: 7
+
+解释: 在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
+     随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
+     
+- 实现：
+```java
+//122题+123题
+    public int maxProfit(int k, int[] prices) {
+        int n=prices.length;
+        if (n==0||n==1||k==0){
+            return 0;
+        }
+        //当2k>n,相当于可以进行不限次数的交易
+        //退化为122题
+        if (k>n/2){
+            return maxProfit(prices);
+        }
+        int[] holds=new int[k];
+        int[] unholds=new int[k];
+        Arrays.fill(holds,Integer.MIN_VALUE);
+        Arrays.fill(unholds,0);
+        for (int i = 0; i < n; i++) {
+            //做K次交易
+            for (int j = 0; j < k; j++) {
+                unholds[j] = Math.max(unholds[j], holds[j] + prices[i]);
+                if (j==0){
+                    holds[j]=Math.max(holds[j],-prices[i]);
+                }else {
+                    holds[j] = Math.max(holds[j], unholds[j-1] - prices[i]);
+                }
+            }
+        }
+        return Math.max(unholds[k-1],holds[k-1]);
+    }
+
+    private int maxProfit(int[] prices){
+        int n=prices.length;
+        if (n==0||n==1){
+            return 0;
+        }
+        int res=0;
+        for (int i = 1; i <n ; i++) {
+            if (prices[i]>prices[i-1]){
+                res+=prices[i]-prices[i-1];
+            }
+        }
+        return res;
+    }
+```
+### 309
+给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+
+设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+
+你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
+**卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。**
+
+示例:
+
+输入: [1,2,3,0,2]
+输出: 3 
+
+解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+- 实现：
+```java
+public int maxProfit(int[] prices) {
+        int n=prices.length;
+        if (n<=1){
+            return 0;
+        }
+        int[] hold=new int[n];  //hold[i]:第i天持有股票的最大收益
+        int[] unhold=new int[n];    //unhold[i]:第i天不持有股票的最大收益
+
+
+        hold[0]=-prices[0];
+        hold[1]=Math.max(hold[0],-prices[1]);
+        unhold[1]=Math.max(unhold[0],hold[0]+prices[1]);
+        for (int i = 2; i < n; i++) {
+            //没有买入和买入
+            hold[i] = Math.max(hold[i-1], unhold[i-2] - prices[i]);
+            //没有卖出和卖出
+            unhold[i] = Math.max(unhold[i-1], hold[i-1] + prices[i]);
+
+        }
+        return unhold[n-1];
+    }
+```
+### 714
+给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+
+**你可以无限次地完成交易，但是你每次交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。**
+
+返回获得利润的最大值。
+
+示例 1:
+
+输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
+输出: 8
+
+解释: 能够达到的最大利润:  
+
+在此处买入 prices[0] = 1
+
+在此处卖出 prices[3] = 8
+
+在此处买入 prices[4] = 4
+
+在此处卖出 prices[5] = 9
+
+总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8.
+
+注意:
+
+0 < prices.length <= 50000.
+
+0 < prices[i] < 50000.
+
+0 <= fee < 50000.
+
+- 实现：
+```java
+//与309题类似，但不需要冷却期
+    public int maxProfit(int[] prices, int fee) {
+        int n=prices.length;
+        if (n==0||n==1){
+            return 0;
+        }
+        int[] hold=new int[n];
+        int[] unhold=new int[n];
+        hold[0]=-prices[0];
+        hold[1]=Math.max(-prices[0],-prices[1]);
+        for (int i = 1; i <n ; i++) {
+            hold[i]=Math.max(unhold[i-1]-prices[i],hold[i-1]);
+            unhold[i]=Math.max(hold[i-1]+prices[i]-fee,unhold[i-1]);
+        }
+        return Math.max(hold[n-1],unhold[n-1]);
+    }
+```
+## 更多动态规划的问题
+相关题目：
+* [53.最大子序和](#53)
+### 53
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+示例:
+
+输入: [-2,1,-3,4,-1,2,1,-5,4],
+输出: 6
+
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
+进阶:
+
+如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
+
+- 实现：
+```java
+public int maxSubArray(int[] nums){
+        //全局最大值
+        int max=nums[0];
+        //局部最大值:当前的连续子序和
+        int curMax=nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            //继续累加
+            if (curMax>=0){
+                curMax+=nums[i];
+            }else//curMax<0:重新在i位置选择连续子数组
+                {
+                curMax=nums[i];
+            }
+            //从局部最大值中选择出全局最大值
+            max=Math.max(max,curMax);
+        }
+        return max;
     }
 ```
 # 参考资料
