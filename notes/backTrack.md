@@ -7,8 +7,7 @@
     * [二维平面上的回溯法](#二维平面上的回溯法)
     * [floodfill算法](#floodfill算法)
     * [回溯法是人工智能的基础](#回溯法是人工智能的基础)
-    
-    
+    * [更多回溯算法](#更多回溯算法)  
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
 
@@ -1204,7 +1203,50 @@ n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并
         return false;
     }
 ```
+## 更多回溯算法
+* [22.括号生成](#22)
+### 22
+给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
 
+例如，给出 n = 3，生成结果为：
+
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+
+实现：
+```java
+private List<String> res;
+    //回溯法
+    public List<String> generateParenthesis(int n) {
+        res=new ArrayList<>();
+        generate(n,n,"");
+        return res;
+    }
+    //left：剩余的左括号的数量
+    //right：剩余的右括号的数量
+    private void generate(int left,int right,String s){
+        if (left==0&&right==0){
+            System.out.println("finished : "+s);
+            res.add(s);
+            return;
+        }
+        //填充左括号
+        if (left>0){
+            System.out.println("add left -> "+s);
+            generate(left-1,right,s+"(");
+        }
+        //当前的左括号数量大于当前的右括号的数量的时候，填充右括号
+        if (left<right){
+            System.out.println("add right -> "+s);
+            generate(left,right-1,s+")");
+        }
+    }
+```
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)

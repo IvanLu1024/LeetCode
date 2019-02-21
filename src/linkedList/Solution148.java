@@ -17,22 +17,25 @@ import utils.LinkedListUtils;
  *
  */
 public class Solution148 {
-    //自顶向上的归并排序
+    //自顶向下的归并排序
     public ListNode sortList(ListNode head) {
         if (head==null||head.next==null){
             return head;
         }
+        //首先将链表折半
         ListNode fast=head.next,slow=head;
         while (fast!=null&&fast.next!=null){
             fast=fast.next.next;
             slow=slow.next;
         }
         ListNode head2=slow.next;
+        //将前后断开连接
         slow.next=null;
-        head = sortList(head);
-        head2=sortList(head2);
+        head = sortList(head);  //前半部分
+        head2=sortList(head2);  //后半部分
         return merge(head,head2);
     }
+    //合并两个已经排序好的链表
     private ListNode merge(ListNode a,ListNode b){
         ListNode dummyHead=new ListNode(-1);
         ListNode p1=a,p2=b,p=dummyHead;

@@ -39,6 +39,8 @@ public  int binarySearch(Comparable[] arr, int n, Comparable target){
 相关题目：
  * [704.二分查找](#704)
  * [34.在排序数组中查找元素的第一个和最后一个位置](#34)
+ * [33.搜索旋转排序数组](#33)
+ * [81.搜索旋转排序数组(2)](#81)
  
 ### 704
 给定一个 n 个元素有序的（升序）整型数组 nums 和一个目标值 target  ，写一个函数搜索 nums 中的 target，如果目标值存在返回下标，否则返回 -1。
@@ -143,6 +145,119 @@ public int[] searchRange(int[] nums, int target) {
         }
         //注意返回的是h，此时h<l
         return h;
+    }
+```
+### 33
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
+
+搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+
+你可以假设数组中不存在重复的元素。
+
+你的算法时间复杂度必须是 O(log n) 级别。
+
+示例 1:
+
+输入: nums = [4,5,6,7,0,1,2], target = 0
+输出: 4
+
+示例 2:
+
+输入: nums = [4,5,6,7,0,1,2], target = 3
+输出: -1
+
+实现：
+```java
+public int search(int[] nums, int target) {
+        if (nums==null||nums.length==0){
+            return -1;
+        }
+        int l=0,h=nums.length-1;
+        while (l<=h){
+            int mid=l+(h-l)/2;
+            if (nums[mid]==target){
+                return mid;
+            }
+            //判断nums[l,mid]是否为递增序列
+            if (nums[l]<=nums[mid]){
+                //如果目标值在这个范围内，注意要使用等于，因为边界值可能是目标值
+                if (nums[l]<=target&&target<=nums[mid]){
+                    h=mid-1;
+                }else {
+                    l=mid+1;
+                }
+            }else {
+                if (nums[mid]<=target&&target<=nums[h]){
+                    l=mid+1;
+                }else {
+                    h=mid-1;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+```
+### 81
+假设按照升序排序的数组在预先未知的某个点上进行了旋转。
+
+( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
+
+编写一个函数来判断给定的目标值是否存在于数组中。若存在返回 true，否则返回 false。
+
+示例 1:
+
+输入: nums = [2,5,6,0,0,1,2], target = 0
+输出: true
+
+示例 2:
+
+输入: nums = [2,5,6,0,0,1,2], target = 3
+输出: false
+进阶:
+
+这是 搜索旋转排序数组 的延伸题目，本题中的 nums  可能包含重复元素。
+
+这会影响到程序的时间复杂度吗？会有怎样的影响，为什么？
+
+实现：
+```java
+public boolean search(int[] nums, int target) {
+        if (nums==null||nums.length==0){
+            return false;
+        }
+        int l=0,h=nums.length-1;
+        while (l<=h){
+            //两边夹逼去重操作
+            if (l!=h&&nums[l]==nums[h]){
+                l++;
+                while (l!=h&&nums[l]==nums[l-1]) l++;
+                while (l!=h&&nums[h]==nums[h-1]) h--;
+            }
+            int mid = l+(h-l)/2;
+            if (nums[mid]==target){
+                return true;
+            }
+            //nums[l,mid]为递增区间
+            if (nums[l]<=nums[mid]){
+                //如果目标值在这个范围内，注意要使用等于，因为边界值可能是目标值
+                if (nums[l]<=target&&target<=nums[mid]){
+                    h=mid-1;
+                }else {
+                    l=mid+1;
+                }
+            }else {
+                if (nums[mid]<=target&&target<=nums[h]){
+                    l=mid+1;
+                }else {
+                    h=mid-1;
+                }
+            }
+        }
+        return false;
     }
 ```
 ## 简单的面试题
