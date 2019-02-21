@@ -1001,6 +1001,7 @@ public boolean isPalindrome(ListNode head) {
 * [725.分隔链表](#725)
 * [817.链表组件](#817)
 * [876.链表的中间结点](#876)
+* [160.相交链表](#160)
 ### 725 
 给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
 
@@ -1280,6 +1281,68 @@ public ListNode detectCycle(ListNode head) {
         }
         //当两个指针指向同一个结点的时候，表明快指针正好比慢指针快了整整一圈
         return fast;
+    }
+```
+### 160
+编写一个程序，找到两个单链表相交的起始节点。
+
+- 分析：
+由于是单链表，当出现公共结点后，其后部分均为相同。（因为2个链表用公共的尾部）
+    1. 当长度相同的时候，同时同步遍历一定能够找到相交部分;
+    2. 当长度不同的时候，转化为长度相同的事情，让长链表的指针先移动|sizeA-sizeB|个结点，
+    接着两个指针同时开始移动。
+
+- 实现：
+```java
+public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA==null||headB==null){
+            return null;
+        }
+        int sizeA=0;
+        int sizeB=0;
+        ListNode curA=headA;
+        ListNode curB=headB;
+        while (curA!=null){
+            sizeA++;
+            curA=curA.next;
+        }
+        while (curB!=null){
+            sizeB++;
+            curB=curB.next;
+        }
+        curA=headA;
+        curB=headB;
+        if (sizeA==sizeB){
+            return commonNode(curA,curB);
+        }else if (sizeA>sizeB){
+            int count = sizeA - sizeB;
+            for (int i = 0; i < count; i++) {
+                curA = curA.next;
+            }
+            return commonNode(curA,curB);
+        }else {
+            int count = sizeB - sizeA;
+            for (int i = 0; i < count; i++) {
+                curB = curB.next;
+            }
+            return commonNode(curA,curB);
+        }
+    }
+    //当长度相同的时候寻找两个链表的公共部分
+    private ListNode commonNode(ListNode headA, ListNode headB){
+        if (headA==null||headB==null){
+            return null;
+        }
+        ListNode curA=headA;
+        ListNode curB=headB;
+        while (curA!=null){
+            if (curA.val==curB.val){
+                return curA;
+            }
+            curA=curA.next;
+            curB=curB.next;
+        }
+        return null;
     }
 ```
 
