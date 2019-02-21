@@ -1,6 +1,7 @@
 package linkedList;
 
 import org.junit.Test;
+import utils.LinkedListUtils;
 
 /**
  * 在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。
@@ -57,12 +58,12 @@ public class Solution148 {
         return dummyHead.next;
 
     }
-    @Test
+   /* @Test
     public void test(){
         int[] arr={4,2,1,3};
         ListNode head = LinkedListUtils.createLinkedList(arr, arr.length);
         LinkedListUtils.printLinkedList(head);
         ListNode res = sortList(head);
         LinkedListUtils.printLinkedList(res);
-    }
+    }*/
 }
