@@ -44,11 +44,11 @@ public class Solution147 {
                  }
                  return sortedlisthead.next;
     }
-    @Test
+   /* @Test
     public void test(){
         int[] arr={4,2,1,3};
         ListNode head = LinkedListUtils.createLinkedList(arr, arr.length);
         ListNode res = insertionSortList(head);
         LinkedListUtils.printLinkedList(res);
-    }
+    }*/
 }
