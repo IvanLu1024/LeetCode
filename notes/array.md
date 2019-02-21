@@ -1579,6 +1579,8 @@ public boolean searchMatrix(int[][] matrix, int target) {
 * [4.寻找两个有序数组的中位数](#4)
 * [169.众数](#169)
 * [229.众数(2)](#229)
+* [238.除自身以外数组的乘积](#238)
+* [217.存在重复元素](#217)
 
 ### 717
 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
@@ -2059,6 +2061,87 @@ public List<Integer> majorityElement1(int[] nums){
         }
         return res;
     }
+```
+### 238
+给定长度为 n 的整数数组 nums，其中 n > 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+
+示例:
+
+输入: [1,2,3,4]
+
+输出: [24,12,8,6]
+
+**说明: 请不要使用除法，且在 O(n) 时间复杂度内完成此题。**
+
+进阶：
+你可以在常数空间复杂度内完成这个题目吗？（ 出于对空间复杂度分析的目的，输出数组不被视为额外空间。）
+
+- 实现：
+```java
+//时间复杂O（n）
+    public int[] productExceptSelf1(int[] nums){
+        int n = nums.length;
+        int[] res = new int[n];
+        if (n==0){
+            return res;
+        }
+        //从左向右直到i-1的位置
+        res[0]=1;
+        for (int i = 1; i < n; i++) {
+            res[i] = res[i-1] * nums[i-1];
+        }
+        //从右向左直到i+1的位置
+        int right=1;    //从右开始的累乘积
+        for (int i = n-1; i >=0; i--) {
+            res[i] *=right;
+            right *=nums[i];
+        }
+        return res;
+    }
+```
+### 217
+给定一个整数数组，判断是否存在重复元素。
+
+如果任何值在数组中出现至少两次，函数返回 true。如果数组中每个元素都不相同，则返回 false。
+
+示例 1:
+
+输入: [1,2,3,1]
+输出: true
+
+示例 2:
+
+输入: [1,2,3,4]
+输出: false
+
+示例 3:
+
+输入: [1,1,1,3,3,4,3,2,4,2]
+输出: true
+- 实现：
+```java
+public boolean containsDuplicate(int[] nums) {
+        Set<Integer> record=new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (record.contains(nums[i])){
+                return true;
+            }else {
+                record.add(nums[i]);
+            }
+        }
+        return false;
+    }
+    
+    //通过排序的方法
+        public boolean containsDuplicate2(int[] nums){
+            Arrays.sort(nums);
+            for (int i = 1; i < nums.length; i++) {
+                if (nums[i]==nums[i-1]){
+                    return true;
+                }
+            }
+            return false;
+        }
 ```
 # 参考资料
 
