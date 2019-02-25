@@ -24,18 +24,18 @@
 | [4](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/description/) | **寻找两个有序数组的中位数** | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#4) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution4.java) |
 | [5](https://leetcode-cn.com/problems/longest-palindromic-substring/description/) | **最长回文子串** |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#5) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution5.java) |
 | [7](https://leetcode-cn.com/problems/reverse-integer/description/) | **整数反转** | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/math.md#7) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/math/Solution7.java) |
-| [8](https://leetcode-cn.com/problems/string-to-integer-atoi/description/) | 字符串转换整数(atoi) |  [笔记] | [代码] |
-| [9](https://leetcode-cn.com/problems/palindrome-number/description/) | 回文数 |  [笔记] | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/string/Solution9.java) |
+| [8](https://leetcode-cn.com/problems/string-to-integer-atoi/description/) | 字符串转换整数(atoi) |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/string.md#8) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/string/Solution8.java) |
+| [9](https://leetcode-cn.com/problems/palindrome-number/description/) | 回文数 |  -- | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/string/Solution9.java) |
 | [11](https://leetcode-cn.com/problems/container-with-most-water/description/) | 盛最多水的容器 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#11) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution11.java) |
-| [14](https://leetcode-cn.com/problems/longest-common-prefix/description/) | 最长公共前缀 |  [笔记] | [代码] |
+| [14](https://leetcode-cn.com/problems/longest-common-prefix/description/) | 最长公共前缀 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/string.md#14) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/string/Solution14.java) |
 | [15](https://leetcode-cn.com/problems/3sum/description/) | 三数之和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#15) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution15.java) |
 | [16](https://leetcode-cn.com/problems/3sum-closest/description/) | 最接近的三数之和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#16) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution16.java) |
 | [20](https://leetcode-cn.com/problems/valid-parentheses/) | 有效的括号 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/stack.md#20) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/stack/Solution20.java) |
-| [21](https://leetcode-cn.com/problems/merge-two-sorted-lists/) | 合并两个有序链表| [笔记]() | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution21.java) |
-| [22](https://leetcode-cn.com/problems/generate-parentheses/) | 括号生成 |  [笔记]() | [代码]() |
+| [21](https://leetcode-cn.com/problems/merge-two-sorted-lists/) | 合并两个有序链表| [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#21) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution21.java) |
+| [22](https://leetcode-cn.com/problems/generate-parentheses/) | 括号生成 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#22) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution22.java) |
 | [23](https://leetcode-cn.com/problems/merge-k-sorted-lists/) | 合并K个排序链表|  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/queue.md#23) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/queue/Solution23.java) |
 | [26](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/) | 删除排序数组中的重复项 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#26) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution26.java) |
-| [33](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) | 搜索旋转排序数组 |  [笔记] | [代码] |
+| [33](https://leetcode-cn.com/problems/search-in-rotated-sorted-array/) | 搜索旋转排序数组 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#33) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution33.java) |
 | [43](https://leetcode-cn.com/problems/multiply-strings/) | 字符串相乘 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/string.md#43) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution43.java) |
 | [46](https://leetcode-cn.com/problems/permutations/) | 全排列 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#46) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution46.java) |
 | [53](https://leetcode-cn.com/problems/maximum-subarray/) | 最大子序和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#53) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution53.java) |
@@ -46,12 +46,12 @@
 | [70](https://leetcode-cn.com/problems/climbing-stairs/) | 爬楼梯 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#5) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution5.java) |
 | [78](https://leetcode-cn.com/problems/subsets/) | 子集 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#78) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution78.java) |
 | [88](https://leetcode-cn.com/problems/merge-sorted-array/) | 合并两个有序数组 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#88) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution88.java)
-| [89](https://leetcode-cn.com/problems/gray-code/) | 格雷编码 |  [笔记] | [代码] |
+| [89](https://leetcode-cn.com/problems/gray-code/) | 格雷编码 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/backTrack.md#89) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/backTrack/Solution89.java) |
 | [104](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/) | 二叉树的最大深度 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#104) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution104.java) |
-| [121](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/) | 买卖股票的最佳时机 |  [笔记] | [代码] |
-| [122](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/) | 买卖股票的最佳时机（2） |  [笔记] | [代码] |
-| [124](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/) | 二叉树中的最大路径和 |  [笔记] | [代码] |
-| [136](https://leetcode-cn.com/problems/single-number/) | 只出现一次的数字 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/math.md#136) | [代码]() |
+| [121](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/) | 买卖股票的最佳时机 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#121) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution121.java) |
+| [122](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/) | 买卖股票的最佳时机（2） |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/dp.md#122) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/dp/Solution122.java) |
+| [124](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/) | 二叉树中的最大路径和 |  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/tree.md#124) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/tree/Solution124.java) |
+| [136](https://leetcode-cn.com/problems/single-number/) | 只出现一次的数字 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/math.md#136) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/find/Solution136.java) |
 | [141](https://leetcode-cn.com/problems/linked-list-cycle/) | 环形链表| [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#141) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution141.java) |
 | [142](https://leetcode-cn.com/problems/linked-list-cycle-ii/) | 环形链表（2）|  [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#142) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution142.java) |
 | [146](https://leetcode-cn.com/problems/lru-cache/) | LRU缓存机制 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/design.md#146) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/design/Solution146.java) |
