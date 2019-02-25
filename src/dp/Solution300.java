@@ -25,6 +25,7 @@ public class Solution300 {
         if (n==0){
             return 0;
         }
+        //memo[i]:表示数组nums中以下标为i的元素为结尾的上升序列的长度
         int[] memo=new int[n];
         Arrays.fill(memo,1);
         for (int i = 1; i < n; i++) {
@@ -40,10 +41,33 @@ public class Solution300 {
         }
         return max;
     }
+
+    //二分查找解法
+    public int lengthOfLIS1(int[] nums){
+        int maxLen=0;
+        //存储着所有长度为i+1的递增子序列中, 最小的那个序列尾数
+        //memo[]必然为递增数组
+        int[] memo=new int[nums.length];
+        for (int num:nums){
+            int l=0,h=maxLen;
+            while (l<h){
+                int mid=l+(h-l)/2;
+                if (memo[mid]<num) l=mid+1;
+                else h=mid;
+            }
+            //将对应的数字放入相应的位置上
+            memo[l]=num;
+            //表示num比所有已知递增序列的尾数都大，则数组拓展的时候
+            if (l==maxLen){
+                maxLen++;
+            }
+        }
+        return maxLen;
+    }
     @Test
     public void test(){
         int[] nums={10,9,2,5,3,7,101,18};
-        int i = lengthOfLIS(nums);
+        int i = lengthOfLIS1(nums);
         System.out.println(i);
     }
 }
