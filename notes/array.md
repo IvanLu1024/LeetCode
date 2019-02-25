@@ -1581,6 +1581,8 @@ public boolean searchMatrix(int[][] matrix, int target) {
 * [229.众数(2)](#229)
 * [238.除自身以外数组的乘积](#238)
 * [217.存在重复元素](#217)
+* [42.接雨水](#42)
+* [128.最长连续序列](#128)
 
 ### 717
 有两种特殊字符。第一种字符可以用一比特0来表示。第二种字符可以用两比特(10 或 11)来表示。
@@ -2143,6 +2145,87 @@ public boolean containsDuplicate(int[] nums) {
             return false;
         }
 ```
+### 42
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+
+![](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/rainwatertrap.png)
+**上面是由数组 [0,1,0,2,1,0,1,3,2,1,2,1] 表示的高度图，在这种情况下，可以接 6 个单位的雨水（蓝色部分表示雨水）。**
+
+示例:
+
+输入: [0,1,0,2,1,0,1,3,2,1,2,1]
+
+输出: 6
+
+- 实现：
+```java
+public int trap(int[] height) {
+        int n = height.length;
+        if (n==0){
+            return 0;
+        }
+        int[] left,right;
+        left=new int[n];
+        right=new int[n];
+        //先初始化左边界
+        for (int i = 1; i < n; i++) {
+            left[i]=Math.max(height[i-1],left[i-1]);
+        }
+        //初始化右边界
+        for (int i = n-2; i >=0 ; i--) {
+            right[i]=Math.max(height[i+1],right[i+1]);
+        }
+        int water=0;
+        //计算雨水量，计算height[1,n-2]的范围，因为两边不能累积雨水
+        for (int i = 1; i < n-1; i++) {
+            int h=Math.min(left[i],right[i]);
+            //累积雨水，当存在高度差的时候就可以累积雨水
+            water+=Math.max(0,h-height[i]);
+        }
+        return water;
+    }
+```
+### 128
+给定一个未排序的整数数组，找出最长连续序列的长度。
+
+要求算法的时间复杂度为 O(n)。
+
+示例:
+
+输入: [100, 4, 200, 1, 3, 2]
+输出: 4
+
+**解释: 最长连续序列是 [1, 2, 3, 4]。它的长度为 4。**
+
+- 实现：
+```java
+public int longestConsecutive(int[] nums) {
+        if (nums==null||nums.length==0){
+            return 0;
+        }
+        //K:num,V:连续序列的长度
+        Map<Integer,Integer> map=new HashMap<>();
+        int maxLen=0;
+        for(int num:nums){
+            //当前是新加入的数字的时候
+            if (!map.containsKey(num)){
+                //左右的相邻数字
+                int left=map.getOrDefault(num-1,0);
+                int right=map.getOrDefault(num+1,0);
+                //计算当前连续序列的长度
+                int len=left+right+1;
+                maxLen=Math.max(len,maxLen);
+                map.put(num,len);
+                //更新左右边界
+                map.put(num-left,len);
+                map.put(num+right,len);
+            }
+        }
+        return maxLen;
+    }
+```
+
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
