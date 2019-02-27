@@ -726,6 +726,7 @@ public List<String> readBinaryWatch(int num){
 * [200.岛屿的个数](#200)  
 * [130.被围绕的区域](#130) 
 * [417.太平洋大西洋水流问题](#417) 
+* [695.岛屿的最大面积](#695)
 <!-- GFM-TOC -->
 ### 200
 给定一个由 '1'（陆地）和 '0'（水）组成的的二维网格，计算岛屿的数量。
@@ -977,6 +978,77 @@ private List<int[]> res=new ArrayList<>();
         }
     }
 ```
+### 695
+给定一个包含了一些 0 和 1的非空二维数组 grid , 一个 岛屿 是由四个方向 (水平或垂直) 的 1 (代表土地) 构成的组合。你可以假设二维矩阵的四个边缘都被水包围着。
+
+找到给定的二维数组中最大的岛屿面积。(如果没有岛屿，则返回面积为0。)
+
+示例 1:
+
+```java
+[[0,0,1,0,0,0,0,1,0,0,0,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,1,1,0,1,0,0,0,0,0,0,0,0],
+ [0,1,0,0,1,1,0,0,1,0,1,0,0],
+ [0,1,0,0,1,1,0,0,1,1,1,0,0],
+ [0,0,0,0,0,0,0,0,0,0,1,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,0,0,0,0,0,0,1,1,0,0,0,0]]
+```
+对于上面这个给定矩阵应返回 6。注意答案不应该是11，因为岛屿只能包含水平或垂直的四个方向的‘1’。
+
+示例 2:
+
+[[0,0,0,0,0,0,0,0]]
+对于上面这个给定的矩阵, 返回 0。
+
+注意: 给定的矩阵grid 的长度和宽度都不超过 50。
+
+- 实现：
+```java
+private int m,n;
+    private boolean[][] visited;
+    private int[][] d={{-1,0},{0,1},{1,0},{0,-1}};
+
+    public int maxAreaOfIsland(int[][] grid) {
+        m=grid.length;
+        if (m==0){
+            return 0;
+        }
+        n=grid[0].length;
+        visited=new boolean[m][n];
+        int res = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visited[i][j]&&grid[i][j]==1){
+                    res=Math.max(res,dfs(grid,i,j));
+                }
+            }
+        }
+        return res;
+
+    }
+    //返回的值就是[x,y]所在位置的岛屿的面积
+    private int dfs(int[][] grid,int x,int y){
+        visited[x][y]=true;
+        int res=1;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + d[i][0];
+            int newY = y + d[i][1];
+            //满足此条件，说明寻找到一个位置，加入该岛屿
+            //相邻位置为1的区域为岛屿
+            if (inArea(newX,newY)&&!visited[newX][newY]&&grid[newX][newY]==1){
+                res+=dfs(grid,newX,newY);
+            }
+        }
+        return res;
+    }
+    //判断当前坐标是否在给定区域内
+    private boolean inArea(int x,int y){
+        return x>=0&&x<m&&y>=0&&y<n;
+    }
+```
+
 ## 回溯法是人工智能的基础
 相关题目：
 <!-- GFM-TOC -->
@@ -1206,6 +1278,7 @@ n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并
 ## 更多回溯算法
 * [22.括号生成](#22)
 * [89.格雷编码](#89)
+* [93.复原IP地址](#93)
 ### 22
 给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
 
@@ -1329,6 +1402,93 @@ private List<String> res;
             }
         }
         return res;
+    }
+```
+### 93
+给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+
+示例:
+
+输入: "25525511135"
+
+输出: ["255.255.11.135", "255.255.111.35"]
+
+- 实现：
+```java
+private List<String> res=new ArrayList<>();
+    public List<String> restoreIpAddresses(String s) {
+        if (s.length() < 4 || s.length() > 12){
+            return res;
+        }
+        generateIpAddress(s,0,"");
+        return res;
+
+    }
+    //生成ip地址的函数，s：待解析的字符串，count：当前已经解析的数字次数（ip为4个0-255是数字组成）
+    //ip:前一次搜索得到的待完成的ip
+    private void generateIpAddress(String s,int count,String ip){
+        //当已经解析了3位数字，判断当前的s是否满足作为最后一位数字的条件，若满足则加入结果集合
+        if (count==3&&isValid(s)){
+            System.out.println("complete ip ");
+            res.add(ip+s);
+        }
+        //每次最多只取三位数
+        for (int i = 1; i < Math.min(4,s.length()); i++) {
+            String curStr = s.substring(0, i);
+            if (isValid(curStr)){
+                System.out.println("CurStr:"+curStr+"  ip:"+ip);
+                //从s[i...n]中搜索
+                generateIpAddress(s.substring(i),count+1,ip+curStr+".");
+            }
+
+        }
+    }
+
+    //判断这个数字是否符合0-255之间
+    private boolean isValid(String s){
+        if (s.charAt(0)=='0'){
+            return s.equals("0");
+        }
+        int i = Integer.parseInt(s);
+        if (i>=0&&i<=255){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public List<String> restoreIpAddresses1(String s){
+        if (s.length() < 4 || s.length() > 12){
+            return res;
+        }
+        generateIp(s,"",0);
+        return res;
+
+    }
+    private void generateIp(String s,String temp,int n){
+        // 剪枝，因ip不会超过三位
+        if (s.length()>3*(4-n)){
+            return;
+        }
+        if (n==4){
+            if (s.length()==0) {
+                //去除最后一个"."
+                System.out.println("ip completed ->"+temp.substring(0, temp.length() - 1));
+                res.add(temp.substring(0, temp.length() - 1));
+            }
+        }
+        for (int i = 1; i < 4; i++) {
+            // 如果剩余的长度还不够i那么说明不能排列成ip
+            if (s.length()<i){
+                break;
+            }
+            if (isValid(s.substring(0,i))){
+                System.out.println("current s:"+s.substring(i)+" last temp:"+temp+" current temp:"+s.substring(0,i));
+                generateIp(s.substring(i),temp+s.substring(0,i)+".",n+1);
+            }else {
+                System.out.println("backTracking ...");
+            }
+        }
     }
 ```
 # 参考资料
