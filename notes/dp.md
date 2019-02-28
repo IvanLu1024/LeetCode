@@ -200,11 +200,50 @@ public int numSquares(int n){
 
 ## LIS问题 
 相关问题：
+* [674.最长连续递增子序列](#674)
 * [300.最长上升子序列](#300)
 * [376.摆动序列](#376)
 * [354.俄罗斯套娃信封问题](#354)
+### 674
+给定一个未经排序的整数数组，找到最长且**连续**的的递增序列。
+
+示例 1:
+
+输入: [1,3,5,4,7]
+输出: 3
+
+解释: 最长连续递增序列是 [1,3,5], 长度为3。
+尽管 [1,3,5,7] 也是升序的子序列, 但它不是连续的，因为5和7在原数组里被4隔开。 
+
+示例 2:
+
+输入: [2,2,2,2,2]
+输出: 1
+
+解释: 最长连续递增序列是 [2], 长度为1。
+注意：数组长度不会超过10000。
+- 实现：
+```java
+public int findLengthOfLCIS(int[] nums){
+        if (nums==null||nums.length==0||nums.length==1){
+            return nums.length;
+        }
+        int count=1;
+        int max=0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i]>nums[i-1]){
+                count++;
+            }else {
+                count=1;
+            }
+            max=Math.max(max,count);
+        }
+        return max;
+
+    }
+```
 ### 300
-给定一个无序的整数数组，找到其中最长上升子序列的长度。
+给定一个无序的整数数组，找到其中最长**上升子序列**的长度。
 
 示例:
 
@@ -212,9 +251,10 @@ public int numSquares(int n){
 输出: 4 
 
 解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
+
 说明:
 
-可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可。
+可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可，**子序列不要求连续。**
 
 你算法的时间复杂度应该为 O(n2) 。
 
@@ -812,6 +852,8 @@ public int maxProfit(int[] prices) {
 ## 更多动态规划的问题
 相关题目：
 * [53.最大子序和](#53)
+* [120.三角形最小路径和](#120)
+* [221.最大的正方形](#221)
 ### 53
 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
@@ -845,6 +887,145 @@ public int maxSubArray(int[] nums){
             max=Math.max(max,curMax);
         }
         return max;
+    }
+```
+### 120
+给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
+
+例如，给定三角形：
+
+```java
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+```
+自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+
+说明：
+
+如果你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题，那么你的算法会很加分
+
+- 实现：
+```java
+/**
+     * 状态转移方程为：
+     * f(0,0)=t[0][0]
+     *
+     * f(i,0)=t[i][0]+f(i-1,0)
+     *
+     * f(i,i)=t[i][i]+f(i-1,i-1)
+     *
+     * f(i,j)=t[i][j]+min{f(i-1,j-1),f(i-1,j)}
+     *
+     * @param triangle
+     * @return
+     */
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        if (n==0){
+            return 0;
+        }
+        for (int i = 1; i < n; i++) {
+            triangle.get(i).set(0,triangle.get(i-1).get(0)+triangle.get(i).get(0));
+            triangle.get(i).set(i,triangle.get(i).get(i)+triangle.get(i-1).get(i-1));
+            for (int j = 1; j <i ; j++) {
+                triangle.get(i).set(j,triangle.get(i).get(j)+Math.min(triangle.get(i-1).get(j-1),triangle.get(i-1).get(j)));
+            }
+        }
+        Collections.sort(triangle.get(n-1));
+        return triangle.get(n-1).get(0);
+    }
+
+    public int minimumTotal1(List<List<Integer>> triangle){
+        int n = triangle.size();
+        if (n==0){
+            return 0;
+        }
+        int[] memo=new int[n];
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (j==0){
+                    memo[j]+=triangle.get(i).get(0);
+                }else if (i==j){
+                    memo[j]=triangle.get(i).get(i)+memo[i-1];
+                }else {
+                    memo[j]=triangle.get(i).get(j)+Math.min(memo[j],memo[j-1]);
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            System.out.print(memo[i]+" ");
+        }
+        int min=memo[0];
+        for (int i = 0; i < n; i++) {
+            min=Math.min(min,memo[i]);
+        }
+        return min;
+        
+    }
+```
+### 221
+在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
+
+示例:
+
+输入: 
+
+```java
+1 0 1 0 0
+1 0 1 1 1
+1 1 1 1 1
+1 0 0 1 0
+```
+输出: 4
+
+- 实现：
+```java
+    public int maximalSquare(char[][] matrix) {
+        int m = matrix.length;
+        if (m==0){
+            return 0;
+        }
+        int n = matrix[0].length;
+        //记录当前位置最大正方形的边长
+        int[][] memo = new int[m][n];
+        //最大正方形的边长
+        int res=0;
+        //初始化上边缘
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0]=='1'){
+                memo[i][0]=1;
+                res=1;
+            }
+        }
+        //初始化左边缘
+        for (int i = 0; i < n; i++) {
+            if (matrix[0][i]=='1'){
+                memo[0][i]=1;
+                res=1;
+            }
+
+        }
+        //状态转移方程：F（i,j）=Min{F(i,j-1),F(i-1,j),F(i-1,j-1)}+1
+        //如果当前位置为1，那么当前位置的最大正方形的边长最多比它的上方，左方和左上方的位置多1
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j]=='1'){
+                    memo[i][j]=min3(memo[i-1][j],memo[i][j-1],memo[i-1][j-1])+1;
+                    //记录最大的边长
+                    res=Math.max(res,memo[i][j]);
+                }
+                //else --> matrix[0][i]!='1' { memo[i][j]=0 }
+            }
+        }
+        return res*res;
+    }
+    //从三个数中获得最小值
+    private int min3(int a,int b,int c){
+        return Math.min(a,Math.min(b,c));
     }
 ```
 # 参考资料

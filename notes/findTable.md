@@ -436,16 +436,14 @@ public int[] twoSum(int[] nums, int target) {
 ]
 - 分析：
 
-1. 使用对撞指针：
+    1. 使用对撞指针：将3 sum转化成2 sum
 
-将3 sum转化成2 sum
-
-2. 使用map：
+    2. 使用map：
 
 创建一个map存储数组中的元素和频数（K：元素；V：频次）
 
 
-遍历map，分别按照3个重复的数字，2个重复的数字和没有重复数字的情况来考虑（注意过程中的去重）。
+遍历map，分别按照3个重复的数字，2个重复的数字和没有重复数字的情况来考虑 **（注意过程中的去重）**。
 
 - 实现：
 ```java
@@ -455,13 +453,16 @@ public int[] twoSum(int[] nums, int target) {
         //首先做排序处理
         Arrays.sort(nums);
         for (int i = 0; i < nums.length-2; i++) {
+            //去重操作
             if (i>0&&nums[i]==nums[i-1]) continue;
             int l=i+1,h=nums.length-1,target=-nums[i];
             while (l<h){
                 if (nums[l]+nums[h]==target){
                    res.add(Arrays.asList(nums[l],nums[h],nums[i]));
+                   ////去重操作
                    while (l<h&&nums[l]==nums[l+1]) l++;
                    while (l<h&&nums[h]==nums[h-1]) h--;
+                   //继续搜索
                    l++;
                    h--;
                 }else if (nums[l]+nums[h]>target){
@@ -470,7 +471,6 @@ public int[] twoSum(int[] nums, int target) {
                     l++;
                 }
             }
-
         }
         return res;
     }
@@ -505,13 +505,9 @@ public int[] twoSum(int[] nums, int target) {
             for (int v1:countMap.keySet()){
                 int v2=0-v0-v1;
                 //确保[[v0,v1,v2]...]内部有序，去重
-                if (v2<=v1||v1<=v0||countMap.get(v2)==null)
-                    continue;
-                //v0<v1<v2
-                res.add(Arrays.asList(v0,v1,v2));
+                if (v0<v1&&v1<v2&&countMap.containsKey(v2))
+                    res.add(Arrays.asList(v0,v1,v2));
             }
-
-
         }
         return res;
     }
