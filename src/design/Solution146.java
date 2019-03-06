@@ -69,14 +69,16 @@ public class Solution146 {
                 return -1;
             }
             node curNode = map.get(key);
+            //先记录返回值
             int res = curNode.value;
+            //将使用过的结点放置到头结点上
             removeNode(curNode);
             move2Head(curNode);
             return res;
         }
 
         public void put(int key, int value) {
-            if (map.get(key)!=null){
+            if (map.containsKey(key)){
                 node curNode = map.get(key);
                 curNode.value = value;
                 removeNode(curNode);
@@ -84,14 +86,16 @@ public class Solution146 {
             }else {
                 node curNode = new node(key,value);
                 map.put(key,curNode);
+                //当缓存满的时候，删除最久使用的结点
                 if (count>=capacity){
+                    //先删除再移动指针
                     map.remove(tail.pre.key);
                     removeNode(tail.pre);
-                    move2Head(curNode);
                 }else {
+                    //缓存未满的时候，直接插入缓存
                     count++;
-                    move2Head(curNode);
                 }
+                move2Head(curNode);
             }
         }
 
@@ -103,7 +107,7 @@ public class Solution146 {
             head.next = n;
         }
 
-        //
+        //删除该结点
         private void removeNode(node n){
             n.pre.next = n.next;
             n.next.pre = n.pre;
