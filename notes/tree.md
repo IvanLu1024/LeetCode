@@ -5,6 +5,7 @@
     * [注意递归的终止条件](#注意递归的终止条件)
     * [定义递归问题](#定义递归问题)
     * [二分搜索树中的问题](#二分搜索树中的问题)
+    * [更多关于二叉树的问题](#更多关于二叉树的问题)
    
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
@@ -641,6 +642,35 @@ private List<Integer> res=new ArrayList<>();
 所有节点的值都是唯一的。
 p、q 为不同节点且均存在于给定的二叉树中。
 
+- 实现：
+```java
+public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        //寻找到最近公共祖先
+        if (root==null||root==q||root==p){
+            return root;
+        }
+        //在左侧继续寻找
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        //在右侧继续寻找
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        //说明p,q分布在两侧
+        if (left!=null&&right!=null){
+            return root;
+        }
+        //在左侧上寻找到结果
+        if (left!=null){
+            return left;
+        }
+        //在右侧上寻找到结果
+        if (right!=null){
+            return right;
+        }
+        //否则，没有结果返回null
+        return null;
+    }
+```
+
 ### 530
 给定一个所有节点为非负值的二叉搜索树，求树中任意两节点的差的绝对值的最小值。
 ```java
@@ -661,6 +691,95 @@ p、q 为不同节点且均存在于给定的二叉树中。
 最小绝对差为1，其中 2 和 1 的差的绝对值为 1（或者 2 和 3）。
 ```
 注意: 树中至少有2个节点。
+## 更多关于二叉树的问题
+相关题目：
+   * [114.二叉树展开为链表](#114)
+### 114
+给定一个二叉树，原地将它展开为链表。
+
+例如，给定二叉树
+```java
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+将其展开为：
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+```
+- 实现
+
+递归式：
+```java
+public void flatten(TreeNode root) {
+        if(root==null){
+            return ;
+        }
+        TreeNode node=root;
+        //不断地将右子树与放入左子树中与根节点相邻的结点的右边
+        while (node!=null){
+            if (node.left!=null) {
+                TreeNode left = node.left;
+                //寻找左子树中最右边的结点就是和根节点相邻的结点
+                while (left.right != null) {
+                    left = left.right;
+                }
+
+                //将右子树放入该节点的右侧
+                left.right = node.right;
+                //将左子树整体放入根节点的右边
+                node.right = node.left;
+                node.left = null;
+            }
+            node = node.right;
+        }
+    }
+```
+栈+集合的广度遍历：
+```java
+public void flatten(TreeNode root) {
+        List<TreeNode> res = bfs(root);
+        for (int i = 0; i < res.size()-1; i++) {
+            res.get(i).right=res.get(i+1);
+        }
+
+    }
+
+private List<TreeNode> bfs(TreeNode root){
+        List<TreeNode> res=new LinkedList<>();
+        if (root==null){
+            return res;
+        }
+        Stack<TreeNode> stack=new Stack<>();
+        stack.push(root);
+        while (!stack.empty()){
+            TreeNode node = stack.pop();
+            res.add(node);
+            if (node.right!=null){
+                stack.push(node.right);
+            }
+            if (node.left!=null){
+                stack.push(node.left);
+            }
+            node.left=null;
+
+        }
+        return res;
+    }
+
+    
+```
 
 # 参考资料
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)

@@ -466,6 +466,7 @@ wordList = ["hot","dot","dog","lot","log"]
 
 
 ## 优先队列
+>使用优先队列和使用堆的效果相同
 
 相关题目：
 
@@ -548,7 +549,6 @@ private List<Integer> res=new ArrayList<>();
 ]
 输出: 1->1->2->3->4->4->5->6
 
-- 分析：
 
 - 实现：
 ```java
@@ -571,7 +571,7 @@ public ListNode mergeKLists(ListNode[] lists) {
             }
         }
         while (!queue.isEmpty()){
-            //从队列中取出队首元素，就是队列中最小的元素
+            //从队列中取出队首元素，优先队列会确保该元素就是队列中最小的元素
             ListNode nextNode = queue.poll();
             //将这个元素插入当前结点的后面
             cur.next=nextNode;
