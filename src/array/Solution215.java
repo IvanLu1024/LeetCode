@@ -3,6 +3,8 @@ package array;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 /**
  * 示例：
@@ -64,6 +66,21 @@ public class Solution215 {
 
         return nums[n-k];
 
+    }
+
+    public int findKthLargest2(int[] nums, int k) {
+        //维护一个大顶堆
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Comparator.reverseOrder());
+        //堆的大小设置为n-k+1,目的是找到第（n-k+1）小的元素，也就是第k大的元素
+        k=nums.length-k+1;
+        //过程中维护堆的大小，当堆的大小大于k则将堆顶出队
+        for (int i:nums){
+            pq.offer(i);
+            if (pq.size()>k){
+                pq.poll();
+            }
+        }
+        return pq.peek();
     }
 
     @Test
