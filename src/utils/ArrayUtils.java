@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.Random;
+
 public class ArrayUtils {
     /**
      * 打印数组的工具类
@@ -17,6 +19,23 @@ public class ArrayUtils {
                 System.out.print(nums[i]+"]");
             }
         }
+    }
+
+    /**
+     * 生成一个整型的随机数组
+     * @param len
+     * @param start 随机数范围起始位置
+     * @param end   随机数范围终止位置
+     * @return
+     */
+    public static Integer[] createRandomArray(int len,int start,int end){
+        Integer[] arr=new Integer[len];
+        for (int i = 0; i < len; i++) {
+            Random random = new Random();
+            int num = random.nextInt((end - start) + 1) + start;
+            arr[i]=num;
+        }
+        return arr;
     }
 
 
