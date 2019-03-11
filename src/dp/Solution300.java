@@ -45,15 +45,16 @@ public class Solution300 {
     //二分查找解法
     public int lengthOfLIS1(int[] nums){
         int maxLen=0;
-        //存储着所有长度为i+1的递增子序列中, 最小的那个序列尾数
+        //存储着所有长度为i+1的递增子序列中, 那个序列最小的数字
         //memo[]必然为递增数组
         int[] memo=new int[nums.length];
         for (int num:nums){
             int l=0,h=maxLen;
+            //在memo中通过二分查找寻找num应当放入的位置
             while (l<h){
                 int mid=l+(h-l)/2;
-                if (memo[mid]<num) l=mid+1;
-                else h=mid;
+                if (memo[mid]<num) l=mid+1; //在左边继续查找
+                else h=mid;                 //在右边继续查找
             }
             //将对应的数字放入相应的位置上
             memo[l]=num;
