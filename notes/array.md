@@ -113,17 +113,19 @@ public int search(int[] nums, int target) {
 
 nums={5,7,7,8,8,10}, target=8
 
-firstOccurance:
+firstOccurance: 尽量往左搜索，所以将target==nums[mid]的部分放在左移的部分
+
+当l==h的时候，下一次循环必然是l>h，而此时确保了nums[l]=target, 即l为值等于target的最靠左的下标
 
 l=0, h=5, mid=2 ,此时target（8）>nums[mid]（7）
 
-l=3, h=5, mid=4,此时target（8）=nums[mid]（8）
+l=2+1, h=5, mid=4,此时target（8）=nums[mid]（8）
 
-l=3, h=3, mid=3,此时target（8）=nums[mid]（8）
+l=3, h=4-1, mid=3,此时target（8）=nums[mid]（8）
 
-l=3, h=2, 跳出循环，返回值为3
+l=3, h=3-1, 跳出循环，返回值为3
 
-lastOccurance:
+lastOccurance:尽量往右搜索，所以将target==nums[mid]的部分放在了右移搜索的部分
 
 l=0, h=5, mid=2 ,此时target（8）>nums[mid]（7）
 
@@ -151,7 +153,7 @@ public int[] searchRange(int[] nums, int target) {
         res[1]=last;
         return res;
     }
-    //寻找target出现的第一个位置
+    //寻找target出现的第一个位置，
     private int firstOccurance(int[] nums,int target){
         int l=0,h=nums.length-1;
         while (l<=h){
@@ -184,6 +186,9 @@ public int[] searchRange(int[] nums, int target) {
     }
 ```
 ## 33. 搜索旋转排序数组
+
+### 描述
+
 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
 
 ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
@@ -204,7 +209,14 @@ public int[] searchRange(int[] nums, int target) {
 输入: nums = [4,5,6,7,0,1,2], target = 3
 输出: -1
 
-实现：
+### 分析
+
+涉及搜索排序数组中某个元素，就应该想到使用**二分搜索**。
+
+由题干所知该数组为旋转排序数组，那么有一个特点：二分搜索的时候，必然存在一边是有序的，那么在有序的部分继续使用二分搜索，若不在此范围内则跳出该部分，继续循环，直到搜索到目标值或跳出循环为止。
+
+### 实现
+
 ```java
 public int search(int[] nums, int target) {
         if (nums==null||nums.length==0){
@@ -216,18 +228,21 @@ public int search(int[] nums, int target) {
             if (nums[mid]==target){
                 return mid;
             }
-            //判断nums[l,mid]是否为递增序列
+            //左半部分有序
             if (nums[l]<=nums[mid]){
                 //如果目标值在这个范围内，注意要使用等于，因为边界值可能是目标值
                 if (nums[l]<=target&&target<=nums[mid]){
                     h=mid-1;
                 }else {
+                    //目标值不在[l,mid]的区间内，跳出该搜索范围
                     l=mid+1;
                 }
-            }else {
+            }else //右半部分有序 
+            {
                 if (nums[mid]<=target&&target<=nums[h]){
                     l=mid+1;
                 }else {
+                    //目标值不在[mid,h]的区间内，跳出该搜索范围
                     h=mid-1;
                 }
             }
@@ -238,6 +253,9 @@ public int search(int[] nums, int target) {
     }
 ```
 ## 81. 搜索旋转排序数组(2)
+
+### 描述
+
 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
 
 ( 例如，数组 [0,0,1,2,2,5,6] 可能变为 [2,5,6,0,0,1,2] )。
@@ -255,11 +273,16 @@ public int search(int[] nums, int target) {
 输出: false
 进阶:
 
-这是 搜索旋转排序数组 的延伸题目，本题中的 nums  可能包含重复元素。
+这是 搜索旋转排序数组 的延伸题目，本题中的 nums  **可能包含重复元素**。
 
 这会影响到程序的时间复杂度吗？会有怎样的影响，为什么？
 
-实现：
+### 分析
+
+这里需要关注重复元素的处理，当nums[l]==nums[mid]的时候，证明nums[l,mid]之间都是相等的元素。此时需要将当前值继续放在搜索范围内，那么l=mid+1,会使得搜索忽略了边界值，而l=mid，会因为若当前的l和mid值相等的时候，使得程序进入死循环。此时需要继续向右搜索，则考虑使用 l=l+1。
+
+### 实现
+
 ```java
 public boolean search(int[] nums, int target) {
         if (nums==null||nums.length==0){
@@ -267,30 +290,29 @@ public boolean search(int[] nums, int target) {
         }
         int l=0,h=nums.length-1;
         while (l<=h){
-            //两边夹逼去重操作
-            if (l!=h&&nums[l]==nums[h]){
-                l++;
-                while (l!=h&&nums[l]==nums[l-1]) l++;
-                while (l!=h&&nums[h]==nums[h-1]) h--;
-            }
             int mid = l+(h-l)/2;
             if (nums[mid]==target){
                 return true;
             }
-            //nums[l,mid]为递增区间
-            if (nums[l]<=nums[mid]){
+            //左半部分有序
+            if (nums[l]<nums[mid]){
                 //如果目标值在这个范围内，注意要使用等于，因为边界值可能是目标值
                 if (nums[l]<=target&&target<=nums[mid]){
                     h=mid-1;
                 }else {
                     l=mid+1;
                 }
-            }else {
+            }else if (nums[l]>nums[mid]){
+                //右半部分有序
                 if (nums[mid]<=target&&target<=nums[h]){
                     l=mid+1;
                 }else {
                     h=mid-1;
                 }
+            }else{
+                //nums[l]==nums[mid]，证明nums[l,mid]之间都是相等的元素
+                //继续往右搜索,为了避免边界值无法被搜索到的情况
+                l++;
             }
         }
         return false;
@@ -298,14 +320,8 @@ public boolean search(int[] nums, int target) {
 ```
 # 简单的面试题
 
-相关题目：
- * [283.移动零](#283)
- * [27.移除元素](#27)
- * [26.删除排序数组中的重复项](#26)
- * [80.删除排序数组中的重复项](#80)
-
- #### 283
- -  移动零
+ ## 283.移动零
+### 描述
 
  给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
 
@@ -317,7 +333,7 @@ public boolean search(int[] nums, int target) {
 
  必须在原数组上操作，不能拷贝额外的数组。
  尽量减少操作次数。
- - 分析：
+### 分析
 
  1. 解法1：
 
@@ -334,10 +350,12 @@ public boolean search(int[] nums, int target) {
  这样操作以后，将nums[0,k)保证为非零元素，保证[0,k)中所有的非零元素都按照顺序排列在[0,k)中。
  这种解法只需要一次遍历数组，即可。
 
- 
 
- - 实现：
- 解法1：
+
+### 实现
+
+解法1：
+
  ```java
     //时间复杂度：O(n)
     //空间复杂度：O(n)
@@ -398,17 +416,15 @@ public boolean search(int[] nums, int target) {
                     int t=nums[i];
                     nums[i]=nums[k];
                     nums[k]=t;
-                    k++;
-                }else
-                    k++;
+                }
+                k++;
             }
-
         }
     }
 
 ```
-#### 27
-- 移除元素
+## 27.移除元素
+### 描述
 
 给定一个数组 nums 和一个值 val，你需要原地移除所有数值等于 val 的元素，返回移除后数组的新长度。
 
@@ -424,12 +440,13 @@ public boolean search(int[] nums, int target) {
 
 你不需要考虑数组中超出新长度后面的元素。
 
-- 分析：
+### 分析
+
 1. 解法1：
 
 首先遍历一遍数组统计出不等于val元素的个数记为count;
 
-然后通过一个双重循环，当搜索到待删除的元素的时候，从这个元素后面开始寻找第一个不为val的元素，将这两个元素交换位置，即可。
+然后通过一个双重循环，当搜索到待删除的元素的时候，从这个元素后面开始寻找**第一个不为val的元素**，将这两个元素交换位置，即可：
 
 例如：nums=[3,2,2,3],val =3
 当搜索到nums[0],此时为3，则交换位置得到[2,3,2,3]
@@ -447,8 +464,10 @@ public boolean search(int[] nums, int target) {
 设置一个计数器count来记录不等于val的元素，遍历数组，只有当搜索的元素不等于val的时候，记录该元素。
 这样确保了nums[0,count]均为不等于val的元素，并且保持相对顺序。
 
-- 实现：
+### 实现
+
 解法1：
+
 ```java
     //时间复杂度：O(n^2)
     //空间复杂度：O(1)
@@ -496,8 +515,149 @@ public boolean search(int[] nums, int target) {
     }
 ```
 
+## 26. 删除排序数组中的重复项
+
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+
+示例 1:
+
+给定数组 nums = [1,1,2], 
+
+函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
+
+你不需要考虑数组中超出新长度后面的元素。
+示例 2:
+
+给定 nums = [0,0,1,1,1,2,2,3,3,4],
+
+函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
+
+你不需要考虑数组中超出新长度后面的元素。
+说明:
+
+为什么返回数值是整数，但输出的答案是数组呢?
+
+请注意，输入数组是以“引用”方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
+
+你可以想象内部操作如下:
+
+```java
+// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
+int len = removeDuplicates(nums);
+
+// 在函数里修改输入数组对于调用者是可见的。
+// 根据你的函数返回的长度, 它会打印出数组中该长度范围内的所有元素。
+for (int i = 0; i < len; i++) {
+    print(nums[i]);
+}
+```
+
+- 实现：
+
+```java
+public int removeDuplicates(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+        int count = 0;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] != nums[i])
+                nums[count++] = nums[i - 1];
+
+
+        }
+        nums[count]=nums[nums.length-1];
+        return count+1;
+
+    }
+
+    public int removeDuplicates1(int[] nums){
+        if (nums!=null&&nums.length!=0){
+            int cur=0;
+            for (int i=1;i<nums.length;i++){
+                if (nums[i]!=nums[cur]){
+                    cur++;
+                    nums[cur]=nums[i];
+                }
+
+            }
+            return cur+1;
+        }else
+            return 0;
+
+    }
+```
+
+## 80.删除排序数组中的重复项
+
+给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。
+
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+
+示例 1:
+
+给定 nums = [1,1,1,2,2,3],
+
+函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
+
+你不需要考虑数组中超出新长度后面的元素。
+示例 2:
+
+给定 nums = [0,0,1,1,1,1,2,3,3],
+
+函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
+
+你不需要考虑数组中超出新长度后面的元素。
+
+- 实现：
+
+```java
+public int removeDuplicates(int[] nums) {
+        if (nums!=null&&nums.length!=0){
+            int cur=0,count=1;
+            for (int i=1;i<nums.length;i++){
+                if (nums[cur]==nums[i]){
+                    count++;
+                }else {
+                    count=1;
+                }
+                if (count<=2){
+                    cur++;
+                    nums[cur]=nums[i];
+                }
+            }
+            return cur+1;
+
+
+        }
+        else
+            return 0;
+
+    }
+
+    //利用增强for循环
+    public int removeDuplicates1(int[] nums) {
+        if (nums!=null&&nums.length!=0){
+            int count=0;
+            for (int num:nums){
+                if (count<2||num>nums[count-2])
+                    nums[count++]=num;
+
+            }
+            return count;
+
+
+
+        }
+        else
+            return 0;
+
+    }
+```
 
 # 三路快排思想的应用
+
 当数组中有大量元素重复出现的时候，普通的快排算法会退化为O(n^2)，这样我们可以考虑使用三路快排算法。
 三路快排要做的事情，其实就是将数组分成三部分：小于v，等于v和大于v，之后递归的对小于v和大于v部分进行排序就好了。
 
@@ -712,139 +872,6 @@ public int findKthLargest(int[] nums, int k) {
         nums[j]=t;
     }
  ```
-### 26
-给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素只出现一次，返回移除后数组的新长度。
-
-不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
-
-示例 1:
-
-给定数组 nums = [1,1,2], 
-
-函数应该返回新的长度 2, 并且原数组 nums 的前两个元素被修改为 1, 2。 
-
-你不需要考虑数组中超出新长度后面的元素。
-示例 2:
-
-给定 nums = [0,0,1,1,1,2,2,3,3,4],
-
-函数应该返回新的长度 5, 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4。
-
-你不需要考虑数组中超出新长度后面的元素。
-说明:
-
-为什么返回数值是整数，但输出的答案是数组呢?
-
-请注意，输入数组是以“引用”方式传递的，这意味着在函数里修改输入数组对于调用者是可见的。
-
-你可以想象内部操作如下:
-```java
-// nums 是以“引用”方式传递的。也就是说，不对实参做任何拷贝
-int len = removeDuplicates(nums);
-
-// 在函数里修改输入数组对于调用者是可见的。
-// 根据你的函数返回的长度, 它会打印出数组中该长度范围内的所有元素。
-for (int i = 0; i < len; i++) {
-    print(nums[i]);
-}
-```
-- 实现：
-```java
-public int removeDuplicates(int[] nums) {
-        if (nums == null || nums.length == 0)
-            return 0;
-        int count = 0;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i - 1] != nums[i])
-                nums[count++] = nums[i - 1];
-
-
-        }
-        nums[count]=nums[nums.length-1];
-        return count+1;
-
-    }
-
-    public int removeDuplicates1(int[] nums){
-        if (nums!=null&&nums.length!=0){
-            int cur=0;
-            for (int i=1;i<nums.length;i++){
-                if (nums[i]!=nums[cur]){
-                    cur++;
-                    nums[cur]=nums[i];
-                }
-
-            }
-            return cur+1;
-        }else
-            return 0;
-
-    }
-```
-### 80
-给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。
-
-不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
-
-示例 1:
-
-给定 nums = [1,1,1,2,2,3],
-
-函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
-
-你不需要考虑数组中超出新长度后面的元素。
-示例 2:
-
-给定 nums = [0,0,1,1,1,1,2,3,3],
-
-函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
-
-你不需要考虑数组中超出新长度后面的元素。
-- 实现：
-```java
-public int removeDuplicates(int[] nums) {
-        if (nums!=null&&nums.length!=0){
-            int cur=0,count=1;
-            for (int i=1;i<nums.length;i++){
-                if (nums[cur]==nums[i]){
-                    count++;
-                }else {
-                    count=1;
-                }
-                if (count<=2){
-                    cur++;
-                    nums[cur]=nums[i];
-                }
-            }
-            return cur+1;
-
-
-        }
-        else
-            return 0;
-
-    }
-
-    //利用增强for循环
-    public int removeDuplicates1(int[] nums) {
-        if (nums!=null&&nums.length!=0){
-            int count=0;
-            for (int num:nums){
-                if (count<2||num>nums[count-2])
-                    nums[count++]=num;
-
-            }
-            return count;
-
-
-
-        }
-        else
-            return 0;
-
-    }
-```
-
 # 双指针
 双指针主要用于遍历数组，两个指针指向不同的元素，从而协同完成任务。
 ### 对撞指针
