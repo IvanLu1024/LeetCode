@@ -9,16 +9,15 @@
    
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
-# 二叉树和递归部分笔记总结
-## 二叉树——天然的递归结构
+# 二叉树——天然的递归结构
 - 相关题目：
 <!-- GFM-TOC -->
    * [104.二叉树的最大深度](#104)
    * [111.二叉树的最小深度](#111)
 <!-- GFM-TOC -->    
-### 104
+## 104.二叉树的最大深度
 
-- 二叉树的最大深度
+### 描述
 
 给定一个二叉树，找出其最大深度。
 
@@ -29,19 +28,16 @@
 示例：
 给定二叉树 [3,9,20,null,null,15,7]，
 
-
-   
 返回它的最大深度 3 。
 
-- 分析：
+### 分析
 
-求二叉树的最大深度，就是求二叉树的深度；这里可以很好的应用递归的方法：
+求二叉树的最大深度，就是求二叉树的深度；这里可以很好的应用**递归**的方法：
 
-首先确定递归的**终止条件**，即二叉树为空的时候，此时深度为0；接着，确定**递归的过程**，
-即从根结点的**左右子树**中找出最大的深度加上1（根结点）就是二叉树的最大深度。
+首先确定递归的**终止条件**，即二叉树为空的时候，此时深度为0；接着，确定**递归的过程**，即从根结点的**左右子树**中找出最大的深度加上1（根结点）就是二叉树的最大深度。
 
+### 实现
 
-- 实现：
 ```java
 public int maxDepth(TreeNode root) {
         if (root==null){
@@ -51,13 +47,13 @@ public int maxDepth(TreeNode root) {
         return Math.max(maxDepth(root.left),maxDepth(root.right))+1;
 
     }
-``` 
-### 111
-- 二叉树的最小深度
+```
+## 111.二叉树的最小深度
+### 描述
 
 给定一个二叉树，找出其最小深度。
 
-最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+最小深度是**从根节点到最近叶子节点的最短路径上的节点数量**。
 
 说明: 叶子节点是指没有子节点的节点。
 
@@ -65,20 +61,19 @@ public int maxDepth(TreeNode root) {
 
 给定二叉树 [3,9,20,null,null,15,7],
 
-  
+
 返回它的最小深度  2.
-- 分析：
+### 分析
 
-这一题与上一道题类似，同样使用递归的方法来求解，但有一些陷阱需要注意。
+这一题与上一道题类似，同样使用递归的方法来求解，但有一些陷阱需要注意：
 
-首先，确定递归的终止条件，即结点为空的时候，此时深度为0；接着关键的是在确定递归的过程，
-当根结点的左右子树均不空的时候，这时取左右子树深度的较小值加1（根节点），**而当左右子树中有一边
-为空的时候，这时取左右子树深度的较大值加1。**
+- 首先，确定递归的终止条件，即结点为空的时候，此时深度为0；
+- 接着关键的是在确定递归的过程，当根结点的左右子树均不空的时候，这时取左右子树深度的较小值加1（根节点）；
+- 当左右子树均为空，此时该节点为叶子节点，此时该节点到叶子节点的深度为1，无论取最大值或最小值均可；
+- **而当左右子树中只有一边为空的时候，这时取左右子树深度的较大值加1。**左右子树只有一边为空，那么此时该节点必然不是叶子结点，需要继续递归，则在有子树的那一边继续递归，所以需要取较大值。
 
->因为当只有一边有结点的时候需要记录此时的深度，如果还是取较小值的时候(任何一个自然数和0相比，较小值永远为0)，则会丢失此时的子结构的深度。
+### 实现
 
-
-- 实现：
 ```java
 public int minDepth(TreeNode root) {
         if (root==null){
@@ -88,13 +83,17 @@ public int minDepth(TreeNode root) {
         if (root.left!=null&&root.right!=null){
             return Math.min(minDepth(root.right),minDepth(root.left))+1;
         }
+    	//当左右子树均为空的时候，该节点为叶子节点直接返回1
+    	 if(root.left==null&&root.right==null){
+            return 1;
+        }
         //当左右子树不是都有结点的时候，取左右子树的最大深度
         return Math.max(minDepth(root.right),minDepth(root.left))+1;
 
     }
 ```
 
-## 翻转二叉树 
+# 翻转二叉树 
 - 相关题目：
 <!-- GFM-TOC -->
    * [226.翻转二叉树](#226)
@@ -102,43 +101,290 @@ public int minDepth(TreeNode root) {
    * [101.对称二叉树](#101)
    * [110.平衡二叉树](#110)
 <!-- GFM-TOC --> 
-### 226
-### 100
-### 101
-### 110
-## 注意递归的终止条件
+## 226.翻转二叉树
+
+### 描述
+
+翻转一棵二叉树。
+
+**示例：**
+
+输入：
+
+```
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+```
+
+输出：
+
+```
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+```
+
+**备注:**
+这个问题是受到 [Max Howell ](https://twitter.com/mxcl)的 [原问题](https://twitter.com/mxcl/status/608682016205344768) 启发的 ：
+
+> 谷歌：我们90％的工程师使用您编写的软件(Homebrew)，但是您却无法在面试时在白板上写出翻转二叉树这道题，这太糟糕了。
+
+### 分析
+
+这里需要注意，树的递归问题。那么翻转的时候，首先翻转当前节点的左右子树的子结构，再将当前节点的左右子树交换，需要注意这里的递归出口有两个。
+
+### 实现
+
+```java
+public TreeNode invertTree(TreeNode root) {
+        if(root==null||(root.left==null&&root.right==null)){
+            return root;
+        }
+        invertTree(root.left);
+        invertTree(root.right);
+        TreeNode t = root.left;
+        root.left = root.right;
+        root.right = t;
+        return root;
+    }
+```
+
+## 100.相同的树
+
+### 描述
+
+给定两个二叉树，编写一个函数来检验它们是否相同。
+
+如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+
+**示例 1:**
+
+```
+输入:       1         1
+          / \       / \
+         2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+输出: true
+```
+
+**示例 2:**
+
+```
+输入:      1          1
+          /           \
+         2             2
+
+        [1,2],     [1,null,2]
+
+输出: false
+```
+
+**示例 3:**
+
+```
+输入:       1         1
+          / \       / \
+         2   1     1   2
+
+        [1,2,1],   [1,1,2]
+
+输出: false
+```
+
+### 分析
+
+递归，当两棵树均为空的时候返回ture，若只有一棵树为空则返回false；当前两个节点的值相等的时候，继续递归判断其左右子树；不相等，则返回false。
+
+### 实现
+
+```java
+public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p==null&&q==null){
+            return true;
+        }else if (p==null||q==null){
+            return false;
+        }
+        
+        if(p.val==q.val){
+            return isSameTree(p.left,q.left)&&isSameTree(p.right,q.right);
+        }else{
+            return false;
+        }   
+    }
+```
+
+## 101.对称二叉树
+
+### 描述
+
+给定一个二叉树，检查它是否是镜像对称的。
+
+例如，二叉树 `[1,2,2,3,4,4,3]` 是对称的。
+
+```
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+```
+
+但是下面这个 `[1,2,2,null,3,null,3]` 则不是镜像对称的:
+
+```
+    1
+   / \
+  2   2
+   \   \
+   3    3
+```
+
+**说明:**
+
+如果你可以运用递归和迭代两种方法解决这个问题，会很加分。
+
+### 分析
+
+因为需要同时判断左右子树，所以需要构造一个辅助函数。这个辅助函数来递归判断节点的左右子树是否对称。
+
+### 实现
+
+```java
+public boolean isSymmetric(TreeNode root) {
+        if(root==null)
+            return true;
+        return isSymmetric(root.left,root.right);
+    }
+    private boolean isSymmetric(TreeNode left, TreeNode right) {
+        if (left==null&&right==null){
+            return true;
+        }else if (left==null||right==null){
+            return false;
+        }
+        if (left.val!=right.val){
+            return false;
+        }
+        return isSymmetric(left.left,right.right)&&isSymmetric(right.left,left.right);
+        
+    }
+```
+
+## 110.平衡二叉树
+
+### 描述
+
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+> 一个二叉树*每个节点* 的左右两个子树的高度差的绝对值不超过1。
+
+**示例 1:**
+
+给定二叉树 `[3,9,20,null,null,15,7]`
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+返回 `true` 。
+
+**示例 2:**
+
+给定二叉树 `[1,2,2,3,3,null,null,4,4]`
+
+```
+       1
+      / \
+     2   2
+    / \
+   3   3
+  / \
+ 4   4
+```
+
+返回 `false` 。
+
+### 分析
+
+根据平衡二叉树的定义，其所有子树的左右子树的高度差均不超过1，若超过则就不是平衡二叉树。这里需要注意，在计算深度的时候就可以设置isBalanced**全局变量**判断当前子树是否平衡。
+
+### 实现
+
+```java
+	boolean isBalanced = true;
+    public boolean isBalanced(TreeNode root) {
+        if(root==null){
+            return true;
+        }
+        depth(root);
+        return isBalanced;
+    }
+    private int depth(TreeNode root){
+        if(root==null){
+            return 0;
+        }
+        int l = depth(root.left);
+        int r = depth(root.right);
+        if(Math.abs(l-r)>1) isBalanced=false;
+        return Math.max(l,r)+1;
+    }
+```
+
+
+
+
+
+# 注意递归的终止条件
 - 相关题目：
 <!-- GFM-TOC -->
    * [112.路径总和（1）](#112)
    * [404.左叶子之和](#404)
 <!-- GFM-TOC --> 
-### 112
+## 112.路径总和（1）
+
+### 描述
+
 给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
 
-说明: 叶子节点是指没有子节点的节点。
+**说明:** 叶子节点是指没有子节点的节点。
 
-- 分析：
+**示例:** 
+给定如下二叉树，以及目标和 `sum = 22`，
+
+```
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+```
+
+返回 `true`, 因为存在目标和为 22 的根节点到叶子节点的路径 `5->4->11->2`。
+
+### 分析
 
 首先，需要注意递归的终止条件，当树为空的时候，返回结果为false；
 
-然后，需要确定递归的过程，当遇到叶子结点的时候需要验证结果是否为待搜索的目标（sum），如果搜索到目标即可返回true，
+然后，需要确定递归的过程，当遇到叶子结点的时候需要验证结果是否为待搜索的目标（sum），如果搜索到目标即可返回true，没有则返回false，表明这条路径不可行。
 如果没有搜索到目标就继续搜索，递归最终得到结果。
-- 实现：
-```java
-示例:
-     给定如下二叉树，以及目标和 sum = 22，
 
-      5
-     / \
-     4   8
-     /   / \
-     11  13  4
-     /  \      \
-     7    2      1
-     返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
- * 
- **/
-public class Solution112 {
+### 实现
+
+```java
     public boolean hasPathSum(TreeNode root, int sum) {
         //注意递归的终止条件
         if (root==null){
@@ -155,32 +401,34 @@ public class Solution112 {
         return hasPathSum(root.right,sum-root.val)||hasPathSum(root.left,sum-root.val);
     }
 ```
-### 404
+## 404.左叶子之和
+
+### 描述
+
 计算给定二叉树的所有左叶子之和。
 
-- 分析：
+**示例：**
 
-这一题的难度在于如何确定一个结点为左叶子结点，
-首先，递归的终止条件为当树为空时候，返回的结果为0；然后，递归的过程为寻找到左叶子结点后累加即可。
-当一个结点的左子树不为空，并且这个子树为叶子结点的时候则为左叶子结点。
-
-- 实现：
-```java
-/**
- *计算给定二叉树的所有左叶子之和。
-
-     示例：
-
-      3
-     / \
-    9  20
-     /  \
+```
+    3
+   / \
+  9  20
+    /  \
    15   7
 
-     在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
- *
- *
- */
+在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+```
+
+### 分析
+
+这一题的难度在于如何确定一个结点为左叶子结点。
+首先，递归的终止条件为当树为空时候，返回的结果为0；然后，递归的过程为寻找到左叶子结点后累加后继续去右子树搜索。
+
+**当一个结点的左子树不为空，并且这个子树为叶子结点的时候则为左叶子结点**。
+
+### 实现
+
+```java
 public class Solution404 {
     public int sumOfLeftLeaves(TreeNode root) {
         if (root==null){
@@ -199,45 +447,197 @@ public class Solution404 {
 
     }
 ```
-## 定义递归问题
+# 定义递归问题
 - 相关题目：
-<!-- GFM-TOC -->
+  <!-- GFM-TOC -->
    * [257.二叉树的所有路径](#257)
    * [113.路径总和（2）](#113)
    * [129.求根到叶子节点数字之和](#129)
    * [222.完全二叉树的节点个数](#222)
-<!-- GFM-TOC --> 
-### 257
+      <!-- GFM-TOC --> 
+## 257.二叉树的所有路径
+### 描述
+
 给定一个二叉树，返回所有从根节点到叶子节点的路径。
 
-说明: 叶子节点是指没有子节点的节点。
+**说明:** 叶子节点是指没有子节点的节点。
 
-- 分析：
+**示例:**
+
+```
+输入:
+
+   1
+ /   \
+2     3
+ \
+  5
+
+输出: ["1->2->5", "1->3"]
+
+解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
+```
+
+### 分析
 
 我们需要关注递归调用的**语义**，在本题中：
-首先确定递归的终止条件，当二叉树为空的时候，那么直接返回一个空的集合，当二叉树为叶子结点的时候，那么将该节点的值
-加入集合中；
+首先确定递归的终止条件，当二叉树为空的时候，那么直接返回一个空的集合，当二叉树为叶子结点的时候，那么将该节点的值，加入集合中；
 
 接着是递归的过程，分别递归调用获得左右子树以其为根结点到叶子结点的路径，将当前路径加上以其孩子结点为根结点到叶子结点的路径，即可。
-- 实现：
+### 实现
+
 ```java
-/**
-* 示例:
-  
-  输入:
-  
-     1
-   /   \
-  2     3
-   \
-    5
-  
-  输出: ["1->2->5", "1->3"]
-  
-  解释: 所有根节点到叶子节点的路径为: 1->2->5, 1->3
-* 
-*/
 public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res=new ArrayList();
+        if(root==null){
+            return res;
+        }
+        generate(root,"",res);
+        return res;
+    }
+    private void generate(TreeNode root,String s,List<String> res){
+        if(root.left==null&&root.right==null){
+            res.add(s+root.val);
+        }else{
+            s+=root.val+"->";
+            if(root.left!=null){
+                generate(root.left,s,res);
+            }
+            if(root.right!=null){
+                generate(root.right,s,res);
+            }
+        }
+    }
+```
+## 113.路径总和（2）
+
+### 描述
+
+给定一个二叉树和一个目标和，找到所有从根节点到叶子节点路径总和等于给定目标和的路径。
+
+**说明:** 叶子节点是指没有子节点的节点。
+
+**示例:**
+给定如下二叉树，以及目标和 `sum = 22`，
+
+```
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \    / \
+        7    2  5   1
+```
+
+返回:
+
+```
+[
+   [5,4,11,2],
+   [5,8,4,5]
+]
+```
+
+### 分析
+
+使用回溯法（即深度遍历），当搜索到叶子结点并且和为sum的时候将当前遍历的节点加入结果集合，否则继续在其左右子树中搜索。
+
+### 实现
+
+```java
+public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> res = new ArrayList();
+        List<Integer> list = new ArrayList();
+        generatePath(root,sum,list,res);
+        return res;
+    }
+
+    private void generatePath(TreeNode node,int sum,List<Integer> list,List<List<Integer>> res){
+        if (node==null){
+            return;
+        }
+        list.add(node.val);
+        if (node.left==null&&node.right==null){
+            if (sum-node.val==0){
+                res.add(new ArrayList<>(list));
+            }
+        }else {
+            if (node.left!=null){
+                generatePath(node.left,sum-node.val,list,res);
+            }
+            if (node.right!=null){
+                generatePath(node.right,sum-node.val,list,res);
+            }
+        }
+        list.remove(list.size()-1);
+    }
+```
+
+
+
+## 129.求根到叶子节点数字之和 
+
+### 描述
+
+给定一个二叉树，它的每个结点都存放一个 `0-9` 的数字，每条从根到叶子节点的路径都代表一个数字。
+
+例如，从根到叶子节点路径 `1->2->3` 代表数字 `123`。
+
+计算从根到叶子节点生成的所有数字之和。
+
+**说明:** 叶子节点是指没有子节点的节点。
+
+**示例 1:**
+
+```
+输入: [1,2,3]
+    1
+   / \
+  2   3
+输出: 25
+解释:
+从根到叶子节点路径 1->2 代表数字 12.
+从根到叶子节点路径 1->3 代表数字 13.
+因此，数字总和 = 12 + 13 = 25.
+```
+
+**示例 2:**
+
+```
+输入: [4,9,0,5,1]
+    4
+   / \
+  9   0
+ / \
+5   1
+输出: 1026
+解释:
+从根到叶子节点路径 4->9->5 代表数字 495.
+从根到叶子节点路径 4->9->1 代表数字 491.
+从根到叶子节点路径 4->0 代表数字 40.
+因此，数字总和 = 495 + 491 + 40 = 1026.
+```
+
+### 分析
+
+和上面的题目思路是类似的，也是使用深度遍历。不过这里需要主要对于sum的处理，每搜索到下一层当前的sum需要进位，即10*sum。
+
+### 实现
+
+```java
+public int sumNumbers(TreeNode root) {
+        List<String> res = RootToLeafPaths(root);
+        int result=0;
+        for (String s : res) {
+            int i = Integer.valueOf(s);
+            result+=i;
+        }
+        return result;
+
+    }
+
+    private List<String> RootToLeafPaths(TreeNode root) {
         List<String> res=new LinkedList<>();
         if (root==null){
             return res;
@@ -249,23 +649,42 @@ public List<String> binaryTreePaths(TreeNode root) {
         //分别添加左右子树，注意递归调用的语义！
 
         //获得左子树结点从根到叶子所有的路径
-        List<String> leftStr = binaryTreePaths(root.left);
+        List<String> leftStr = RootToLeafPaths(root.left);
         for (String s : leftStr) {
-            res.add(String.valueOf(root.val)+"->"+s);
+            res.add(String.valueOf(root.val)+s);
         }
         //获得右子树结点从根到叶子所有的路径
-        List<String> rightStr = binaryTreePaths(root.right);
+        List<String> rightStr = RootToLeafPaths(root.right);
         for (String s : rightStr) {
-            res.add(String.valueOf(root.val)+"->"+s);
+            res.add(String.valueOf(root.val)+s);
         }
+
         return res;
     }
+
+
+    //深度遍历
+    public int sumNumbers1(TreeNode root) {
+        if (root==null){
+            return 0;
+        }
+        int results=dfs(root,0);
+        return results;
+
+
+    }
+    private int dfs(TreeNode root,int sum){
+        if (root==null){
+            return 0;
+        }
+        if (root.right==null&&root.left==null){
+            return sum*10+root.val;
+        }
+        return dfs(root.right,10*sum+root.val)+dfs(root.left,10*sum+root.val);
+    }
 ```
-### 113
 
-### 129 
-
-### 222
+## 222.完全二叉树的节点个数
 给出一个完全二叉树，求出该树的节点个数。
 
 说明：
@@ -283,17 +702,80 @@ public List<String> binaryTreePaths(TreeNode root) {
 
 输出: 6
 ```
-## 稍复杂的递归逻辑
+### 分析
+
+思路1 ： 直接使用深度遍历，若当前节点为空，则返回0，否则将当前节点累加上继续遍历左右子树；
+
+思路2：利用完全二叉树的性质，完全二叉树去除最后一行，为一棵满二叉树。满二叉树的节点数可以利用公式：
+
+n=2^h-1。所以在遍历过程中，可以先利用公式计算，若不能使用公式则使用累加。
+
+### 实现
+
+思路1：
+
+```java
+ public int countNodes(TreeNode root) {
+        return root==null ? 0 : countNodes(root.left)+countNodes(root.right)+1;
+    }
+```
+
+思路2：
+
+```java
+public int countNodes(TreeNode root) {
+        if (root==null){
+            return 0;
+        }
+
+        //先统计左右子树的高度
+        int leftHeight=getLeftHeight(root);
+        int rightHeight=getRightHeight(root);
+        //如果左右子树高度相等，则说明是满二叉树，则按公式来计算
+        if (leftHeight==rightHeight)
+            return (2<<leftHeight)-1;
+        //如果不相等，则遍历计数
+        else return countNodes(root.right)+countNodes(root.left)+1;
+
+    }
+
+	//由于该树为完全二叉树，其右子树的高度就是根节点到最右端节点的距离
+    private int getRightHeight(TreeNode right) {
+        int height=0;
+        while (right.right!=null){
+            right=right.right;
+            height++;
+        }
+        return height;
+    }
+	
+    private int getLeftHeight(TreeNode left) {
+        int height=0;
+        while (left.left!=null){
+            left=left.left;
+            height++;
+        }
+        return height;
+    }
+```
+
+
+
+# 稍复杂的递归逻辑
+
 - 相关题目：
 <!-- GFM-TOC -->
    * [路径总和（3）](#437)
 <!-- GFM-TOC --> 
-### 437
+## 437.路径总和（3）
+
+### 描述
+
 给定一个二叉树，它的每个结点都存放着一个整数值。
 
 找出路径和等于给定数值的路径总数。
 
-路径不需要从根节点开始，也不需要在叶子节点结束，但是路径方向必须是向下的（只能从父节点到子节点）。
+**路径不需要从根节点开始，也不需要在叶子节点结束**，但是路径方向必须是向下的（只能从父节点到子节点）。
 
 二叉树不超过1000个节点，且节点数值范围是 [-1000000,1000000] 的整数。
 
@@ -316,8 +798,44 @@ root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
 3.  -3 -> 11
 ```
 
+### 分析
 
-## 二分搜索树中的问题
+题干中搜索的目标路径**不需要从根节点开始**，说明每个节点都可以作为该路径的起点。目标路径也不需要在叶子节点结束，说明在搜索每个节点的时候都可以判断当前累加和是否满足sum，若满足则计数器加一。否则，继续向下进行搜索。
+
+### 实现
+
+```java
+public int pathSum(TreeNode root, int sum) {
+        if(root==null){
+            return 0;
+        }
+    	//先搜索根节点，此时起点为根节点
+        int count=dfs(root,sum);
+    	//再搜索左右子树，此时起点就是左右子树节点
+        count+=pathSum(root.left,sum);
+        count+=pathSum(root.right,sum);
+        return count;
+    }
+	//深度遍历，从当前节点开始搜索
+    private int dfs(TreeNode node,int sum){
+        if (node==null){
+            return 0;
+        }
+        int count=0;
+        sum-=node.val;
+        //表明搜索到一个符合条件的解
+        if (sum==0){
+            count++;
+        }
+        //继续搜索左右子树
+        return count+dfs(node.left,sum)+dfs(node.right,sum);
+    }
+```
+
+
+
+# 二分搜索树中的问题
+
 - 相关题目：
 <!-- GFM-TOC -->
    * [235.二叉搜索树的最近公共祖先](#235)
@@ -329,7 +847,10 @@ root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
    * [236.二叉树的最近公共祖先](#236)
    * [530.二叉搜索树的最小绝对差](#530)
 <!-- GFM-TOC --> 
-### 235
+## 235.二叉搜索树的最近公共祖先
+
+### 描述
+
 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
 
 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
@@ -344,7 +865,7 @@ root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
    0      _4       7       9
          /  \
          3   5
-``` 
+```
 示例 1:
 
 输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
@@ -359,7 +880,7 @@ root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
 
 所有节点的值都是唯一的。
 p、q 为不同节点且均存在于给定的二叉搜索树中。
-- 分析：
+### 分析
 
 由于给定的二叉树是二叉搜索树，那么可以运用其性质来求解这道题目；
 还是同样使用递归的方法，首先确定递归的终止条件，当结点为空的时候，那么此时不存在
@@ -371,7 +892,8 @@ p、q 为不同节点且均存在于给定的二叉搜索树中。
 3. 如果p,q分布在根节点的两侧的时候，此时公共祖先为当前的根节点。
 
 这样，就可以很轻松的写出递归的解法了。
-- 实现：
+### 实现
+
 ```java
 public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root==null){
@@ -389,7 +911,10 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         return root;
     }
 ```
-### 98
+## 98.验证二叉搜索树
+
+### 描述
+
 给定一个二叉树，判断其是否是一个有效的二叉搜索树。
 
 假设一个二叉搜索树具有如下特征：
@@ -417,7 +942,49 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 解释: 输入为: [5,1,4,null,null,3,6]。
      根节点的值为 5 ，但是其右子节点值为 4 。
 ```
-### 450
+### 分析
+
+根据二分搜索树的性质可得其中序遍历的为从小到大的排列，那么从这点出发来寻找解题的突破口。
+
+设置一个全局变量来记录中序遍历的前一个结点即pre，在中序遍历的时候，不断地判断当前节点值和前一个节点值的关系，若当前节点值大于前一个节点值则继续递归，否则返回false。
+
+### 实现
+
+```java
+	private  Integer pre=null;	//这里必须要设置为全局变量
+    public boolean isValidBST(TreeNode root){
+        return inOrder(root);
+    }
+    private boolean inOrder(TreeNode root){
+        if (root==null){
+            return true;
+        }
+        if (!inOrder(root.left)){
+            return false;
+        }
+
+        //验证当前结点值是否满足中序遍历
+        if (pre!=null&&root.val>=pre){
+            return false;
+        }
+        //记录前一个结点的值
+        pre=root.val;
+
+        if (!inOrder(root.right)){
+            return false;
+        }
+        return true;
+    }
+```
+
+
+
+
+
+## 450.删除二叉搜索树中的节点
+
+### 描述
+
 给定一个二叉搜索树的根节点 root 和一个值 key，删除二叉搜索树中的 key 对应的节点，并保证二叉搜索树的性质不变。返回二叉搜索树（有可能被更新）的根节点的引用。
 
 一般来说，删除节点可分为两个步骤：
@@ -691,7 +1258,7 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 最小绝对差为1，其中 2 和 1 的差的绝对值为 1（或者 2 和 3）。
 ```
 注意: 树中至少有2个节点。
-## 更多关于二叉树的问题
+# 更多关于二叉树的问题
 相关题目：
    * [114.二叉树展开为链表](#114)
 ### 114
