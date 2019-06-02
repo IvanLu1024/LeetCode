@@ -51,6 +51,25 @@ public class Solution109 {
         root.right=createTree(list,mid+1,r);
         return root;
     }
+
+    public TreeNode sortedListToBST1(ListNode head) {
+        if(head==null){
+            return null;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode pre = null;
+        while (fast!=null){
+            pre=slow;
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        TreeNode node = new TreeNode(slow.val);
+        node.right = sortedListToBST1(slow.next);
+        pre=null;
+        node.left = sortedListToBST1(head);
+        return node;
+    }
     @Test
     public void test(){
         int[] arr={-10, -3, 0, 5, 9};
