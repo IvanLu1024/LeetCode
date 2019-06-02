@@ -977,10 +977,6 @@ public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
     }
 ```
 
-
-
-
-
 ## 450.删除二叉搜索树中的节点
 
 ### 描述
@@ -1023,7 +1019,80 @@ key = 3
     4   7
 ```
 
-### 108
+### 分析
+
+首先搜索待删除节点，若key小于当前节点值则继续在左子树中搜索，若大于，则继续在右子树中搜索，若等于则说明寻找到了待删除节点。
+
+对于待删除节点，需要分三种情况来讨论：
+
+1. 左子树为空的时候，若删除当前节点，就只需要将其左子树覆盖即可；
+2. 右子树为空的时候，若删除当前节点，就只需要将其右子树覆盖即可；
+3. 左右子树均不为空的时候，若删除当前节点，其中一种方法就是选择中序序列中与该节点值相邻的节点来替换即可。那么可以选择**右子树中的最小元素**或**左子树中的最大元素**，笔者在这里是选择了右子树的最小元素的方式来实现的。
+
+### 实现
+
+```java
+public TreeNode deleteNode(TreeNode root, int key) {
+        if(root==null){
+            return null;
+        }
+        if(key==root.val){
+            //当左子树为空的时候
+            if (root.left==null){
+                TreeNode right = root.right;
+                return right;
+            }
+            //当右子树为空的时候
+            if (root.right==null){
+                TreeNode left = root.left;
+                return left;
+            }
+            //当左右子树均不为空的时候
+            if (root.left!=null&&root.right!=null){
+                //寻找右子树中最小的元素
+                TreeNode successNode = minNode(root.right);
+                successNode.right = delMinNode(root.right);
+                successNode.left = root.left;
+                return successNode;
+            }
+
+
+        }else if(key<root.val){
+            root.left=deleteNode(root.left,key);
+        }else{
+            root.right=deleteNode(root.right,key);
+        }
+        return root;
+
+    }
+
+    //寻找最小值
+    private TreeNode minNode(TreeNode root){
+        if (root==null){
+            return null;
+        }
+        if (root.left==null){
+            return root;
+        }
+        return minNode(root.left);
+    }
+    //删除最小值，并返回删除后的根节点
+    private TreeNode delMinNode(TreeNode root){
+        //当左侧为空的时候，删除当前结点
+        if (root.left==null){
+            TreeNode rightNode = root.right;
+            root.right=null;
+            return rightNode;
+        }
+        root.left = delMinNode(root.left);
+        return root;
+    }
+```
+
+## 108.将有序数组转换为二叉搜索树
+
+### 描述
+
 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
 
 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
@@ -1040,7 +1109,12 @@ key = 3
    /   /
  -10  5
 ```
-- 实现：
+### 分析
+
+根据二叉搜索树的性质可得，其中序遍历得到的结果为有序序列，不断地根据中点来构建节点，就是中序遍历的逆过程。
+
+### 实现
+
 ```java
 public TreeNode sortedArrayToBST(int[] nums) {
         if (nums==null||nums.length==0){
@@ -1060,7 +1134,9 @@ public TreeNode sortedArrayToBST(int[] nums) {
         return root;
     }
 ```
-### 109
+## 109.有序链表转换二叉搜索
+### 描述
+
 给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
 
 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
@@ -1077,7 +1153,16 @@ public TreeNode sortedArrayToBST(int[] nums) {
    /   /
  -10  5
 ```
-- 实现：
+### 分析
+
+思路1：将链表转化为数组，那么该题目就转化成了[108](#108)题了
+
+思路2：使用快慢指针，不断搜索中间节点，注意记得还要使用一个pre指针，指向慢指针的前一个节点，用于将前半部分链表的结尾置空。
+
+### 实现
+
+思路1：
+
 ```java
 //首先将链表转化为数组或者集合，这样就转化为了108题
     public TreeNode sortedListToBST(ListNode head) {
@@ -1104,7 +1189,37 @@ public TreeNode sortedArrayToBST(int[] nums) {
         return root;
     }
 ```
+思路2：
+
+```java
+public TreeNode sortedListToBST(ListNode head) {
+        if(head==null){
+            return null;
+        }
+        if(head.next == null)
+            return new TreeNode(head.val);
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode pre = new ListNode(0);
+        while (fast!=null&&fast.next!=null){
+            pre=slow;
+            
+            slow=slow.next;
+            fast=fast.next.next;
+            
+        }
+        TreeNode node = new TreeNode(slow.val);
+        node.right = sortedListToBST(slow.next);
+        pre.next=null;
+        node.left = sortedListToBST(head);
+        return node;
+    }
+```
+
+
+
 ### 230
+
 给定一个二叉搜索树，编写一个函数 kthSmallest 来查找其中第 k 个最小的元素。
 
 说明：
