@@ -1,21 +1,83 @@
 <!-- GFM-TOC -->
-* [动态规划部分笔记总结](#动态规划部分笔记总结)
-    * [第一个动态规划问题](#第一个动态规划问题)
-    * [发现重叠子问题](#发现重叠子问题)
-    * [状态的定义和状态转移](#状态的定义和状态转移)
-    * [面试中的0-1背包问题 ](#面试中的0-1背包问题)
-    * [LIS问题  ](#LIS问题)
-    * [LCS，最短路，求动态规划的具体解以及更多 ](#LCS，最短路，求动态规划的具体解以及更多)
-    * [股票交易问题](#股票交易问题)
-    * [更多动态规划的问题](#更多动态规划的问题)
+
+* [第一个动态规划问题](#第一个动态规划问题)
+* [发现重叠子问题](#发现重叠子问题)
+* [状态的定义和状态转移](#状态的定义和状态转移)
+* [面试中的0-1背包问题 ](#面试中的0-1背包问题)
+* [LIS问题  ](#LIS问题)
+* [LCS，最短路，求动态规划的具体解以及更多 ](#LCS，最短路，求动态规划的具体解以及更多)
+* [股票交易问题](#股票交易问题)
+* [更多动态规划的问题](#更多动态规划的问题)
+
 * [参考资料](#参考资料)
-<!-- GFM-TOC -->
-# 动态规划部分笔记总结
+  <!-- GFM-TOC -->
+
+
+
 ![](../pict/dp_01.png)
-## 第一个动态规划问题
+# 第一个动态规划问题
 相关题目：
 * [70.爬楼梯](#70)
-### 70
+## 70.爬楼梯
+
+### 描述
+
+假设你正在爬楼梯。需要 *n* 阶你才能到达楼顶。
+
+每次你可以爬 1 或 2 个台阶。你有多少种不同的方法可以爬到楼顶呢？
+
+**注意：**给定 *n* 是一个正整数。
+
+**示例 1：**
+
+```
+输入： 2
+输出： 2
+解释： 有两种方法可以爬到楼顶。
+1.  1 阶 + 1 阶
+2.  2 阶
+```
+
+**示例 2：**
+
+```
+输入： 3
+输出： 3
+解释： 有三种方法可以爬到楼顶。
+1.  1 阶 + 1 阶 + 1 阶
+2.  1 阶 + 2 阶
+3.  2 阶 + 1 阶
+```
+
+### 分析
+
+当n=0，F(n)=0；当n=1，F(n)=1；当n=2，F(n)=2；
+
+当n>=3时，对于到达这个高度有两种选择：1.从n-1处爬1阶；2.从n-2处爬2阶，
+
+所以F(n)=F(n-1)+F(n-2)。
+
+### 实现
+
+```java
+public int climbStairs(int n) {
+        if(n<=2){
+            return n;
+        }
+        int[] memo=new int[n+1];
+        memo[1]=1;
+        memo[2]=2;
+        for(int i =3;i<=n;i++){
+            memo[i]=memo[i-1]+memo[i-2];
+        }
+        return memo[n];
+    }
+```
+
+
+
+
+
 ## 发现重叠子问题
 相关题目：
 * [343.整数拆分](#343)
@@ -24,33 +86,43 @@
 * [62.不同路径](#62)
 * [63.不同路径（2）](#63)
 
-### 343
-给定一个正整数 n，将其拆分为至少两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。
+## 343.整数拆分
 
-示例 1:
+### 描述
 
+给定一个正整数 *n*，将其拆分为**至少**两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。
+
+**示例 1:**
+
+```
 输入: 2
 输出: 1
 解释: 2 = 1 + 1, 1 × 1 = 1。
-示例 2:
+```
 
+**示例 2:**
+
+```
 输入: 10
 输出: 36
 解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
-说明: 你可以假设 n 不小于 2 且不大于 58。
-- 分析：
-- 实现：
+```
+
+**说明:** 你可以假设 *n* 不小于 2 且不大于 58。
+
+### 实现
+
 ```java
     //记忆化搜索
     private int[] memo;
-    public int integerBreak1(int n) {
+    public int integerBreak(int n) {
         assert n>=2;
         memo=new int[n+1];
-        return breakInteger1(n);
+        return breakInteger(n);
     }
 
 
-    private int breakInteger1(int n){
+    private int breakInteger(int n){
         if (n==1){
             return 1;
         }
@@ -61,7 +133,7 @@
         }else {
             //从1到n-1计算分割结果
             for (int i = 1; i <= n - 1; i++) {
-                res = max3(res, i * (n - i), i * breakInteger1(n - i));
+                res = max3(res, i * (n - i), i * breakInteger(n - i));
             }
             memo[n]=res;
         }
@@ -71,40 +143,57 @@
         return Math.max(a,Math.max(b,c));
     }
 
-    public int integerBreak2(int n) {
+    public int integerBreak(int n) {
         assert n>=2;
         memo=new int[n+1];
         return breakInteger2(n);
 
     }
 
-    private int breakInteger2(int n){
+    private int breakInteger(int n){
         memo[1]=1;
         for (int i = 2; i <=n ; i++) {
             for (int j = 1; j <=i ; j++) {
-                //将n分割成j+(i-j)
+                //将i分割成j+(i-j)
                 memo[i]= max3(memo[i],j*(i-j),j*memo[i-j]);
             }
         }
         return memo[n];
     }
 ```
-### 279
-给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+## 279.完全平方数
 
-示例 1:
+### 描述
 
+给定正整数 *n*，找到若干个完全平方数（比如 `1, 4, 9, 16, ...`）使得它们的和等于 *n*。你需要让组成和的完全平方数的个数最少。
+
+**示例 1:**
+
+```
 输入: n = 12
 输出: 3 
 解释: 12 = 4 + 4 + 4.
-示例 2:
+```
 
+**示例 2:**
+
+```
 输入: n = 13
 输出: 2
 解释: 13 = 4 + 9.
-- 分析：
+```
 
-- 实现：
+### 分析
+
+```
+定义一个函数f(n)表示我们要求的解。f(n)的求解过程为：
+f(n) = 1 + min{
+  f(n-1^2), f(n-2^2), f(n-3^2), f(n-4^2), ... , f(n-k^2) //(k为满足k^2<=n的最大的k)
+}
+```
+
+### 实现
+
 ```java
 public int numSquares(int n){
         if (n==0){
@@ -121,26 +210,84 @@ public int numSquares(int n){
         return memo[n];
     }
 ```
-### 91
-一条包含字母 A-Z 的消息通过以下方式进行了编码：
+## 91.解码方法
+### 描述
 
+一条包含字母 `A-Z` 的消息通过以下方式进行了编码：
+
+```
 'A' -> 1
 'B' -> 2
 ...
 'Z' -> 26
-给定一个只包含数字的非空字符串，请计算解码方法的总数。
+```
 
-示例 1:
+给定一个只包含数字的**非空**字符串，请计算解码方法的总数。
 
+**示例 1:**
+
+```
 输入: "12"
 输出: 2
 解释: 它可以解码为 "AB"（1 2）或者 "L"（12）。
-示例 2:
+```
 
+**示例 2:**
+
+```
 输入: "226"
 输出: 3
 解释: 它可以解码为 "BZ" (2 26), "VF" (22 6), 或者 "BBF" (2 2 6) 。
+```
+
+### 分析
+
+思路()：
+
+1. s[i]是编码、s[i-1]是编码、s[i-1:i+1]是编码。nums[i] = nums[i-1] + nums[i-2]
+2. s[i]是编码、s[i-1]不是编码。nums[i] = nums[i-1]
+3. s[i]不是编码、s[i-1]是编码、s[i-1:i+1]是编码。nums[i] = nums[i-2]
+4. s[i]不是编码、s[i-1]是编码、s[i-1:i+1]不是编码。nums[i] = 0
+5. 都不是编码。nums[i] = 0
+
+### 实现
+
+```java
+public int numDecodings(String s) {
+        int n = s.length();
+        if (n==0){
+            return 0;
+        }
+        //memo[i]表示字符串s中下标为(i-1)的解码方法次数
+        int[] memo=new int[n+1];
+        memo[0]=1;
+        if (s.charAt(0)>'0'){
+            memo[1]=1;
+        }
+        char[] chars = s.toCharArray();
+        for (int i = 2; i <= n; i++) {
+            int one = chars[i-1]-'0';
+            //如果一个字符满足(1-9)则记录
+            if (one>0){
+                memo[i]+=memo[i-1];
+            }
+            int two = 10*(chars[i-2]-'0')+(chars[i-1]-'0');
+            //如果两个字符满足(10-26)则记录
+            if (two <= 26 && two >= 10) {
+                    memo[i] += memo[i - 2];
+            }
+
+        }
+        return memo[n];
+    }
+```
+
+
+
+
+
 ### 62
+
 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
 
 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
@@ -323,13 +470,13 @@ public int lengthOfLIS1(int[] nums){
  示例:
 
  输入: envelopes = [[5,4],[6,4],[6,7],[2,3]]
- 
+
  输出: 3
- 
+
  解释: 最多信封的个数为 3, 组合为: [2,3] => [5,4] => [6,7]。
- 
+
  - 实现：
- 
+
  DP解法（效率蛮低的）：
  ```java
 public int maxEnvelopes(int[][] envelopes) {
@@ -360,7 +507,7 @@ public int maxEnvelopes(int[][] envelopes) {
         }
         return max;
     }
-```
+ ```
 二分查找解法：
 ```java
 public int maxEnvelopes1(int[][] envelopes){
@@ -455,8 +602,9 @@ public int wiggleMaxLength(int[] nums) {
     }
 ```
 
-
 ## LCS，最短路，求动态规划的具体解以及更多
+
+
 
 ## 更多动态规划的题目
 相关题目：
@@ -576,19 +724,20 @@ public String longestPalindrome1(String s){
 
 - 实现：
 ```java
-public int maxProfit(int[] prices) {
-        int n = prices.length;
-        if (n==0){
-            return 0;
-        }
-        int max=0;  //记录最大利润
-        for (int i = 1; i <n ; i++) {
-            for (int j = 0; j < i; j++) {
-                //prices[i]-prices[j]:一次买卖的利润
-                max=Math.max(max,prices[i]-prices[j]);
-            }
-        }
-        return max;
+    public int maxProfit(int[] prices) {
+                int n = prices.length;
+               if (n==0){
+                   return 0;
+               }
+               //持有股票
+               int hold=Integer.MIN_VALUE;
+               //抛售股票
+               int unhold=0;
+               for (int i = 0; i < n; i++) {
+                   hold=Math.max(hold,-prices[i]);
+                   unhold=Math.max(unhold,hold+prices[i]);
+               }
+               return unhold;
     }
 ```
 ### 122
