@@ -286,20 +286,25 @@ public int numDecodings(String s) {
 
 
 
-### 62
+## 62.不同路径
 
-一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+### 描述
+
+一个机器人位于一个 *m x n* 网格的左上角 （起始点在下图中标记为“Start” ）。
 
 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
 
 问总共有多少条不同的路径？
 
-例如，上图是一个7 x 3 的网格。有多少可能的路径？
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/robot_maze.png)
 
-说明：m 和 n 的值均不超过 100。
+例如，上图是一个3 x 7 的网格。有多少可能的路径？
 
-示例 1:
+**说明：***m* 和 *n* 的值均不超过 100。
 
+**示例 1:**
+
+```
 输入: m = 3, n = 2
 输出: 3
 解释:
@@ -307,24 +312,67 @@ public int numDecodings(String s) {
 1. 向右 -> 向右 -> 向下
 2. 向右 -> 向下 -> 向右
 3. 向下 -> 向右 -> 向右
-示例 2:
+```
 
+**示例 2:**
+
+```
 输入: m = 7, n = 3
 输出: 28
+```
 
-### 63
-一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+### 分析
+
+F(i , j)：到达位置为(i,j)有F(i , j)条路径。
+
+对于上边界的所有点，只有可能从其左边移动过来，那么F(i , j)均为1；同理对于左边界上的所有点，
+
+F(i , j)也均为1。
+
+对于其他的点，都有两种可能：一是从上方移动过来的，二是从左边移动过来的。那么到达该位置的路径数为上方和左方位置之和，因为上方和左方均可到达当前位置，那么路径数是可以累加的。那么F(i , j)=F(I-1,j)+F(i,j-1)。
+
+### 实现
+
+```java
+ public int uniquePaths(int m, int n) {
+        int[][] memo=new int[m][n];
+     	//初始化左边界   
+     	for(int i=0;i<m;i++){
+            memo[i][0]=1;
+        }
+     	//初始化上边界
+        for(int i=0;i<n;i++){
+            memo[0][i]=1;
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                //累加上方和左方的路径数
+                memo[i][j]=memo[i-1][j]+memo[i][j-1];
+            }
+        }
+        return memo[m-1][n-1];
+    }
+```
+
+## 63.不同路径(2)
+
+### 描述
+
+一个机器人位于一个 *m x n* 网格的左上角 （起始点在下图中标记为“Start” ）。
 
 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
 
 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
 
-网格中的障碍物和空位置分别用 1 和 0 来表示。
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/10/22/robot_maze.png)
 
-说明：m 和 n 的值均不超过 100。
+网格中的障碍物和空位置分别用 `1` 和 `0` 来表示。
 
-示例 1:
+**说明：***m* 和 *n* 的值均不超过 100。
 
+**示例 1:**
+
+```
 输入:
 [
   [0,0,0],
@@ -337,15 +385,545 @@ public int numDecodings(String s) {
 从左上角到右下角一共有 2 条不同的路径：
 1. 向右 -> 向右 -> 向下 -> 向下
 2. 向下 -> 向下 -> 向右 -> 向右
+```
+
+### 分析
+
+这一题和上一题的不同在于**存在障碍物**，那么对于障碍物的处理是关键：
+
+对于上边界的点，若当前位置不是障碍物则置为1，若是障碍物，从当前位置到结尾均为0。因为起点无法到达该位置以及以后的位置。
+
+对于左边界，也是同理，同样地处理障碍物。
+
+对于其他位置，若当前位置不是障碍物，则和上题同样是左边位置和上边位置之和；若是障碍物，则直接置为0，**因为不可达**。
+
+### 实现
+
+```java
+public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m=obstacleGrid.length;
+        if(m==0){
+            return 0;
+        }
+        int n = obstacleGrid[0].length;
+        int[][] memo=new int[m][n];
+    	//初始化左边界
+        for(int i=0;i<m;i++){
+            if(obstacleGrid[i][0]!=1){
+                memo[i][0]=1;
+            }else{
+                //直接跳出，其后的值则均为0
+                break;
+            }
+        }
+    	//初始化上边界
+        for(int i=0;i<n;i++){
+            if(obstacleGrid[0][i]!=1){
+                memo[0][i]=1;
+            }else{
+                break;
+            }
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                //对于当前位置不是障碍物时
+                if(obstacleGrid[i][j]!=1){
+                    memo[i][j]=memo[i-1][j]+memo[i][j-1];
+                }
+            }
+        }
+        return memo[m-1][n-1];
+    }
+```
+
+
+
+
 
 ## 状态的定义和状态转移
+
 相关题目：
 * [198.打家劫舍](#198)
-### 198 
+## 198.打家劫舍
 
-## 面试中的0-1背包问题 
+你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，**如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警**。
 
-## LIS问题 
+给定一个代表每个房屋存放金额的非负整数数组，计算你**在不触动警报装置的情况下，**能够偷窃到的最高金额。
+
+**示例 1:**
+
+```
+输入: [1,2,3,1]
+输出: 4
+解释: 偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+```
+
+**示例 2:**
+
+```
+输入: [2,7,9,3,1]
+输出: 12
+解释: 偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+```
+
+### 分析
+
+状态转移方程：F(i)表示在**位置i的最大收益**。由于不能在相邻房屋同时进行偷盗，所以对于每个位置有两种选择，要么偷，要么不偷。
+
+i=0, F(0)=v[0];
+
+i=1,F(1)=max{v[0],v[1]};
+
+那么对于i>=2, F(i)=max{F(i-1),F(i-2)+v[i]}；
+
+### 实现
+
+```java
+public int rob(int[] nums) {
+        int n = nums.length;
+        if(n==0){
+            return 0;
+        }
+        if(n==1){
+            return nums[0];
+        }
+        if(n==2){
+            return Math.max(nums[0],nums[1]);
+        }
+        int[] memo = new int[n];
+        memo[0]=nums[0];
+        memo[1]=Math.max(nums[0],nums[1]);
+        for(int i=2;i<n;i++){
+            memo[i]=Math.max(memo[i-1],nums[i]+memo[i-2]);
+        }
+        return memo[n-1];
+    }
+```
+
+# 0-1背包问题 
+
+### 描述
+
+有一个容量为 C 的背包，要用这个背包装下物品的价值最大，这些物品有两个属性：体积 w和价值 v。
+
+数组w中各元素表示每个物品的重量为w[i]，数组v中各元素表示每个物品的价值为v[i]。
+
+示例：
+
+```
+v={60,100,120};
+w={10,20,30};
+C=50;
+
+结果为：220
+解释：20+30<=50,100+120=220
+```
+
+### 分析
+
+状态转移方程：F（i,j）表示拥有前i个物品，容量为j的背包的价值最大值。
+
+对于第i件物品：
+
+```
+能够放入：在不放入当前物品和放入当前物品（当前背包容量会减少）中选择最大值 
+
+F(i,j)=max{F(i-1,j),v[i] + F(i-1,j-w[i])}
+
+不能够放入:F(i,j)=F(i-1,j)
+```
+
+例如：
+
+有一个容量为5的背包，物品如下所示：
+
+|     id     |  0   |  1   |  2   |
+| :--------: | :--: | :--: | :--: |
+| **weight** |  1   |  2   |  3   |
+| **value**  |  6   |  10  |  12  |
+
+表格中的值表示F（i，j）
+
+| id（i）\capcaity（j） |  0   |  1   |  2   | 3    | 4    | 5     |
+| :-------------------: | :--: | :--: | :--: | ---- | ---- | ----- |
+|           0           |  0   |  6   |  6   | 6    | 6    | 6     |
+|           1           |  0   |  6   |  10  | 6+10 | 6+10 | 6+10  |
+|           2           |  0   |  6   |  10  | 6+10 | 6+12 | 10+12 |
+
+那么结果为22
+
+### 实现
+
+```java
+//时间复杂度O(N*C)
+//空间复杂度O(N*C)
+public int knapsack(int[] w, int[] v, int C){
+        int n = w.length;
+        if (n==0||C==0){
+            return 0;
+        }
+       int[][] memo=new int[n][C+1];
+
+        //先初始化
+        for (int i = 0; i <= C; i++) {
+            if (i>=w[0]){
+                memo[0][i]=v[0];
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= C; j++) {
+                //0：不放入该物品
+                memo[i][j]=memo[i-1][j];
+                if (j>=w[i]){
+                    //1：放入该物品
+                    memo[i][j]=Math.max(memo[i-1][j],v[i]+memo[i-1][j-w[i]]);
+                }
+            }
+        }
+        return memo[n-1][C];
+    }
+```
+
+空间优化：
+
+观察状态转移方程：F(i,j)=max{F(i-1,j),v[i] + F(i-1,j-w[i])}，第i行元素只依赖于第i-1行元素。理论上，只需要保持两行元素，只需要使用上边和左边的元素，使用前后一对奇偶数即可。
+
+```java
+	//优化空间复杂度
+	//空间复杂度：O(2*C)
+    public int knapsack(int[] w, int[] v, int C){
+        int n = w.length;
+        if (n==0||C==0){
+            return 0;
+        }
+        memo=new int[2][C+1];
+
+        //先初始化
+        for (int i = 0; i <= C; i++) {
+            if (i>=w[0]){
+                memo[0][i]=v[0];
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j <= C; j++) {
+                //0：不放入该物品
+                memo[i%2][j]=memo[(i-1)%2][j];
+                if (j>=w[i]){
+                    //1：放入该物品
+                    memo[i%2][j]=Math.max(memo[i%2][j],v[i]+memo[(i-1)%2][j-w[i]]);
+                }
+            }
+        }
+        return memo[(n-1)%2][C];
+    }
+```
+
+进一步优化空间：
+
+因为 dp[j-w] 表示 dp[i-1] [j-w]，因此不能先求 dp[i] [j-w]，以防将 dp[i-1] [j-w] 覆盖。也就是说要先计算 dp[i] [j] 再计算 dp[i] [j-w[i]]，在程序实现时需要按**倒序**来循环求解。
+
+```java
+	private int[] dp;
+    //进一步优化空间复杂度
+	//空间复杂度：O(C)
+    public int knapsack2(int[] w, int[] v, int C){
+        int n = w.length;
+        if (n==0||C==0){
+            return 0;
+        }
+        dp=new int[C+1];
+
+        //先初始化，将第一个元素放入背包中
+        for (int i = 0; i <= C; i++) {
+            if (i>=w[0]){
+                dp[i]=v[0];
+            }
+        }
+        
+        for (int i = 1; i < n; i++) {
+            //从右向左
+            for (int j = C; j >=w[i] ; j--) {
+                dp[j]=Math.max(dp[j],v[i]+dp[j-w[i]]);
+            }
+        }
+        return dp[C];
+    }
+```
+
+## 416.分割等和子集
+
+### 描述
+
+给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+注意:
+
+每个数组中的元素不会超过 100
+数组的大小不会超过 200
+示例 1:
+
+```
+输入: [1, 5, 11, 5]
+
+输出: true
+
+解释: 数组可以分割成 [1, 5, 5] 和 [11].
+
+示例 2:
+
+输入: [1, 2, 3, 5]
+
+输出: false
+
+解释: 数组不能分割成两个元素和相等的子集.
+```
+
+### 分析
+
+这道题其实可以变成是**0-1背包问题**，申请二维数组dp[i] [j]（0<=i<=nums.size()，0<=j<=(sum/2)，sum是数组的和），要划分成两半且和相等，即sum(left)=sum(right)，那么原数组和必须是偶数，否则无法划分。其中dp[i] [j]**表示从第一个元素到第i个元素是否存在能组成和为j的子集，如果可以为true，否则为false**。
+
+接下来我们来看递推公式，看看dp[i][j]可以怎么由子问题推导而来，先给出公式：
+
+dp[i] [j] = dp[i - 1] [j] || dp[i - 1] [j - nums[i]];
+
+1. 如果考虑第i个元素，那么情况等于前i-1个元素的子集和加上第i个元素的和可以组成和j，j-nums[i]表示前i-1个元素可以组成和为j-nums[i]，那么加上第i个元素nums[i]，和即为j，可以组成子集。
+2. 如果不考虑第i个元素，那么情况等于前i-1个元素的情况即dp[i-1] [j]（前i-1个元素如果已经可以划分子集左，那么剩下的元素直接划分到另外一边即子集右即可）
+
+所以是这两种情况的或构成递推公式，我一直觉得这道题和背包问题的理解有点出入，因为0-1背包问题是背或者不背，但一定所有的元素最后都会有结果（背或者不背），而这道题元素的背指的在左半边子集，不背指的在右半边子集，我们的目标是使得**左半边子集的和等于总和的一半**。这样思考才会和背包问题对应上。
+
+### 实现
+
+二维数组：
+
+```java
+public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        int sum=0;
+        for(int i:nums){
+            sum+=i;
+        }
+        if(sum%2!=0){
+            return false;
+        }
+        sum/=2;
+        boolean[][] memo=new boolean[n+1][sum+1];
+        
+        for(int i=1;i<n+1;i++){
+            memo[i][0]=true;
+        }
+        
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<sum+1;j++){
+                if(j>=nums[i-1]){
+                    memo[i][j]=memo[i-1][j]||memo[i-1][j-nums[i-1]];
+                }else{
+                    memo[i][j]=memo[i-1][j];
+                }
+            }
+        }
+        return memo[n][sum];
+    }
+```
+
+一维数组：
+
+```java
+ public boolean canPartition(int[] nums){
+        int n = nums.length;
+        if (nums==null||n==0){
+            return false;
+        }
+        int sum=0;
+        for (int i = 0; i <n ; i++) {
+            sum+=nums[i];
+        }
+        if (sum%2!=0){
+            return false;
+        }
+        int c=sum/2;
+        int[] dp=new boolean[c+1];
+        for (int i = 0; i <= c; i++) {
+                dp[i]=(nums[0]==i);
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = c; j >=nums[i] ; j--) {
+                dp[j]=dp[j]||dp[j-nums[i]];
+            }
+        }
+        return dp[c];
+
+    }
+```
+
+# 0-1背包问题的变种
+
+- 完全背包问题：每个物品可以无限使用
+- 多重背包问题：
+- 多维费用背包问题：要考虑物品的体积和重量两个维度？三维数组实现
+- 物品之间可以有互相排斥；也可以互相依赖
+
+## 322.零钱兑换
+
+### 描述
+
+给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。
+
+示例 1:
+
+输入: coins = [1, 2, 5], amount = 11
+输出: 3 
+解释: 11 = 5 + 5 + 1
+示例 2:
+
+输入: coins = [2], amount = 3
+输出: -1
+
+说明:
+你可以认为每种硬币的数量是无限的。
+
+### 分析
+
+由于每种硬币的数量是无限的，那么这一题就是一道完全背包问题。
+
+状态转移方程：
+
+F(i,j)表示使用从下标为0到(i-1)的元素累计总金额为j时的**最少硬币数量**
+
+```
+F(i,j)=min{F(i-1,j),F(i,j-coins[i])+1}
+```
+
+### 实现
+
+二维数组：
+
+```java
+public int coinChange(int[] coins, int amount) {
+        int n = coins.length;
+        if(n==0){
+            return 0;
+        }
+        /*F(i,j)=min{F(i-1,j),F(i,j-coins[i])+1}*/
+        //memo[i][j]：表示使用从下标为0到(i-1)的元素累加和为j时的最少硬币数量
+        int[][] memo=new int[n+1][amount+1];
+
+        //初始化
+        for (int i = 0; i < amount+1; i++) {
+            memo[0][i] = amount+1;
+        }
+        //
+        for (int i = 0; i < n; i++) {
+            memo[i][0] = 0;
+        }
+
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<amount+1;j++){
+                if(j>=coins[i-1]){
+                    memo[i][j]=Math.min(memo[i-1][j],memo[i][j-coins[i-1]]+1);
+                }else{
+                    memo[i][j]=memo[i-1][j];
+                }
+            }
+        }
+        int res=memo[n][amount]==(amount+1)?-1:memo[n][amount];
+        return res;
+    }
+```
+
+一维数组：
+
+```java
+public int coinChange(int[] coins, int amount) {
+        //memo[i]：累加金额为i使用的最少硬币数量
+    	int[] memo=new int[amount+1];
+        Arrays.fill(memo,amount+1);
+        memo[0]=0;
+        for (int coin:coins){
+            for (int i = coin; i <=amount; i++) {
+                memo[i]=Math.min(memo[i],memo[i-coin]+1);
+            }
+        }
+        if (memo[amount]==amount+1){
+            memo[amount]=-1;
+        }
+        return memo[amount];
+    }
+```
+
+## 474.一和零
+
+### 描述
+
+在计算机界中，我们总是追求用有限的资源获取最大的收益。
+
+现在，假设你分别支配着 m 个 0 和 n 个 1。另外，还有一个仅包含 0 和 1 字符串的数组。
+
+你的任务是使用给定的 m 个 0 和 n 个 1 ，找到能拼出存在于数组中的字符串的最大数量。每个 0 和 1 至多被使用一次。
+
+注意:
+
+给定 0 和 1 的数量都不会超过 100。
+给定字符串数组的长度不会超过 600。
+
+示例 1:
+
+```
+输入: Array = {"10", "0001", "111001", "1", "0"}, m = 5, n = 3
+输出: 4
+```
+
+解释: 总共 4 个字符串可以通过 5 个 0 和 3 个 1 拼出，即 "10","0001","1","0" 。
+
+示例 2:
+
+```
+输入: Array = {"10", "0", "1"}, m = 1, n = 1
+输出: 2
+```
+
+
+
+解释: 你可以拼出 "10"，但之后就没有剩余数字了。更好的选择是拼出 "0" 和 "1" 。
+
+### 分析
+
+二维背包，1和0的数量相当于背包容量。memo[i] [j]表示0的个数为i，1的个数为j能拼出字符串的最大数量。
+
+考虑两种情况：
+
+1. 使用当前字符串（背上该物品），在0的数量为i-count0(count0:当前字符串0的个数)，1的数量为j-count1(count1:当前字符串1的个数)的基础上再加一。
+2. 不使用当前字符串（不背该物品）
+
+### 实现
+
+```java
+private int[][] memo;
+    public int findMaxForm(String[] strs, int m, int n) {
+        memo=new int[m+1][n+1];
+        for (String str:strs){
+            int count0=0;
+            int count1=0;
+            char[] chars = str.toCharArray();
+            for (int i = 0; i <chars.length ; i++) {
+                if (chars[i]=='0'){
+                    count0++;
+                }
+                if (chars[i]=='1'){
+                    count1++;
+                }
+            }
+            for (int i = m; i >=count0 ; i--) {
+                for (int j = n; j >=count1 ; j--) {
+                    memo[i][j]=Math.max(memo[i][j],memo[i-count0][j-count1]+1);
+                }
+            }
+        }
+        return memo[m][n];
+    }
+```
+
 相关问题：
 * [674.最长连续递增子序列](#674)
 * [300.最长上升子序列](#300)
