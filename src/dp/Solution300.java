@@ -57,7 +57,7 @@ public class Solution300 {
                 else h=mid;                 //在右边继续查找
             }
             //将对应的数字放入相应的位置上
-            memo[l]=num;
+            memo[h]=num;
             //表示num比所有已知递增序列的尾数都大，则数组拓展的时候
             if (l==maxLen){
                 maxLen++;

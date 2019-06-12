@@ -56,10 +56,27 @@ public class Solution121 {
         }
         return max;
     }
+
+    //时间复杂度：O(n)
+    public int maxProfit2(int[] prices){
+        int n = prices.length;
+        if (n==0){
+            return 0;
+        }
+        //持有股票
+        int hold=Integer.MIN_VALUE;
+        //抛售股票
+        int unhold=0;
+        for (int i = 0; i < n; i++) {
+            hold=Math.max(hold,-prices[i]);
+            unhold=Math.max(unhold,hold+prices[i]);
+        }
+        return unhold;
+    }
     @Test
     public void test(){
         int[] p={7,1,5,3,6,4};
-        int r = maxProfit1(p);
+        int r = maxProfit2(p);
         System.out.println(r);
 
     }

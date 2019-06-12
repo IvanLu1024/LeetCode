@@ -29,28 +29,31 @@ public class Solution91 {
         if (n==0){
             return 0;
         }
+        //memo[i]表示字符串s中下标为(i-1)的解码方法次数
         int[] memo=new int[n+1];
         memo[0]=1;
         if (s.charAt(0)>'0'){
             memo[1]=1;
         }
+        char[] chars = s.toCharArray();
         for (int i = 2; i <= n; i++) {
-            int one = Integer.parseInt(s.substring(i - 1, i));
+            int one = chars[i-1]-'0';
             //如果一个字符满足(1-9)则记录
             if (one>0){
                 memo[i]+=memo[i-1];
             }
-            int two = Integer.parseInt(s.substring(i - 2, i));
+            int two = 10*(chars[i-2]-'0')+(chars[i-1]-'0');
             //如果两个字符满足(10-26)则记录
-            if (two<=26&&two>=10){
-                memo[i]+=memo[i-2];
+            if (two <= 26 && two >= 10) {
+                    memo[i] += memo[i - 2];
             }
+
         }
         return memo[n];
     }
     @Test
     public void test(){
-        String s="12";
+        String s="226";
         int i = numDecodings(s);
         System.out.println(i);
     }

@@ -23,7 +23,7 @@ public class Solution2 {
                 memo[i][j]=memo[i-1][j];
                 if (j>=w[i]){
                     //1：放入该物品
-                    memo[i][j]=Math.max(memo[i][j],v[i]+memo[i-1][j-w[i]]);
+                    memo[i][j]=Math.max(memo[i-1][j],v[i]+memo[i-1][j-w[i]]);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class Solution2 {
         }
         dp=new int[C+1];
 
-        //先初始化
+        //先初始化，将第一个元素放入背包中
         for (int i = 0; i <= C; i++) {
             if (i>=w[0]){
                 dp[i]=v[0];
@@ -79,12 +79,13 @@ public class Solution2 {
         }
         return dp[C];
     }
+
+
+
     @Test
     public void test(){
-        int[] v={60,100,120};
-        int[] w={10,20,30};
-        int C=50;
-        int knapsack = knapsack2(w, v, C);
-        System.out.println(knapsack);
+        int[] coins={1,2,5};
+        int amount=11;
+
     }
 }

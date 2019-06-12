@@ -68,12 +68,13 @@ public class Solution377 {
         dp[0]=1;
 
         for (int i = 1; i <=c ; i++) {
-            for (int num:nums){
-                if (i>=num) {
-                    dp[i] = dp[i] + dp[i-num];
+            for (int j = 0; j < n; j++) {
+                if (i>=nums[j]){
+                    dp[i]+=dp[i-nums[j]];
                 }
             }
         }
+
         return dp[c];
 
     }
@@ -82,6 +83,8 @@ public class Solution377 {
         int[] nums={1,2,3};
         int target=4;
         int res = combinationSum41(nums, target);
+        String s="";
+        s.length();
         System.out.println(res);
     }
 }

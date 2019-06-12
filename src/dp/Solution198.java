@@ -113,10 +113,30 @@ public class Solution198 {
         return memo[n-1];
     }
 
+    public int rob4(int[] nums){
+        int n = nums.length;
+        if (n==0){
+            return 0;
+        }
+        int x=0;    //偷当前位置
+        int y=0;    //不偷当前位置
+        int pre=0;  //上一个位置的最大收益
+        //Arrays.fill(memo,-1);
+        for (int i = 0; i < n; i++) {
+            //记录上一个位置的值
+            pre=x;
+            //偷当前位置
+            x=Math.max(x,y+nums[i]);
+            //不偷当前位置
+            y=pre;
+        }
+        return Math.max(x,y);
+    }
+
     @Test
     public void test(){
-        int[] nums={1,2,3,1};
-        int rob = rob2(nums);
+        int[] nums={2,1,1,2};
+        int rob = rob3(nums);
         System.out.println(rob);
     }
 }
