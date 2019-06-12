@@ -39,10 +39,10 @@ public class Solution494 {
      *  于是我们可以知道：S = sum(P) - sum(N)；
      *  那么sum(P) + sum(N) + sum(P) - sum(N) = sum(nums) + S = 2sum(P)；
      *  那么sum(P) = [S + sum(nums)] / 2； []表示向下取整
-     *  这样就转化成了在数组中寻找一些数字的和为p/2的问题（0-1背包问题）例如416
+     *
+     *  这样转化为0-1背包问题，其中背包的容量为sum(P)
      *
      */
-    int[] memo;
     public int findTargetSumWays(int[] nums, int S) {
         int n = nums.length;
         if (n==0){
@@ -56,15 +56,16 @@ public class Solution494 {
             return 0;
         }
         int p=(sum+S)/2;
-        memo=new int[p+1];
+        //memo[i]:和为i最多有多少种方式
+        int[] memo=new int[p+1];
+        //和为0的情况只有一种，那就是所有元素均不取
         memo[0]=1;
+        //对于每一个元素都有不取和取两种选择
         for(int i=0;i<n;i++){
             for(int j=p;j>=nums[i];j--){
                 memo[j]=memo[j]+ memo[j-nums[i]];
             }
         }
-
-
         return memo[p];
     }
     @Test
