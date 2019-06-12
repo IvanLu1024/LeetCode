@@ -2,10 +2,10 @@
 
 欢迎各位指正出我的错误和不足之处，请积极issues吧~希望共同进步，加油！
 
-本仓库是我自己关于LeetCode的做题记录,代码是利用Java来进行实现的。
+本仓库是我自己关于 LeetCode 的做题记录,代码是利用 Java 来进行实现的。
 
 
-其中我做了大致分类参考了bobo老师的[课程](https://coding.imooc.com/class/82.html)和[仓库](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)：
+其中我做了大致分类参考了 bobo 老师的[课程](https://coding.imooc.com/class/82.html)和[仓库](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)：
 
 | 分类 |  笔记 | 代码 |
 | :--: | :--: | :--: |
@@ -21,6 +21,7 @@
 | 数学 | [数学笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/math.md)| [数学代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/math)|
 | 设计 | [设计笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/design.md)| [设计代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/design)|
 | 字符串 | [字符串笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/string.md)| [字符串代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/string)|
+| 图 | [图笔记]() | [图代码](https://github.com/IvanLu1024/LeetCode/tree/master/src/graph) |
 
 ## :green_heart: 点赞数最高的Leetcode问题--Top 100 
 [点击查看详细](https://github.com/IvanLu1024/LeetCode/blob/master/notes/top100.md)
