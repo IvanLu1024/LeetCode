@@ -523,7 +523,7 @@ C=50;
 
 ### 分析
 
-状态转移方程：F（i,j）表示拥有前i个物品，容量为j的背包的价值最大值。
+状态转移方程：F（i,j）表示**拥有前i个物品，容量为j的背包的价值最大值**。
 
 对于第i件物品：
 
@@ -760,9 +760,154 @@ public boolean canPartition(int[] nums) {
 # 0-1背包问题的变种
 
 - 完全背包问题：每个物品可以无限使用
-- 多重背包问题：
 - 多维费用背包问题：要考虑物品的体积和重量两个维度？三维数组实现
 - 物品之间可以有互相排斥；也可以互相依赖
+
+# 完全背包问题
+
+## 377.组合总和（4）
+
+### 描述
+
+给定一个由正整数组成且不存在重复数字的数组，找出和为给定目标正整数的组合的个数。
+
+示例:
+
+```
+nums = [1, 2, 3]
+target = 4
+
+所有可能的组合为：
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+```
+
+请注意，顺序不同的序列被视作不同的组合。
+
+因此输出为 7。
+
+进阶：
+如果给定的数组中含有负数会怎么样？
+问题会产生什么变化？
+我们需要在题目中添加什么限制来允许负数的出现？
+
+### 分析
+
+由于数组中的每个元素可以选择多次，所以该题为完全背包问题，其中target为容量。
+
+dp[i]：表示**和为i从数组nums中选择的组合数**
+
+举例：nums=[1,2,3], target=4
+
+dp[1]=dp[0]=1
+
+dp[2]=dp[1]+dp[0]=2
+
+dp[3]=dp[2]+dp[1]+dp[0]=4
+
+dp[4]=dp[3]+dp[2]+dp[1]=7
+
+### 实现
+
+```java
+	private int[] dp;
+    public int combinationSum4(int[] nums, int target){
+        int c=target;
+        int n=nums.length;
+        if (n==0){
+            return 0;
+        }
+        //dp[i]:表示和为i的组合次数
+        dp=new int[c+1];
+        //和为0的组合次数只有一种
+        dp[0]=1;
+		//dp[i]=dp[i-nums[0]]+dp[i-nums[1]]+...
+        for (int i = 1; i <=c ; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i>=nums[j]){
+                    dp[i]+=dp[i-nums[j]];
+                }
+            }
+        }
+
+        return dp[c];
+
+    }
+```
+
+
+
+## 139.单词拆分
+
+### 描述
+
+给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
+
+说明：
+
+拆分时可以重复使用字典中的单词。
+你可以假设字典中没有重复的单词。
+
+```
+示例 1：
+
+输入: s = "leetcode", wordDict = ["leet", "code"]
+输出: true
+解释: 返回 true 因为 "leetcode" 可以被拆分成 "leet code"。
+示例 2：
+
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以被拆分成 "apple pen apple"。
+     注意你可以重复使用字典中的单词。
+示例 3：
+
+输入: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+输出: false
+```
+
+### 分析
+
+由于字典中的元素的使用次数不限制，那么这是一个完全背包问题。
+
+dp[i]表示字符串s[0...i)是否存在于字典中。
+如果S能够被“字典集合”（dict）中的单词拼接而成，所以满足下列方程：
+
+状态转移方程：
+f(0)=true,表示空
+f(i)=f(j)&&dict.contains(s[j,i))，0<j<i，确保了s[0,j)和s[j,i)均存在于字典中
+
+### 实现
+
+```java
+public boolean wordBreak(String s, List<String> wordDict) {
+        int n = s.length();
+        if (n==0){
+            return false;
+        }
+        memo=new boolean[n+1];
+        memo[0]=true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                String tStr = s.substring(j, i);
+                if (memo[j]&&wordDict.contains(tStr)){
+                    memo[i]=true;
+                    break;
+                }
+            }
+        }
+        return memo[n];
+    }
+```
+
+
+
+# 
 
 ## 322.零钱兑换
 
@@ -775,6 +920,7 @@ public boolean canPartition(int[] nums) {
 输入: coins = [1, 2, 5], amount = 11
 输出: 3 
 解释: 11 = 5 + 5 + 1
+
 示例 2:
 
 输入: coins = [2], amount = 3
@@ -813,7 +959,6 @@ public int coinChange(int[] coins, int amount) {
         for (int i = 0; i < amount+1; i++) {
             memo[0][i] = amount+1;
         }
-        //
         for (int i = 0; i < n; i++) {
             memo[i][0] = 0;
         }
@@ -821,6 +966,7 @@ public int coinChange(int[] coins, int amount) {
         for(int i=1;i<n+1;i++){
             for(int j=1;j<amount+1;j++){
                 if(j>=coins[i-1]){
+                    //memo[i][j-coins[i-1]]+1中i体现出了每个硬币可以使用多次，即完全背包特性
                     memo[i][j]=Math.min(memo[i-1][j],memo[i][j-coins[i-1]]+1);
                 }else{
                     memo[i][j]=memo[i-1][j];
@@ -851,6 +997,8 @@ public int coinChange(int[] coins, int amount) {
         return memo[amount];
     }
 ```
+
+# 0-1背包变种
 
 ## 474.一和零
 
@@ -924,12 +1072,93 @@ private int[][] memo;
     }
 ```
 
+## 494.目标和
+
+### 描述
+
+给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
+
+返回可以使最终数组和为目标数 S 的所有添加符号的方法数。
+
+示例 1:
+
+输入: nums: [1, 1, 1, 1, 1], S: 3
+输出: 5
+解释: 
+
+-1+1+1+1+1 = 3
++1-1+1+1+1 = 3
++1+1-1+1+1 = 3
++1+1+1-1+1 = 3
++1+1+1+1-1 = 3
+
+一共有5种方法让最终目标和为3。
+注意:
+
+数组的长度不会超过20，并且数组中的值全为正数。
+初始的数组的和不会超过1000。
+保证返回的最终结果为32位整数。
+
+### 分析
+
+sum(P)表示所有正数的和，sum(N)表示所有负数的绝对值之和。
+
+sum(P)-sum(N)=S
+
+sum(nums)=sum(P)+sum(N)
+
+-->S+sum(nums)=2sum(P)
+
+​	-->sum(P)=(S+sum(nums))/2
+
+这样就在该数组中寻找和为sum(P)的最大方式数，即有多少种方式使得元素之和为sum(P)。
+
+因为对于数组中的每个元素，都有两种选择，要么取，要么不取。这样就转化成为了0-1背包问题，其中背包的容量为sum(P)。
+
+### 实现
+
+```java
+public int findTargetSumWays(int[] nums, int S) {
+        int n = nums.length;
+        if (n==0){
+            return 0;
+        }
+        int sum=0;
+        for (int i = 0; i < n; i++) {
+            sum+=nums[i];
+        }
+        if (sum < S || (sum + S) % 2 != 0) {
+            return 0;
+        }
+        int p=(sum+S)/2;
+        //memo[i]:和为i最多有多少种方式
+        int[] memo=new int[p+1];
+        //和为0的情况只有一种，那就是所有元素均不取
+        memo[0]=1;
+        //对于每一个元素都有不取和取两种选择
+        for(int i=0;i<n;i++){
+            for(int j=p;j>=nums[i];j--){
+                memo[j]=memo[j]+ memo[j-nums[i]];
+            }
+        }
+        return memo[p];
+    }
+```
+
+# LIC(最长上升子序列)
+
+
+
 相关问题：
+
 * [674.最长连续递增子序列](#674)
 * [300.最长上升子序列](#300)
 * [376.摆动序列](#376)
 * [354.俄罗斯套娃信封问题](#354)
-### 674
+## 674.最长连续递增子序列
+
+### 描述
+
 给定一个未经排序的整数数组，找到最长且**连续**的的递增序列。
 
 示例 1:
@@ -947,27 +1176,36 @@ private int[][] memo;
 
 解释: 最长连续递增序列是 [2], 长度为1。
 注意：数组长度不会超过10000。
-- 实现：
-```java
-public int findLengthOfLCIS(int[] nums){
-        if (nums==null||nums.length==0||nums.length==1){
-            return nums.length;
-        }
-        int count=1;
-        int max=0;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i]>nums[i-1]){
-                count++;
-            }else {
-                count=1;
-            }
-            max=Math.max(max,count);
-        }
-        return max;
 
+### 分析
+
+由于是连续递增子序列，所以只需要检查相邻的元素之间的大小关系即可。利用一个len记录以当前元素结尾的连续递增子序列的长度，maxLen记录最长连续递增子序列的长度，即取len中的最大值。
+
+### 实现
+
+```java
+public int findLengthOfLCIS(int[] nums) {
+        int n = nums.length;
+        if(n==0){
+            return 0;
+        }
+        int maxLen=1;
+        int len=1;
+        for(int i=1;i<n;i++){
+            if(nums[i]>nums[i-1]){
+                len++;
+                maxLen=Math.max(maxLen,len);
+            }else{
+                len=1;
+            }
+        }
+        return maxLen;
     }
 ```
-### 300
+## 300.最长上升子序列
+
+### 描述
+
 给定一个无序的整数数组，找到其中最长**上升子序列**的长度。
 
 示例:
@@ -985,7 +1223,26 @@ public int findLengthOfLCIS(int[] nums){
 
 进阶: 你能将算法的时间复杂度降低到 O(n log n) 吗?
 
-- 实现：
+### 分析
+
+- DP：
+
+LIS(i)表示以第i个数字为结尾的最长上升子序列的长度，即[0,..,i]的范围内，选择数字nums[i]可以获得的最长上升子序列的长度。
+
+LIS(i) = max(1+LIS(j) if nums[i]>nums[j])，j<i
+
+- 二分搜索：
+
+```java
+memo[i]: 所有长度为i+1的递增子序列中, 最小的那个序列尾数.
+        由定义知memo数组必然是一个递增数组, 可以用 max 来表示最长递增子序列的长度. 
+        对数组进行迭代, 依次判断每个数num将其插入memo数组相应的位置:
+        1. num > memo[maxL], 表示num比所有已知递增序列的尾数都大, 将num添加入数组
+           数组尾部, 并将最长递增序列长度max加1
+        2. memo[i-1] < num <= memo[i], 只更新相应的memo[i]
+```
+
+### 实现
 
 DP解法：
 ```java
@@ -1013,7 +1270,7 @@ public int lengthOfLIS(int[] nums) {
 ```
 二分查找解法：
 ```java
-public int lengthOfLIS1(int[] nums){
+public int lengthOfLIS(int[] nums){
         int maxLen=0;
         //存储着所有长度为i+1的递增子序列中, 最小的那个序列尾数
         //memo[]必然为递增数组
@@ -1035,7 +1292,10 @@ public int lengthOfLIS1(int[] nums){
         return maxLen;
     }
 ```
-### 354
+## 354.俄罗斯套娃问题
+
+### 描述
+
 给定一些标记了宽度和高度的信封，宽度和高度以整数对形式 (w, h) 出现。当另一个信封的宽度和高度都比这个信封大的时候，
 
  这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
@@ -1053,7 +1313,19 @@ public int lengthOfLIS1(int[] nums){
 
  解释: 最多信封的个数为 3, 组合为: [2,3] => [5,4] => [6,7]。
 
- - 实现：
+### 分析
+
+- 动态规划：
+
+首先将所有信封按照width和height的升序排列，即先按照width升序，若width相等则按照height的升序排列。这样就转化成为了LIC（最长上升子序列）问题。
+
+memo[i]，表示以第i个元素结尾的信封的最大套娃（即width和height均递增的序列）的长度。
+
+- 二分搜索：
+
+首先**先按照width升序排列，如果width相等就按照height降序排列，这样可以保证依次遍历数组的时候，保证若height大于前面的元素的height，width必定大于该元素的width，这样就一定可以包含前面的这个元素**。这样就转化成了一位数组的LIS问题,即寻找height的最长上升子序列。
+
+### 实现
 
  DP解法（效率蛮低的）：
  ```java
@@ -1088,17 +1360,13 @@ public int maxEnvelopes(int[][] envelopes) {
  ```
 二分查找解法：
 ```java
-public int maxEnvelopes1(int[][] envelopes){
+public int maxEnvelopes(int[][] envelopes){
         int n = envelopes.length;
         if (n==0){
             return 0;
         }
         int len=0;
         int[] memo=new int[n];
-        //先按照width升序排列，如果width相等就按照height降序排列
-        //这样可以保证依次遍历数组的时候,
-        // 后面的width始终比前面的大并且如果高度也大于前面的就一定可以包含前面的
-        //这样就转化成了一位数组的LIS问题
         Arrays.sort(envelopes, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
@@ -1123,7 +1391,10 @@ public int maxEnvelopes1(int[][] envelopes){
         return len;
     }
 ```
-### 376
+## 376.摆动序列
+
+### 描述
+
 如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。少于两个元素的序列也是摆动序列。
 
 例如， [1,7,4,9,2,5] 是一个摆动序列，因为差值 (6,-3,5,-7,3) 是正负交替出现的。相反, [1,4,7,2,5] 和 [1,7,4,5,5] 不是摆动序列，第一个序列是因为它的前两个差值都是正数，第二个序列是因为它的最后一个差值为零。
@@ -1150,7 +1421,12 @@ public int maxEnvelopes1(int[][] envelopes){
 进阶:
 你能否用 O(n) 时间复杂度完成此题?
 
-- 实现：
+### 分析
+
+使用用up[i]和down[i]分别记录以第i个元素为结尾为上升沿和下降沿结束的最长摆动序列长度
+
+### 实现
+
 ```java
 public int wiggleMaxLength(int[] nums) {
         int n = nums.length;
@@ -1163,7 +1439,7 @@ public int wiggleMaxLength(int[] nums) {
         down[0]=1;
         for (int i = 1; i < n; i++) {
             if (nums[i]>nums[i-1]){
-                //上升的时候
+                //上升的时候，因为是摆动序列，所以up[i]可以在上一个下降沿的基础上增加，当前位置的下降沿保持不变
                 up[i]=down[i-1]+1;
                 down[i]=down[i-1];
             }else if (nums[i]<nums[i-1]){
@@ -1174,17 +1450,22 @@ public int wiggleMaxLength(int[] nums) {
                 down[i]=down[i-1];
                 up[i]=up[i-1];
             }
-
         }
         return Math.max(up[n-1],down[n-1]);
     }
 ```
 
-## LCS，最短路，求动态规划的具体解以及更多
+# LCS（最长公共子序列）
 
 
 
-## 更多动态规划的题目
+
+
+最短路，求动态规划的具体解以及更多
+
+
+
+# 更多动态规划的题目
 相关题目：
 * [5.最长回文子串](#5)
 ### 5
@@ -1272,7 +1553,7 @@ public String longestPalindrome1(String s){
         return r-l-1;
     }
 ```
-## 股票交易问题
+# 股票交易问题
 相关题目：
 * [121.买卖股票的最佳时机](#121)
 * [122.买卖股票的最佳时机(2)](#122)
