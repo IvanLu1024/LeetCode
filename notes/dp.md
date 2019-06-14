@@ -1,21 +1,7 @@
-<!-- GFM-TOC -->
-
-* [第一个动态规划问题](#第一个动态规划问题)
-* [发现重叠子问题](#发现重叠子问题)
-* [状态的定义和状态转移](#状态的定义和状态转移)
-* [面试中的0-1背包问题 ](#面试中的0-1背包问题)
-* [LIS问题  ](#LIS问题)
-* [LCS，最短路，求动态规划的具体解以及更多 ](#LCS，最短路，求动态规划的具体解以及更多)
-* [股票交易问题](#股票交易问题)
-* [更多动态规划的问题](#更多动态规划的问题)
-
-* [参考资料](#参考资料)
-  <!-- GFM-TOC -->
-
 
 
 ![](../pict/dp_01.png)
-# 第一个动态规划问题
+# 常规动态规划问题
 相关题目：
 * [70.爬楼梯](#70)
 ## 70.爬楼梯
@@ -1457,114 +1443,51 @@ public int wiggleMaxLength(int[] nums) {
 
 # LCS（最长公共子序列）
 
+### 描述
 
+给出两个字符串S1和S2，求这两个字符串的最长公共子序列的长度？
 
+### 分析
 
+LCS(m,n)表示S1[0...m]和S2[0...n]的最长公共子序列的长度，对于每个元素有以下两种情况：
 
-最短路，求动态规划的具体解以及更多
+1. S1[m]==S2[n]：LCS(m,n)=1+LCS(m-1,n-1)
+2. S1[m]!=S2[n]：LCS(m,n)=max{LCS(m,n-1),LCS(m,n-1)}
 
+### 实现
 
-
-# 更多动态规划的题目
-相关题目：
-* [5.最长回文子串](#5)
-### 5
-给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
-
-示例 1：
-
-输入: "babad"
-输出: "bab"
-注意: "aba" 也是一个有效答案。
-
-示例 2：
-
-输入: "cbbd"
-输出: "bb"
-
-
-- 实现：
-解法1：动态规划
 ```java
-public String longestPalindrome(String s) {
-        int n = s.length();
-        if (n==0){
-            return "";
-        }
-        //记录最长的回文串的起始下标
-        int start=0;
-        //记录最长回文串的长度
-        int maxLen=1;
-        //memo[i][j] i:起始下标，j：结束下标，表示是否为回文串
-        boolean[][] memo=new  boolean[n][n];
-        char[] chars = s.toCharArray();
-        //初始化，
-        for (int i = 0; i < n; i++) {
-            memo[i][i]=true;
-                if (i+1<n&&chars[i]==chars[i+1]){
-                    memo[i][i+1]=true;
-                    maxLen=2;
-                    start=i;
-                }
-        }
-        //若s[i]和s[j]相等，并且memo[i+1][j-1]为true，此时可以构建新的回文串s[i,j]
-        //从后向前地搜索
-        for (int i = n-1; i >= 0; i--) {
-            for (int j = i+2; j <n ; j++) {
-                if (chars[i]==chars[j]&&memo[i+1][j-1]){
-                    memo[i][j]=true;
-                    if (j-i+1>maxLen){
-                        maxLen=j-i+1;
-                        start=i;
-                    }
-                }
+public int lengthOfLCS(String s1,String s2){
+    int m = s1.length();
+    int n = s2.length();
+    if(m==0||n==0){
+        return 0;
+    }
+    int[][] memo = new int[m+1][n+1];
+    char[] chars1 = s1.toCharArray();
+    char[] chars2 = s2.toCharArray();
+    for(int i=1;i<=m;i++){
+        for(int j=1;j<=n;j++){
+            if(chars1[i-1]==chars2[j-1]){
+                memo[i][j]=1+memo[i-1][j-1];
+            }else{
+                memo[i][j]=Math.max(memo[i-1][j],memo[i][j-1]);
             }
         }
-        return s.substring(start,start+maxLen);
     }
+    int len = memo[m][n];
+    return len;
+}
 ```
-解法2：
-```java
-public String longestPalindrome1(String s){
-        if (s==null||s.length()==0){
-            return "";
-        }
-        int start=0,end=0;
-        for (int i = 0; i < s.length(); i++) {
-            //i：中间位置，若回文串为偶数则是偏左的位置
-            int len1 = expand(s, i, i);            //回文串长度为奇数
-            int len2 = expand(s, i, i + 1);     //回文串长度为偶数
-            int len = Math.max(len1,len2);
-            if (len>end-start){
-                //len-1：对于奇数没有影响，对于偶数位置会偏左
-                start = i - (len-1)/2;
-                end = i +(len/2);
-            }
-        }
-        return s.substring(start,end+1);
-    }
 
-    //从中间开始拓展
-    private int expand(String s,int l ,int r){
-        while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
-            l--;
-            r++;
-        }
-        return r-l-1;
-    }
-```
 # 股票交易问题
-相关题目：
-* [121.买卖股票的最佳时机](#121)
-* [122.买卖股票的最佳时机(2)](#122)
-* [123.买卖股票的最佳时机(3)](#123)
-* [188.买卖股票的最佳时机(4)](#188)
-* [309.买卖股票时机含冷冻期](#309)
-* [714.买卖股票时机含手续费](#714)
-### 121
+## 121.买卖股票的最佳时机
+
+### 描述
+
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 
-如果你最多只允许完成一笔交易（即买入和卖出一支股票），设计一个算法来计算你所能获取的最大利润。
+**如果你最多只允许完成一笔交易（即买入和卖出一支股票）**，设计一个算法来计算你所能获取的最大利润。
 
 注意你不能在买入股票前卖出股票。
 
@@ -1581,7 +1504,15 @@ public String longestPalindrome1(String s){
 输出: 0
 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
 
-- 实现：
+### 分析
+
+由于本题目中限制最多只能做一笔交易，那么只需要设置两个变量：
+
+- hold：若持有当前股票时候的最大利润（由于只能做一笔交易，所以在本题中hold一定为负数，即最小成本）
+- unhold：若抛售当前股票时候的最大利润
+
+### 实现
+
 ```java
     public int maxProfit(int[] prices) {
                 int n = prices.length;
@@ -1599,7 +1530,9 @@ public String longestPalindrome1(String s){
                return unhold;
     }
 ```
-### 122
+## 122.买卖股票的最佳时机(2)
+### 描述
+
 给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
 
 设计一个算法来计算你所能获取的最大利润。**你可以尽可能地完成更多的交易（多次买卖一支股票）**。
@@ -1630,9 +1563,16 @@ public String longestPalindrome1(String s){
 
 解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
 
-- 实现：
+### 分析
+
+由于可以尽可能多地做交易，那么可以看作交易次数不限制的股票交易问题。
+
+这里可以使用贪心算法，每当有股票上升就进行交易。
+
+### 实现
+
 ```java
-//贪心策略：只要有上升就进行交易
+	//贪心策略：只要有上升就进行交易
     public int maxProfit(int[] prices) {
         int n = prices.length;
         if (n==0||n==1){
@@ -1647,7 +1587,10 @@ public String longestPalindrome1(String s){
         return max;
     }
 ```
-### 123
+## 123.买卖股票的最佳时机(3)
+
+### 描述
+
 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
 
 设计一个算法来计算你所能获取的最大利润。**你最多可以完成 两笔 交易。**
@@ -1678,7 +1621,15 @@ public String longestPalindrome1(String s){
 
 解释: 在这个情况下, 没有交易完成, 所以最大利润为 0。
 
-- 实现：
+### 分析
+
+由于本题最多只能做两次交易，那么需要设置两对变量：
+
+- hold1,unhold1：第一次的交易；
+- hold2,unhold2：第二次的交易，在第一次的基础上。
+
+### 实现
+
 ```java
 public int maxProfit(int[] prices) {
         int n=prices.length;
@@ -1700,12 +1651,15 @@ public int maxProfit(int[] prices) {
         return unhold2;
     }
 ```
-### 188
+## 188.买卖股票的最佳时机(4)
+
+### 描述
+
 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
 
 设计一个算法来计算你所能获取的最大利润。**你最多可以完成 k 笔交易。**
 
-注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+注意: 你不能同时参与多笔交易（**你必须在再次购买前出售掉之前的股票**）。
 
 示例 1:
 
@@ -1721,10 +1675,18 @@ public int maxProfit(int[] prices) {
 
 解释: 在第 2 天 (股票价格 = 2) 的时候买入，在第 3 天 (股票价格 = 6) 的时候卖出, 这笔交易所能获得利润 = 6-2 = 4 。
      随后，在第 5 天 (股票价格 = 0) 的时候买入，在第 6 天 (股票价格 = 3) 的时候卖出, 这笔交易所能获得利润 = 3-0 = 3 。
-     
-- 实现：
+
+### 分析
+
+由于本题目中最多可以做k次交易，那么对于k的大小应该分情况讨论：
+
+- 当k>=n/2,那么相当于可以做**无限次交易**，即转化为[121题](#121.买卖股票的最佳时机)n为股票的总数即总天数；
+- 当k<n/2，设置两个数组用来分别记录这k次交易的hold和unhold
+
+### 实现
+
 ```java
-//122题+123题
+	//122题+123题
     public int maxProfit(int k, int[] prices) {
         int n=prices.length;
         if (n==0||n==1||k==0){
@@ -1740,7 +1702,7 @@ public int maxProfit(int[] prices) {
         Arrays.fill(holds,Integer.MIN_VALUE);
         Arrays.fill(unholds,0);
         for (int i = 0; i < n; i++) {
-            //做K次交易
+            //做K次交易，注意第一次交易hold的初始值为0
             for (int j = 0; j < k; j++) {
                 unholds[j] = Math.max(unholds[j], holds[j] + prices[i]);
                 if (j==0){
@@ -1767,12 +1729,15 @@ public int maxProfit(int[] prices) {
         return res;
     }
 ```
-### 309
+## 309.买卖股票时机含冷冻期
+
+### 描述
+
 给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
 
 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
 
-你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+你不能同时参与多笔交易（**你必须在再次购买前出售掉之前的股票**）。
 
 **卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。**
 
@@ -1782,7 +1747,18 @@ public int maxProfit(int[] prices) {
 输出: 3 
 
 解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
-- 实现：
+### 分析
+
+交易次数没有限制，由于由冷却期的限制，那么在每次持有股票的时候可以是没有买入或买入两种状态，每当买入的时候前面一定有个冷却期,对于i>2的时候：
+
+hold(i)=max{hold(i-1),unhold(i-2)-prices[i]}
+
+对于不持有股票的时候可以是没有卖出和卖出两种状态：
+
+unhold(i)=max{unhold(i-1),hold(i-1)+prices[i]}
+
+### 实现
+
 ```java
 public int maxProfit(int[] prices) {
         int n=prices.length;
@@ -1795,6 +1771,7 @@ public int maxProfit(int[] prices) {
 
         hold[0]=-prices[0];
         hold[1]=Math.max(hold[0],-prices[1]);
+    	unhold[0]=0;	//第一天不能抛售股票
         unhold[1]=Math.max(unhold[0],hold[0]+prices[1]);
         for (int i = 2; i < n; i++) {
             //没有买入和买入
@@ -1806,7 +1783,9 @@ public int maxProfit(int[] prices) {
         return unhold[n-1];
     }
 ```
-### 714
+## 714.买卖股票时机含手续费
+### 描述
+
 给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
 
 **你可以无限次地完成交易，但是你每次交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。**
@@ -1838,10 +1817,14 @@ public int maxProfit(int[] prices) {
 
 0 <= fee < 50000.
 
-- 实现：
+### 分析
+
+本题**交易次数没有限制**，多了一个限制在于交易费，其操作和[309题](.买卖股票的最佳时机含冷冻期)中操作是类似的，但是没有冷却期，并且**每次抛售的时候需要扣除交易费用**。
+
+### 实现
+
 ```java
-//与309题类似，但不需要冷却期
-    public int maxProfit(int[] prices, int fee) {
+public int maxProfit(int[] prices, int fee) {
         int n=prices.length;
         if (n==0||n==1){
             return 0;
@@ -1852,17 +1835,117 @@ public int maxProfit(int[] prices) {
         hold[1]=Math.max(-prices[0],-prices[1]);
         for (int i = 1; i <n ; i++) {
             hold[i]=Math.max(unhold[i-1]-prices[i],hold[i-1]);
+            //抛售的时候扣除交易费用
             unhold[i]=Math.max(hold[i-1]+prices[i]-fee,unhold[i-1]);
         }
         return Math.max(hold[n-1],unhold[n-1]);
     }
 ```
-## 更多动态规划的问题
-相关题目：
-* [53.最大子序和](#53)
-* [120.三角形最小路径和](#120)
-* [221.最大的正方形](#221)
-### 53
+# 更多动态规划的问题
+## 5.最长回文子串
+
+### 描述
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+
+输入: "babad"
+输出: "bab"
+注意: "aba" 也是一个有效答案。
+
+示例 2：
+
+输入: "cbbd"
+输出: "bb"
+
+### 分析
+
+- DP：状态转移方程为F(i,j)表示下标为i和j之间的字符是否能够组成回文串，
+
+若s[i]==s[j]并且F(i+1,j-1)，表示能够构成新的回文串，这时F(i,j)=true
+
+否则，均不能构成回文串
+
+- 中心拓展法：回文串分为两种，一种为奇数个，另一种为偶数个。把每个字母当成回文串的中心
+
+  这里要考虑两种情况，回文串的长度为奇数或者偶数情况。
+
+### 实现
+
+解法1：动态规划
+
+```java
+public String longestPalindrome(String s) {
+        int n = s.length();
+        if (n==0){
+            return "";
+        }
+        //记录最长的回文串的起始下标
+        int start=0;
+        //记录最长回文串的长度
+        int maxLen=1;
+        //memo[i][j] i:起始下标，j：结束下标，表示是否为回文串
+        boolean[][] memo=new  boolean[n][n];
+        char[] chars = s.toCharArray();
+        //初始化，需要将相邻位置初始化
+        for (int i = 0; i < n; i++) {
+            memo[i][i]=true;
+                if (i+1<n&&chars[i]==chars[i+1]){
+                    memo[i][i+1]=true;
+                    maxLen=2;
+                    start=i;
+                }
+        }
+        //若s[i]和s[j]相等，并且memo[i+1][j-1]为true，此时可以构建新的回文串s[i,j],这时只能构建偶数回文串，从后向前地搜索
+        for (int i = n-1; i >= 0; i--) {
+            for (int j = i+2; j <n ; j++) {
+                if (chars[i]==chars[j]&&memo[i+1][j-1]){
+                    memo[i][j]=true;
+                    if (j-i+1>maxLen){
+                        maxLen=j-i+1;
+                        start=i;
+                    }
+                }
+            }
+        }
+        return s.substring(start,start+maxLen);
+    }
+```
+
+解法2：
+
+```java
+	String res="";
+    public String longestPalindrome(String s){
+        if (s==null||s.length()==0){
+            return "";
+        }
+        for (int i = 0; i < s.length(); i++) {
+            expand(s, i, i);            //回文串长度为奇数
+            expand(s, i, i + 1);     //回文串长度为偶数
+        }
+        return res;
+    }
+
+    //从中间开始拓展
+    private void expand(String s, int l , int r){
+        while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
+            l--;
+            r++;
+        }
+        //由于跳出循环的时候, l--和r++各多执行了一次 所以需要 l + 1回来 r - 1 回来，  然后r 需要+ 1 所以不用变
+        String cur=s.substring(l+1,r);
+        if (cur.length()>res.length()){
+            res=cur;
+        }
+    }
+```
+
+## 53.最大子序和
+
+### 描述
+
 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
 示例:
@@ -1876,7 +1959,8 @@ public int maxProfit(int[] prices) {
 
 如果你已经实现复杂度为 O(n) 的解法，尝试使用更为精妙的分治法求解。
 
-- 实现：
+### 实现
+
 ```java
 public int maxSubArray(int[] nums){
         //全局最大值
@@ -1897,7 +1981,10 @@ public int maxSubArray(int[] nums){
         return max;
     }
 ```
-### 120
+## 120.三角形最小路径和
+
+### 描述
+
 给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
 
 例如，给定三角形：
@@ -1916,21 +2003,21 @@ public int maxSubArray(int[] nums){
 
 如果你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题，那么你的算法会很加分
 
-- 实现：
+### 分析
+
+状态转移方程为：
+
+```
+ f(0,0)=t[0][0]
+
+- f(i,0)=t[i][0]+f(i-1,0)
+- f(i,i)=t[i][i]+f(i-1,i-1)
+- f(i,j)=t[i][j]+min{f(i-1,j-1),f(i-1,j)}
+```
+
+### 实现
+
 ```java
-/**
-     * 状态转移方程为：
-     * f(0,0)=t[0][0]
-     *
-     * f(i,0)=t[i][0]+f(i-1,0)
-     *
-     * f(i,i)=t[i][i]+f(i-1,i-1)
-     *
-     * f(i,j)=t[i][j]+min{f(i-1,j-1),f(i-1,j)}
-     *
-     * @param triangle
-     * @return
-     */
     public int minimumTotal(List<List<Integer>> triangle) {
         int n = triangle.size();
         if (n==0){
@@ -1943,11 +2030,16 @@ public int maxSubArray(int[] nums){
                 triangle.get(i).set(j,triangle.get(i).get(j)+Math.min(triangle.get(i-1).get(j-1),triangle.get(i-1).get(j)));
             }
         }
-        Collections.sort(triangle.get(n-1));
-        return triangle.get(n-1).get(0);
+        int min=Integer.MAX_VALUE;
+        for(int i:triangle.get(n-1)){
+            min=Math.min(min,i);
+        }
+        
+        return min;
     }
-
-    public int minimumTotal1(List<List<Integer>> triangle){
+```
+```java
+public int minimumTotal(List<List<Integer>> triangle){
         int n = triangle.size();
         if (n==0){
             return 0;
@@ -1975,7 +2067,13 @@ public int maxSubArray(int[] nums){
         
     }
 ```
-### 221
+
+
+
+## 221.最大的正方形
+
+### 描述
+
 在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
 
 示例:
@@ -1990,7 +2088,8 @@ public int maxSubArray(int[] nums){
 ```
 输出: 4
 
-- 实现：
+### 实现
+
 ```java
     public int maximalSquare(char[][] matrix) {
         int m = matrix.length;
