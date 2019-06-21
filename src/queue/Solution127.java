@@ -117,7 +117,9 @@ public class Solution127 {
             //建立一个临时集合
             Set<String> temp=new HashSet<>();
 
+
             for (String word : beginSet) {
+                //寻找邻居节点
                 char[] chars = word.toCharArray();
                 for (int i = 0; i < chars.length; i++) {
                     char ch=chars[i];
@@ -133,7 +135,6 @@ public class Solution127 {
                         }
                     }
                     chars[i]=ch;
-                    
                 }
             }
             beginSet=temp;

@@ -6,6 +6,7 @@ import utils.LinkedListUtils;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * 合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
@@ -55,6 +56,32 @@ public class Solution23 {
         }
         return dummyHead.next;
     }
+
+    public ListNode mergeKLists1(ListNode[] lists) {
+        if(lists.length==0){
+            return null;
+        }
+        if(lists.length==1){
+            return lists[0];
+        }
+        Queue<Integer> queue = new PriorityQueue<>();
+        //将原链表集合加入优先队列中
+        for(ListNode node:lists){
+            while(node!=null){
+                queue.offer(node.val);
+                node=node.next;
+            }
+        }
+        ListNode dummyHead = new ListNode(0);
+        ListNode cur=dummyHead;
+        //将元素依次出队，并构建一个新的链表，这个链表就是一个排序链表
+        while(!queue.isEmpty()){
+            cur.next=new ListNode(queue.poll());
+            cur=cur.next;
+        }
+        return dummyHead.next;
+    }
+
     @Test
     public void test(){
         int[] a1={1,4,5};
