@@ -1,22 +1,24 @@
-# 设计部分的总结笔记
 相关题目：
 * [146.LRU缓存机制](#146)
 * [155.最小栈](#155)
 * [225.用队列实现栈](#225)
 * [232.用栈实现队列](#232)
 * [432.全O(1)的数据结构](#432)
-### 146
+## 146.LRU缓存机制
+
+### 描述
+
  运用你所掌握的数据结构，设计和实现一个  LRU (最近最少使用) 缓存机制。它应该支持以下操作： 获取数据 get 和 写入数据 put 。
- 
+
  获取数据 get(key) - 如果密钥 (key) 存在于缓存中，则获取密钥的值（总是正数），否则返回 -1。
  写入数据 put(key, value) - 如果密钥不存在，则写入其数据值。当缓存容量达到上限时，它应该在写入新数据之前删除最近最少使用的数据值，从而为新的数据值留出空间。
- 
+
  进阶:
- 
+
  你是否可以在 O(1) 时间复杂度内完成这两种操作？
- 
+
  示例:
- 
+
  ```java
 LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
  
@@ -29,8 +31,18 @@ LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
  cache.get(1);       // 返回 -1 (未找到)
  cache.get(3);       // 返回  3
  cache.get(4);       // 返回  4
-```
-- 实现：
+ ```
+### 分析
+
+思路1：使用双向链表+map的解法
+
+首先设置缓存中存储的每个节点都是双向链表中的一个节点，另外还需要设置两个指针，**head指向最近使用的节点，tail指向最久使用的节点**；每次使用到缓存key1（get(key1)或put(key1,value1)），都需要将当前key1对应的节点，将该节点移动到双链表的头部（先将头指针指向该节点[move2Head]，再从双链表中删除该节点[removeNode]）。
+
+思路2：使用List+map的解法
+
+设置一个List，这个List的特点是尾部是最近使用的节点，头部是最久使用的节点。与上面的思路类似，每当使用到缓存key1就需要将当前key1对应的节点，移动到List的尾部（先从List删除该key1，再从尾部插入key1）。
+
+### 实现
 
 解法1：
 ```java
@@ -160,7 +172,9 @@ LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
     }
 ```
 
-### 155
+## 155.最小栈
+### 描述
+
 设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
 
 push(x) -- 将元素 x 推入栈中。
@@ -179,7 +193,21 @@ minStack.pop();
 minStack.top();      --> 返回 0.
 minStack.getMin();   --> 返回 -2.
 ```
-- 实现：
+### 分析
+
+思路1：使用带有记录当前最小值的单链表实现
+
+设置一个栈顶指针top，每次出栈和入栈都是操作栈顶指针。
+
+思路2：两个栈实现
+
+一个正常的栈，一个用于记录最小值的栈，栈顶始终记录着当前栈中的最小元素。
+
+正常的栈的操作没有什么特殊操作，对于最小值栈，当入栈的时候，若当前值小于栈顶元素则压入栈；当出栈的时候，若正常栈的栈顶元素和最小值栈相同，则同时出栈，否则只需要操作正常栈出栈，即可。
+
+
+
+### 实现
 
 解法1：
 ```java
@@ -284,7 +312,67 @@ class MinStack {
 
     }
 ```
-### 225
+## 225.用队列实现栈
+
+### 描述
+
+使用队列实现栈的下列操作：
+
+- push(x) -- 元素 x 入栈
+- pop() -- 移除栈顶元素
+- top() -- 获取栈顶元素
+- empty() -- 返回栈是否为空
+
+**注意:**
+
+- 你只能使用队列的基本操作-- 也就是 `push to back`, `peek/pop from front`, `size`, 和 `is empty` 这些操作是合法的。
+- 你所使用的语言也许不支持队列。 你可以使用 list 或者 deque（双端队列）来模拟一个队列 , 只要是标准的队列操作即可。
+- 你可以假设所有操作都是有效的（例如, 对一个空的栈不会调用 pop 或者 top 操作）。
+
+### 分析
+
+首先分析一下，队列和栈的区别在于出入元素顺序的不同。那么，利用队列实现先进先出（FIFO），就需要在入队的时候，将入队的元素放置到队头的位置。这里可以借鉴循环队列的思想，为了达到与入队序列逆序，那么需要将队列循环左移（n-1位）。例如：queue:[1,2,3]->push(4):[1,2,3,4]->[2,3,4,1]->...[4,3,2,1]。
+
+### 实现
+
+```java
+class MyStack {
+
+   Queue<Integer> queue;
+        /** Initialize your data structure here. */
+        public MyStack() {
+            queue =new LinkedList<>();
+        }
+
+        /** Push element x onto stack. */
+    	//将入队顺序逆序
+        public void push(int x) {
+            queue.offer(x);
+            for (int i = 0; i < queue.size() - 1; i++) {
+                queue.offer(queue.poll());
+            }
+        }
+
+        /** Removes the element on top of the stack and returns that element. */
+        public int pop() {
+            return queue.poll();
+        }
+
+        /** Get the top element. */
+        public int top() {
+            return queue.peek();
+        }
+
+        /** Returns whether the stack is empty. */
+        public boolean empty() {
+            return queue.isEmpty();
+        }
+}
+```
+
+
+
+
 
 ### 232
 
@@ -402,4 +490,4 @@ class AllOne{
             return "";
         }
     }
-```  
+```
