@@ -8,8 +8,7 @@
     * [Floyd环检测算法](#Floyd环检测算法)
 * [参考资料](#参考资料)
 <!-- GFM-TOC -->
-# 链表部分的笔记总结
-## 链表，在节点间穿针引线
+# 链表，在节点间穿针引线
 相关题目：
 * [206.反转链表](#206)
 * [92.反转链表（2）](#92)   
@@ -18,7 +17,10 @@
 * [328.奇偶链表](#328)
 * [2.两数相加](#2)
 * [445.两数相加(2)](#445)
-### 206
+## 206.反转链表
+
+### 描述
+
 反转一个单链表。
 
 示例:
@@ -28,7 +30,7 @@
 进阶:
 你可以迭代或递归地反转链表。你能否用两种方法解决这道题？
 
-- 分析：
+### 分析
 
 链表的反转的最终结果应该是如下图所示的效果，这样更加便于理解
 ![](../pict/linkedList_01.png)
@@ -39,7 +41,8 @@
 **最后，pre指向的结点是原链表的尾节点，也就是翻转后的头结点。**
 ![](../pict/linkedList_03.png)
 
-- 实现：
+### 实现
+
 ```java
 public ListNode reverseList(ListNode head) {
         if (head==null||head.next==null){
@@ -58,7 +61,9 @@ public ListNode reverseList(ListNode head) {
         return pre;
     }
 ```
-### 92
+## 92.反转链表（2）
+### 描述
+
 反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。
 
 说明:
@@ -68,13 +73,13 @@ public ListNode reverseList(ListNode head) {
 
 输入: 1->2->3->4->5->NULL, m = 2, n = 4
 输出: 1->4->3->2->5->NULL
-- 分析：
 
-首先设置一个虚拟头结点，为了方便的操作头指针。
+### 分析
 
-设置一个pre，用于指向需要翻转位置的前一个位置；
+首先寻找到第m个位置的前一个位置pre，此后从第m个位置开始，**不断地将其后继节点移动到第m个位置**，这个需要进行（m-n）次。
 
-- 实现：
+### 实现
+
 ```java
 public ListNode reverseBetween(ListNode head, int m, int n) {
         ListNode newHead =new ListNode(0);
@@ -85,7 +90,7 @@ public ListNode reverseBetween(ListNode head, int m, int n) {
             pre=pre.next;
         }
         ListNode cur=pre.next;
-
+		//不断将post放入pre的后继节点
         for (int i = 0; i < n - m; i++) {
             ListNode post=cur.next;
 
@@ -98,7 +103,9 @@ public ListNode reverseBetween(ListNode head, int m, int n) {
         return newHead.next;
     }
 ```
-### 83 
+## 83.删除排序链表中的重复元素
+
+### 描述
 
 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
 
@@ -110,7 +117,13 @@ public ListNode reverseBetween(ListNode head, int m, int n) {
 
 输入: 1->1->2->3->3
 输出: 1->2->3
-- 实现：
+
+### 分析
+
+设置两个指针，cur即指向无重复元素链表的当前节点,post为指向当前链表（存在重复元素）的节点。
+
+### 实现
+
 ```java
 public ListNode deleteDuplicates(ListNode head) {
         if (head==null||head.next==null)
@@ -119,18 +132,23 @@ public ListNode deleteDuplicates(ListNode head) {
         ListNode post=head.next;
 
         while (post!=null){
+            //当有不重复的元素的时候，cur记录下来
             if (cur.val!=post.val){
                 cur.next=post;
                 cur=post;
             }
+            //存在重复元素则直接跳过
             post=post.next;
         }
+   		//因为跳出循环后最后一个节点仍可能是重复元素
         cur.next=null;
 
         return head;
     }
 ```
-### 86 
+## 86.分隔链表
+
+### 描述
 
 给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
 
@@ -141,7 +159,12 @@ public ListNode deleteDuplicates(ListNode head) {
 输入: head = 1->4->3->2->5->2, x = 3
 输出: 1->2->2->4->3->5
 
-- 实现：
+### 分析
+
+分别设置**左右两个指针，左指针用于记录值小于x的结点，右指针用于记录值大于等于x的结点**。使用一次遍历就可以将左右指针记录完成，遍历完成后链接左右两个部分即可，需要将尾部置空，因为最后右指针的后面依然还有元素，若不置空，会出现循环链表。
+
+### 实现
+
 ```java
 public ListNode partition(ListNode head, int x) {
         if (head==null){
@@ -172,9 +195,11 @@ public ListNode partition(ListNode head, int x) {
         return leftHead.next;
     }
 ```
-### 328 
+## 328.奇偶链表
 
-给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性。
+### 描述
+
+给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。请注意，**这里的奇数节点和偶数节点指的是节点编号的奇偶性，而不是节点的值的奇偶性**。
 
 请尝试使用原地算法完成。你的算法的空间复杂度应为 O(1)，时间复杂度应为 O(nodes)，nodes 为节点总数。
 
@@ -191,9 +216,13 @@ public ListNode partition(ListNode head, int x) {
 应当保持奇数节点和偶数节点的相对顺序。
 链表的第一个节点视为奇数节点，第二个节点视为偶数节点，以此类推。
 
-- 实现：
+### 分析
+
+和[86题](#86)是类似的，不过在于分割的条件不同而已。
+
+### 实现
+
 ```java
-//与86题类似
     public ListNode oddEvenList(ListNode head) {
         if (head==null||head.next==null){
             return head;
@@ -219,9 +248,9 @@ public ListNode partition(ListNode head, int x) {
         return oddHead.next;
     }
 ```
-### 2 
+## 2.两数相加
 
-- 两数相加
+### 描述
 
 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
 
@@ -235,14 +264,14 @@ public ListNode partition(ListNode head, int x) {
 输出：7 -> 0 -> 8
 原因：342 + 465 = 807
 
-- 分析：
+### 分析
 
 根据题意，由于 这些非负的整数是**逆序的**，所以这两个“数字”的相加，可以从第一个位置开始；
 
 每一位求和并且进位来逐步进行计算，需要注意的是这里可以**设置一个虚拟头结点来更加方便地得到返回值。**
 
+### 实现
 
-- 实现：
 ```java
 public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
         if (l1==null||l2==null){
@@ -269,8 +298,9 @@ public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
         return head.next;
     }
 ```
-### 445
-- 两数相加（2）
+## 445.两数相加（2）
+
+### 描述
 
 给定两个非空链表来代表两个非负整数。数字最高位位于链表开始位置。它们的每个节点只存储单个数字。将这两数相加会返回一个新的链表。
 
@@ -287,7 +317,12 @@ public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
 输入: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 输出: 7 -> 8 -> 0 -> 7
 
-- 实现：
+### 分析
+
+使用三个栈来实现，首先将链表1和链表2中的数值都分别入栈stack1和stack2。再利用另一个栈来记录两数相加之后各位数的情况，
+
+### 实现
+
 ```java
 public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if (l1 == null || l2 == null) {
@@ -345,7 +380,10 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 * [203.移除链表元素](#203)
 * [82.删除排序链表中的重复元素（2）](#82)
 * [21.合并两个有序链表](#21)
-### 203
+## 203.移除链表元素
+
+### 描述
+
 删除链表中等于给定值 val 的所有节点。
 
 示例:
@@ -354,7 +392,8 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 输出: 1->2->3->4->5
 
-实现：
+### 实现
+
 ```java
 //虚拟头指针法
     public ListNode removeElements(ListNode head, int val) {
@@ -379,7 +418,10 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         return dummyHead.next;
     }
 ```
-### 82
+## 82.删除排序链表中的重复元素（2）
+
+### 描述
+
 给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现 的数字。
 
 示例 1:
@@ -394,10 +436,20 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 输出: 2->3
 
-实现：
+### 分析
+
+解法1：
+
+三指针的方法，搜索到需要删除的结点的前一个结点pre，将pre与后面链接。
+
+解法2：
+
+设置两个指针，pre指向上一次遍历中最后一个没有重复的元素，cur指向最近一次遍历中没有重复的元素。所以每次只需要将pre连接上cur即可（pre.next=cur）。
+
+### 实现
+
 ```java
-//三指针的方法，搜索到需要删除的结点的前一个结点pre，将pre与后面链接
-    public ListNode deleteDuplicates(ListNode head) {
+public ListNode deleteDuplicates(ListNode head) {
         if (head==null||head.next==null)
             return head;
 
@@ -447,8 +499,9 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         }
         return head;
     }
-    
-    public ListNode deleteDuplicates1(ListNode head){
+```
+```java
+    public ListNode deleteDuplicates(ListNode head){
         ListNode dummy=new ListNode(-1);
         dummy.next=head;
         ListNode pre=dummy;
@@ -474,7 +527,13 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         return dummy.next;
     }
 ```
-### 21
+
+
+
+## 21.合并两个有序链表
+
+### 描述
+
 将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 
 
 示例：
@@ -483,7 +542,12 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 输出：1->1->2->3->4->4
 
-实现：
+### 分析
+
+类似于归并排序的操作。
+
+### 实现
+
 ```java
 public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         //合并的新链表
@@ -509,13 +573,16 @@ public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         return dummy.next;
     }
 ```
-## 复杂的穿针引线 
+# 复杂的穿针引线 
 相关题目：
 * [24.两两交换链表的节点](#24)
 * [25.k个一组旋转链表](#25)
 * [147.对链表进行插入排序](#147)
 * [148.排序链表](#148)
-### 24
+## 24.两两交换链表的节点
+
+### 描述
+
 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
 
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
@@ -524,7 +591,24 @@ public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 
 给定 1->2->3->4, 你应该返回 2->1->4->3.
 
-实现：
+### 分析
+
+将相邻的两个元素交换的时候，需要注意一些细节。
+
+例如 1->2->3->4的操作过程如下图所示：
+
+<div align="center">
+    <img src="https://gitee.com/IvanLu1024/picts/raw/b36643352986f57f4b84d0ee719abdefaa2c5e82/blog/leetcode/linkedList/24.png"/>
+</div>
+
+
+
+**设置一个pre指针，指向每次需要交换的起始位置，都是每次交换的前一个元素**。
+
+
+
+### 实现
+
 ```java
 public ListNode swapPairs(ListNode head) {
         ListNode dummy = new ListNode(-1);
@@ -534,6 +618,7 @@ public ListNode swapPairs(ListNode head) {
         while (p.next!=null&&p.next.next!=null){
             ListNode n1=p.next;
             ListNode n2=p.next.next;
+            //记录下一次交换的起始位置
             ListNode next=n2.next;
             p.next=n2;
             n2.next=n1;
@@ -545,7 +630,10 @@ public ListNode swapPairs(ListNode head) {
 
     }
 ```
-### 25
+## 25.k个一组旋转链表
+
+### 描述
+
 给出一个链表，每 k 个节点一组进行翻转，并返回翻转后的链表。
 
 k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么将最后剩余节点保持原有顺序。
@@ -564,7 +652,8 @@ k 是一个正整数，它的值小于或等于链表的长度。如果节点总
 
 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
 
-实现：
+### 实现
+
 ```java
 public ListNode reverseKGroup(ListNode head, int k) {
         if (head==null){
@@ -579,10 +668,11 @@ public ListNode reverseKGroup(ListNode head, int k) {
         return dummyHead.next;
 
     }
-    //从后向前翻转链表
+    //从后向前翻转链表，返回值为下次进行翻转的起始元素
     private ListNode reverse(ListNode head,int k){
         ListNode last=head;
-        for (int i = 0; i < k+1; i++) {
+        //寻找翻转k次的结尾元素
+        for (int i = 0; i <= k; i++) {
             last=last.next;
             if (i!=k&&last==null){
                 return null;
@@ -590,7 +680,7 @@ public ListNode reverseKGroup(ListNode head, int k) {
         }
         ListNode tail=head.next;
         ListNode cur=tail.next;
-        //每次将元素提前的操作，第一个结点不动，从第二个结点开始，将其依次提前
+        //依次将元素提前的操作，第一个结点不动，从第二个结点开始，将其依次提前
         //**特别注意其实现过程**
         while (cur!=last){
             ListNode next=cur.next;
@@ -602,7 +692,10 @@ public ListNode reverseKGroup(ListNode head, int k) {
         return tail;
     }
 ```
-### 147
+## 147.对链表进行插入排序
+
+### 描述
+
 对链表进行插入排序。
 
 插入排序算法：
@@ -610,7 +703,7 @@ public ListNode reverseKGroup(ListNode head, int k) {
 插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
 每次迭代中，插入排序只从输入数据中移除一个待排序的元素，找到它在序列中适当的位置，并将其插入。
 重复直到所有输入数据插入完为止。
- 
+
 
 示例 1：
 
@@ -624,7 +717,18 @@ public ListNode reverseKGroup(ListNode head, int k) {
 
 输出: -1->0->3->4->5
 
-实现：
+### 分析
+
+不断使用头插法将待排序的节点插入已排序的节点中，例如4->2->1->3，其操作过程如下图所示：
+
+<div align="center">
+    <img src="https://gitee.com/IvanLu1024/picts/raw/b9e9cf501ac16b77da00a9c5e6fc6504ecfe6919/blog/leetcode/linkedList/147.png"/>
+</div>
+
+
+
+### 实现
+
 ```java
 public ListNode insertionSortList(ListNode head) {
         if(head == null||head.next == null)
@@ -635,22 +739,25 @@ public ListNode insertionSortList(ListNode head) {
         ListNode cur = head;
         while (cur != null) {
             ListNode next = cur.next;
-            //pre:指向待排序的部分的头指针
+            //pre:指向待排序的部分的头指针，每次循环都从头开始搜索
             ListNode pre = sortedlisthead;
-            //在已排序的部分寻找可以插入的位置
+            //在已排序的部分寻找当前节点可以插入的位置
             while (pre.next != null && cur.val > pre.next.val) {
                 pre = pre.next;
             }
-            //将待排序的结点插入已排序的部分
+            //将待排序的结点插入已排序的头部
             cur.next = pre.next;
-            //继续指向未排序的部分
+            //将头指针指向当前节点
             pre.next = cur;
+            //在下一个待排序的节点继续
             cur = next;
         }
         return sortedlisthead.next;
     }
 ```
-### 148
+## 148.排序链表
+### 描述
+
 在 O(n log n) 时间复杂度和常数级空间复杂度下，对链表进行排序。
 
 示例 1:
@@ -665,22 +772,28 @@ public ListNode insertionSortList(ListNode head) {
 
 输出: -1->0->3->4->5
 
-实现：
+### 分析
+
+[归并排序](<https://duhouan.github.io/Java-Notes/#/./Sort/02%E9%AB%98%E7%BA%A7%E6%8E%92%E5%BA%8F%E9%97%AE%E9%A2%98?id=_1-%e5%bd%92%e5%b9%b6%e6%96%b9%e6%b3%95>)，和数组中的归并排序的思想是类似的。
+
+### 实现
+
 ```java
-//自顶向下的归并排序
+	//自顶向下的归并排序
     public ListNode sortList(ListNode head) {
         if (head==null||head.next==null){
             return head;
         }
-        //首先将链表折半
-        ListNode fast=head.next,slow=head;
+        //利用快慢指针寻找链表的中点,使用pre来记录中间节点的位置
+        ListNode fast=head,slow=head,pre=null;
         while (fast!=null&&fast.next!=null){
+            pre=slow;
             fast=fast.next.next;
             slow=slow.next;
         }
-        ListNode head2=slow.next;
+        ListNode head2=pre.next;
         //将前后断开连接
-        slow.next=null;
+        pre.next=null;
         head = sortList(head);  //前半部分
         head2=sortList(head2);  //后半部分
         return merge(head,head2);
@@ -709,15 +822,16 @@ public ListNode insertionSortList(ListNode head) {
             p.next=p2;
         }
         return dummyHead.next;
-
     }
 ```
-## 不仅仅是穿针引线 
 相关题目：
 * [237.删除链表中的节点](#237)
-### 237
+## 237.删除链表中的节点
+
+### 描述
+
 请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点，你将只被给定要求被删除的节点。
- 
+
 示例 1:
 
 输入: head = [4,5,1,9], node = 5
@@ -733,7 +847,7 @@ public ListNode insertionSortList(ListNode head) {
 输出: [4,5,9]
 
 解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
- 
+
 说明:
 
 链表至少包含两个节点。
@@ -744,7 +858,12 @@ public ListNode insertionSortList(ListNode head) {
 
 不要从你的函数中返回任何结果。
 
-实现：
+### 分析
+
+注意题目中只给出了待删除的节点，而题目中没有强调不能使用值删除的方法，那么使用值替换的办法，用下一个节点的值替换该节点的数值，再将下一个节点删除即可。
+
+### 实现
+
 ```java
 public void deleteNode(ListNode node) {
         if (node==null)
@@ -765,7 +884,9 @@ public void deleteNode(ListNode node) {
 * [61.旋转链表](#61)
 * [143.重排链表](#143)
 * [234.回文链表](#234)
-### 19
+## 19.删除链表的倒数第N个节点
+### 描述
+
 给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
 
 示例：
@@ -782,7 +903,8 @@ public void deleteNode(ListNode node) {
 
 你能尝试使用一趟扫描实现吗？
 
-实现：
+### 实现
+
 ```java
 public ListNode removeNthFromEnd(ListNode head, int n) {
         ListNode dummyHead=new ListNode(0);
@@ -803,10 +925,11 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
         slowNode.next=delNode.next;
         delNode=null;
         return dummyHead.next;
-
     }
 ```
-### 61
+## 61.旋转链表
+### 描述
+
 给定一个链表，旋转链表，将链表每个节点向右移动 k 个位置，其中 k 是非负数。
 
 示例 1:
@@ -836,7 +959,18 @@ public ListNode removeNthFromEnd(ListNode head, int n) {
 
 向右旋转 4 步: 2->0->1->NULL
 
-实现：
+### 分析
+
+循环旋转，但其实本质上是将**尾部向前数第K个元素作为头，原来的头接到原来的尾上**。
+
+例如：1->2->3->4->5->NULL，k=2,如下图所示：
+
+<div align="center">
+    <img src="https://gitee.com/IvanLu1024/picts/raw/969766d6278198e2a4c51a38dfa6dea55651b11d/blog/leetcode/linkedList/61.png"/>
+</div>
+
+### 实现
+
 ```java
 public ListNode rotateRight(ListNode head, int k) {
         if (head==null||head.next==null){
@@ -873,7 +1007,10 @@ public ListNode rotateRight(ListNode head, int k) {
         return head;
     }
 ```
-### 143
+## 143.重排链表
+
+### 描述
+
 给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
 
 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
@@ -888,7 +1025,24 @@ public ListNode rotateRight(ListNode head, int k) {
 
 给定链表 1->2->3->4->5, 重新排列为 1->5->2->4->3.
 
-实现：
+### 分析
+
+首先将原链表拆成两部分，并且**确保后半部分的长度不超过前半部分的长度**，再将后部分的链表翻转，最后再将翻转后的后半部分链表依次插入前半部分链表各元素之间。
+
+例如： 1->2->3->4
+
+1. 前半部分：1->2；后半部分：3->4
+2. 翻转后半部分：4-3
+3. 将后半部分依次插入前半部分之间：1->4->2->3
+
+例如：1->2->3->4->5
+
+1. 前半部分：1->2->3；后半部分：4->5
+2. 翻转后半部分：5->4
+3. 将后半部分依次插入前半部分之间：1->5-2->4->3
+
+### 实现
+
 ```java
 public void reorderList(ListNode head) {
         if (head==null||head.next==null||head.next.next==null){
@@ -896,6 +1050,7 @@ public void reorderList(ListNode head) {
         }
         //寻找链表的中间节点
         ListNode fast=head,slow=head;
+    	//这里需要确保后半部分的链表长度不超过前半部分的链表长度
         while (fast.next!=null&&fast.next.next!=null){
             fast=fast.next.next;
             slow=slow.next;
@@ -906,6 +1061,7 @@ public void reorderList(ListNode head) {
         secend=reverse(secend);
 
         ListNode first=head;
+    	//将后半部分的元素依次插入前半部分的元素之间
         while (secend!=null){
             ListNode next=first.next;
             first.next=secend;
@@ -915,7 +1071,7 @@ public void reorderList(ListNode head) {
             first = first.next;
         }
     }
-
+	//头插法，翻转链表
     private ListNode reverse(ListNode head){
         if (head==null||head.next==null){
             return head;
@@ -1032,7 +1188,7 @@ root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
 
 解释:
 输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
- 
+
 
 提示:
 
@@ -1176,7 +1332,7 @@ ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next 
 输出：此列表中的结点 4 (序列化形式：[4,5,6])
 
 由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
- 
+
 
 提示：
 
@@ -1284,10 +1440,11 @@ public ListNode detectCycle(ListNode head) {
 编写一个程序，找到两个单链表相交的起始节点。
 
 - 分析：
-由于是单链表，当出现公共结点后，其后部分均为相同。（因为2个链表用公共的尾部）
+  由于是单链表，当出现公共结点后，其后部分均为相同。（因为2个链表用公共的尾部）
     1. 当长度相同的时候，同时同步遍历一定能够找到相交部分;
     2. 当长度不同的时候，转化为长度相同的事情，让长链表的指针先移动|sizeA-sizeB|个结点，
-    接着两个指针同时开始移动。
+
+      接着两个指针同时开始移动。
 
 - 实现：
 ```java

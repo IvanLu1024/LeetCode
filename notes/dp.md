@@ -173,7 +173,8 @@ public int climbStairs(int n) {
 
 ```
 定义一个函数f(n)表示我们要求的解。f(n)的求解过程为：
-f(n) = 1 + min{
+f(n) = 1 + 
+min{
   f(n-1^2), f(n-2^2), f(n-3^2), f(n-4^2), ... , f(n-k^2) //(k为满足k^2<=n的最大的k)
 }
 ```

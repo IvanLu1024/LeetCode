@@ -4,7 +4,7 @@
 | :--: | :--: | :--: | :--: |
 | 1(简单) | 两数之和 |[笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/findTable.md#1) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) | 
 | 2(中等) | 两数相加 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/linkedList.md#2) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/linkedList/Solution2.java) |
-| 3(中等) | 无重复字符的最长子串 | | [查看]() | 
+| 3(中等) | 无重复字符的最长子串 | [笔记](https://github.com/IvanLu1024/LeetCode/blob/master/notes/array.md#3) | [代码](https://github.com/IvanLu1024/LeetCode/blob/master/src/array/Solution3.java) |
 | 4(困难) | 寻找两个有序数组的中位数 | | [查看]() | 
 | 5(中等) | 最长回文串 | | [查看]() | 
 | 7(简单) | 整数反转 | | [查看]() |
