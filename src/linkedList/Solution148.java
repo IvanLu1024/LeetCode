@@ -23,8 +23,8 @@ public class Solution148 {
             return head;
         }
         //首先将链表折半
-        ListNode fast=head.next,slow=head;
-        while (fast!=null&&fast.next!=null){
+        ListNode fast=head,slow=head;
+        while (fast.next!=null&&fast.next.next!=null){
             fast=fast.next.next;
             slow=slow.next;
         }
