@@ -801,3 +801,146 @@ order by
 	score desc
 ```
 
+## 180.连续出现的数字
+
+### 描述
+
+编写一个 SQL 查询，查找所有至少连续出现三次的数字。
+
+```
++----+-----+
+| Id | Num |
++----+-----+
+| 1  |  1  |
+| 2  |  1  |
+| 3  |  1  |
+| 4  |  2  |
+| 5  |  1  |
+| 6  |  2  |
+| 7  |  2  |
++----+-----+
+```
+
+
+例如，给定上面的 Logs 表， 1 是唯一连续出现至少三次的数字。
+
+```
++-----------------+
+| ConsecutiveNums |
++-----------------+
+| 1               |
++-----------------+
+```
+
+### 建表语句
+
+```sql
+DROP TABLE
+IF
+    EXISTS LOGS;
+CREATE TABLE LOGS ( Id INT, Num INT );
+INSERT INTO LOGS ( Id, Num )
+VALUES
+    ( 1, 1 ),
+    ( 2, 1 ),
+    ( 3, 1 ),
+    ( 4, 2 ),
+    ( 5, 1 ),
+    ( 6, 2 ),
+    ( 7, 2 );
+```
+
+### 解决方法
+
+```sql
+select 
+	distinct l1.num ConsecutiveNums 
+from 
+	logs l1,logs l2,logs l3
+where 
+	l1.id=l2.id+1 and l1.num=l2.num and l1.id=l3.id+2 and l1.num=l3.num;
+```
+
+## 184.部门工资最高的员工
+
+### 描述
+
+Employee 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。
+
+```
++----+-------+--------+--------------+
+| Id | Name  | Salary | DepartmentId |
++----+-------+--------+--------------+
+| 1  | Joe   | 70000  | 1            |
+| 2  | Henry | 80000  | 2            |
+| 3  | Sam   | 60000  | 2            |
+| 4  | Max   | 90000  | 1            |
++----+-------+--------+--------------+
+```
+
+Department 表包含公司所有部门的信息。
+
+```
++----+----------+
+| Id | Name     |
++----+----------+
+| 1  | IT       |
+| 2  | Sales    |
++----+----------+
+```
+
+
+编写一个 SQL 查询，找出每个部门工资最高的员工。例如，根据上述给定的表格，Max 在 IT 部门有最高工资，Henry 在 Sales 部门有最高工资。
+
+```
++------------+----------+--------+
+| Department | Employee | Salary |
++------------+----------+--------+
+| IT         | Max      | 90000  |
+| Sales      | Henry    | 80000  |
++------------+----------+--------+
+```
+
+### 建表语句
+
+```sql
+DROP TABLE IF EXISTS Employee;
+CREATE TABLE Employee ( Id INT, NAME VARCHAR ( 255 ), Salary INT, DepartmentId INT );
+DROP TABLE IF EXISTS Department;
+CREATE TABLE Department ( Id INT, NAME VARCHAR ( 255 ) );
+INSERT INTO Employee ( Id, NAME, Salary, DepartmentId )
+VALUES
+    ( 1, 'Joe', 70000, 1 ),
+    ( 2, 'Henry', 80000, 2 ),
+    ( 3, 'Sam', 60000, 2 ),
+    ( 4, 'Max', 90000, 1 );
+INSERT INTO Department ( Id, NAME )
+VALUES
+    ( 1, 'IT' ),
+    ( 2, 'Sales' );
+```
+
+### 解决方法
+
+使用内连接，实现1：
+
+```sql
+SELECT 
+    d.Name as Department, e.Name as Employee, m.Salary
+FROM 
+    Employee as e,Department as d,(SELECT DepartmentId,MAX(Salary) Salary FROM Employee  GROUP BY DepartmentId) as m
+WHERE 
+    e.DepartmentId=d.Id and m.DepartmentId=e.DepartmentId and e.Salary=m.Salary
+```
+
+使用join，实现2：
+
+```sql
+SELECT 
+    d.Name as Department, e.Name as Employee, m.Salary
+FROM 
+    (SELECT DepartmentId,MAX(Salary) Salary FROM Employee  GROUP BY DepartmentId) as m
+JOIN Employee e ON m.Salary=e.Salary and m.DepartmentId=e.DepartmentId
+JOIN Department d ON e.DepartmentId=d.Id;
+```
+
