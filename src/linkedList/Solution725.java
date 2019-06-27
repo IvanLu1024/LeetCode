@@ -12,24 +12,20 @@ public class Solution725 {
         int left = len % k;
         ListNode[] res=new ListNode[k];
         List<ListNode> list=new ArrayList<>();
-        for (int i = 0; i < k; i++) {
+        for(int i=0;i<k;i++){
             //将余数均分
             int size=average_size+(i<left?1:0);
-            if (size==0){
-                list.add(null);
-            }else {
-
-                ListNode tail = getTail(root, size);
-                //记录一下，下一次循环的起点
-                ListNode newRoot = tail.next;
+            if(size==0){
+                res[i]=null;
+            }else{
+                ListNode tail=getTail(root,size);
+                ListNode newRoot=tail.next;
+                //将当前插入结果中的链表与原链表断开连接
                 tail.next=null;
-                list.add(root);
+                res[i]=root;
+                //从下一个位置继续
                 root=newRoot;
             }
-
-        }
-        for (int i = 0; i < k; i++) {
-            res[i]=list.get(i);
         }
         return res;
     }
@@ -42,7 +38,7 @@ public class Solution725 {
         return len;
     }
 
-    //获取新的头结点
+    //根据长度获取链表的相应的尾指针
     private ListNode getTail(ListNode root,int size){
         for (int i = 1; i < size; i++) {
             assert root!=null;
