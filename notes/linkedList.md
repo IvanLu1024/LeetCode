@@ -17,7 +17,7 @@
 * [328.奇偶链表](#328)
 * [2.两数相加](#2)
 * [445.两数相加(2)](#445)
-## 206.反转链表
+## 206.反转链表*
 
 ### 描述
 
@@ -784,16 +784,15 @@ public ListNode insertionSortList(ListNode head) {
         if (head==null||head.next==null){
             return head;
         }
-        //利用快慢指针寻找链表的中点,使用pre来记录中间节点的位置
-        ListNode fast=head,slow=head,pre=null;
-        while (fast!=null&&fast.next!=null){
-            pre=slow;
+        //首先将链表折半
+        ListNode fast=head,slow=head;
+        while (fast.next!=null&&fast.next.next!=null){
             fast=fast.next.next;
             slow=slow.next;
         }
-        ListNode head2=pre.next;
+        ListNode head2=slow.next;
         //将前后断开连接
-        pre.next=null;
+        slow.next=null;
         head = sortList(head);  //前半部分
         head2=sortList(head2);  //后半部分
         return merge(head,head2);
@@ -1087,7 +1086,10 @@ public void reorderList(ListNode head) {
         return pre;
     }
 ```
-### 234
+## 234.回文链表
+
+### 描述
+
 请判断一个链表是否为回文链表。
 
 示例 1:
@@ -1105,7 +1107,12 @@ public void reorderList(ListNode head) {
 进阶：
 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
 
-实现：
+### 分析
+
+首先，将链表对半分，再将后半部分翻转，最后从中点开始和从头开始遍历依次比较元素是否相等，若均相等就是回文链表，若存在不相等则不是回文链表。
+
+### 实现
+
 ```java
 public boolean isPalindrome(ListNode head) {
         if (head==null||head.next==null){
@@ -1149,174 +1156,44 @@ public boolean isPalindrome(ListNode head) {
         return pre;
     }
 ```
-## 更多链表的问题
-相关题目：
-* [725.分隔链表](#725)
-* [817.链表组件](#817)
-* [876.链表的中间结点](#876)
-* [160.相交链表](#160)
-### 725 
-给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+## 快慢指针总结
 
-每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+在链表的题目中，时常需要使用到快慢指针，下面总结一下，快慢指针的常见用法和用途：
 
-这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+### 1.寻找链表中点
 
-返回一个符合上述规则的链表的列表。
+将快慢指针同时遍历链表，由于快指针的速度是慢指针的两倍，所以当快指针遍历结束的时候，慢指针此时指向的就是中间节点的位置。不过在这里有一些细节需要注意，由于通常要对链表进行分割操作等，所以这里的中间节点通常指的是中间节点靠左的前一个位置。例如：
 
-举例： 1->2->3->4, k = 5 // 5 结果 [ [1], [2], [3], [4], null ]
+在1->2->3->4->5（奇数链表）中，中间结点指的是**数值为3的节点**（正中间位置）；
 
-示例 1：
+在1->2->3->4（偶数链表）中，中间结点指的是**数值为2的节点**（靠左的位置）；
 
-输入: 
-root = [1, 2, 3], k = 5
-输出: [[1],[2],[3],[],[]]
+示例代码：
 
-解释:
-输入输出各部分都应该是链表，而不是数组。
-
-例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = null。
-第一个输出 output[0] 是 output[0].val = 1, output[0].next = null。
-最后一个元素 output[4] 为 null, 它代表了最后一个部分为空链表。
-
-示例 2：
-
-输入: 
-root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
-
-输出: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
-
-解释:
-输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
-
-
-提示:
-
-root 的长度范围： [0, 1000].
-
-输入的每个节点的大小范围：[0, 999].
-
-k 的取值范围： [1, 50].
-
-实现：
 ```java
-public ListNode[] splitListToParts(ListNode root, int k) {
-        int len=listNodeLen(root);
-        int average_size = len / k;
-        int left = len % k;
-        ListNode[] res=new ListNode[k];
-        List<ListNode> list=new ArrayList<>();
-        for (int i = 0; i < k; i++) {
-            //将余数均分
-            int size=average_size+(i<left?1:0);
-            if (size==0){
-                list.add(null);
-            }else {
-
-                ListNode tail = getTail(root, size);
-                //记录一下，下一次循环的起点
-                ListNode newRoot = tail.next;
-                tail.next=null;
-                list.add(root);
-                root=newRoot;
-            }
-
-        }
-        for (int i = 0; i < k; i++) {
-            res[i]=list.get(i);
-        }
-        return res;
-    }
-    private int listNodeLen(ListNode root){
-        int len=0;
-        while (root!=null){
-            len++;
-            root=root.next;
-        }
-        return len;
-    }
-
-    //获取新的头结点
-    private ListNode getTail(ListNode root,int size){
-        for (int i = 1; i < size; i++) {
-            assert root!=null;
-            root=root.next;
-        }
-        return root;
-    }
+ListNode slow=head,fast=head;
+//注意其循环条件，这样可以确保slow在循环结束后指向靠左的位置
+while(fast.next!=null&&fast.next.next!=null){
+    fast=fast.next.next;
+    slow=slow.next;
+}
+//此时slow指向靠左位置的中点，即偶数链表中的靠左位置和奇数链表中的正中间位置
+ListNode rightHalf=slow.next;
 ```
-### 817 
-给定一个链表（链表结点包含一个整型值）的头结点 head。
 
-同时给定列表 G，该列表是上述链表中整型值的一个子集。
+## 876.链表的中间结点
 
-返回列表 G 中组件的个数，这里对组件的定义为：链表中一段最长连续结点的值（该值必须在列表 G 中）构成的集合。
+### 描述
 
-示例 1：
-
-输入: 
-head: 0->1->2->3
-G = [0, 1, 3]
-
-输出: 2
-
-解释: 
-链表中,0 和 1 是相连接的，且 G 中不包含 2，所以 [0, 1] 是 G 的一个组件，同理 [3] 也是一个组件，故返回 2。
-
-示例 2：
-
-输入: 
-head: 0->1->2->3->4
-G = [0, 3, 1, 4]
-
-输出: 2
-
-解释: 
-链表中，0 和 1 是相连接的，3 和 4 是相连接的，所以 [0, 1] 和 [3, 4] 是两个组件，故返回 2。
-注意:
-
-如果 N 是给定链表 head 的长度，1 <= N <= 10000。
-链表中每个结点的值所在范围为 [0, N - 1]。
-1 <= G.length <= 10000
-G 是链表中所有结点的值的一个子集.
-
-实现：
-```java
-public int numComponents(ListNode head, int[] G) {
-        Set<Integer> gSet=new HashSet<>();
-        for (int i = 0; i < G.length; i++) {
-            gSet.add(G[i]);
-        }
-        ListNode cur=head;
-        int count=0,curCount=0;
-        //遍历链表
-        while (cur!=null){
-            //当G中包含当前结点的时候
-            if (gSet.contains(cur.val)){
-                //如果当前组件的长度为0，证明是一个新的组件，则组件的计数器加1
-                if (curCount==0){
-                    count++;
-                }
-                //统计当前组件的长度
-                curCount++;
-            }else {
-                //如果G中不包含当前结点的时候，则将组件长度置为0
-                curCount=0;
-            }
-            cur=cur.next;
-        }
-        return count;
-    }
-```
-### 876
 给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
 
-如果有两个中间结点，则返回第二个中间结点。
+如果有两个中间结点，则返回**第二个中间结点**。
 
- 
+
 
 示例 1：
 
+```
 输入：[1,2,3,4,5]
 
 输出：此列表中的结点 3 (序列化形式：[3,4,5])
@@ -1324,46 +1201,74 @@ public int numComponents(ListNode head, int[] G) {
 返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。
 注意，我们返回了一个 ListNode 类型的对象 ans，这样：
 ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
+```
 
 示例 2：
 
+```
 输入：[1,2,3,4,5,6]
 
 输出：此列表中的结点 4 (序列化形式：[4,5,6])
 
 由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
-
+```
 
 提示：
 
 给定链表的结点数介于 1 和 100 之间。
 
-实现：
+### 实现
+
 ```java
 public ListNode middleNode(ListNode head) {
-        int len = listNodeLen(head);
-        int mid=len/2+1;
-        ListNode res=head;
-        for (int i = 1; i < mid; i++) {
-            res=res.next;
+        iif(head==null||head.next==null){
+            return head;
         }
-        return res;
-    }
-    private int listNodeLen(ListNode root){
-        int len=0;
-        while (root!=null){
-            len++;
-            root=root.next;
+        ListNode fast=head,slow=head;
+        while(fast!=null&&fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
         }
-        return len;
+        return slow;       
     }
 ```
 
+# 
+
+### 2.寻找链表中的倒数第k个元素
+
+将快指针先行走k个位置，将快慢指针同时进行遍历，当快指针遍历结束的时候，此时慢指针指向就是倒数第k个元素。
+
+示例代码：
+
+```java
+ListNode slow=head,fast=head;
+for(int i=0;i<k;i++){
+    fast=fast.next;
+}
+while(fast!=null){
+    slow=slow.next;
+    fast=fast.next;
+}
+//此时慢指针指向的就是倒数第k个元素
+ListNode node=slow;
+```
+
+### 3.寻找环路
+
+将快指针的移动速度设置为慢指针的两倍，将快慢指针同时遍历链表，**若此链表存在环的时候，遍历过程中必然存在快慢指针指向同一个元素的时候**。
+
 ## Floyd环检测算法
+
 相关题目：
-* [141.环形链路](#141)
-* [142.环形链路（2）](#142)
-### 141
+
+- [141.环形链路](#141)
+- [142.环形链路（2）](#142)
+
+## 141.环形链路
+
+### 描述
+
 给定一个链表，判断链表中是否有环。
 
 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
@@ -1374,32 +1279,41 @@ public ListNode middleNode(ListNode head) {
 输出：true
 解释：链表中有一个环，其尾部连接到第二个节点。
 
-实现：
+### 实现
+
 ```java
 public boolean hasCycle(ListNode head) {
         if (head==null||head.next==null){
             return false;
         }
-        ListNode slow=head;
-        ListNode fast=head.next;
-        while (slow!=null&&fast!=null&&fast.next!=null){
-            if (slow==fast){
-                return true;
-            }
+        ListNode slow=head,fast=slow;
+        while(fast!=null&&fast.next!=null){
             slow=slow.next;
             fast=fast.next.next;
+            if(slow==fast){
+                return true;
+            }
         }
         return false;
     }
 ```
-### 142
+
+## 142.环形链路（2）
+
+### 描述
+
 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
 
 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
 
 说明：不允许修改给定的链表。
 
-- 实现：
+### 分析
+
+首先，通过快慢指针的遍历过程中记录其步长，一圈的长度为cycleLen=fastCount-slowCount，再通过环的长度来寻找环的入口。
+
+### 实现
+
 ```java
 public ListNode detectCycle(ListNode head) {
         if (head==null||head.next==null){
@@ -1436,17 +1350,24 @@ public ListNode detectCycle(ListNode head) {
         return fast;
     }
 ```
-### 160
+
+## 160.相交链表
+
+### 描述
+
 编写一个程序，找到两个单链表相交的起始节点。
 
-- 分析：
-  由于是单链表，当出现公共结点后，其后部分均为相同。（因为2个链表用公共的尾部）
-    1. 当长度相同的时候，同时同步遍历一定能够找到相交部分;
-    2. 当长度不同的时候，转化为长度相同的事情，让长链表的指针先移动|sizeA-sizeB|个结点，
+### 分析
 
-      接着两个指针同时开始移动。
+由于是单链表，当出现公共结点后，其后部分均为相同。（因为2个链表用公共的尾部）
 
-- 实现：
+1. 当长度相同的时候，同时同步遍历一定能够找到相交部分;
+2. 当长度不同的时候，转化为长度相同的事情，让长链表的指针先移动|sizeA-sizeB|个结点，
+
+接着两个指针同时开始移动，寻找第一个相等的元素就是相交的起始节点。
+
+### 实现
+
 ```java
 public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         if (headA==null||headB==null){
@@ -1500,6 +1421,185 @@ public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
     }
 ```
 
+## 更多链表的问题
+
+相关题目：
+* [725.分隔链表](#725)
+* [817.链表组件](#817)
+* [876.链表的中间结点](#876)
+## 725.分隔链表
+
+### 描述
+
+给定一个头结点为 root 的链表, 编写一个函数以将链表分隔为 k 个连续的部分。
+
+每部分的长度应该尽可能的相等: 任意两部分的长度差距不能超过 1，也就是说可能有些部分为 null。
+
+这k个部分应该按照在链表中出现的顺序进行输出，并且排在前面的部分的长度应该大于或等于后面的长度。
+
+返回一个符合上述规则的链表的列表。
+
+举例： 1->2->3->4, k = 5 // 5 结果 [ [1], [2], [3], [4], null ]
+
+示例 1：
+
+```
+输入: 
+root = [1, 2, 3], k = 5
+输出: [[1],[2],[3],[],[]]
+
+解释:
+输入输出各部分都应该是链表，而不是数组。
+
+例如, 输入的结点 root 的 val= 1, root.next.val = 2, \root.next.next.val = 3, 且 root.next.next.next = null。
+第一个输出 output[0] 是 output[0].val = 1, output[0].next = null。
+最后一个元素 output[4] 为 null, 它代表了最后一个部分为空链表。
+```
+
+示例 2：
+
+```
+输入: 
+root = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], k = 3
+
+输出: [[1, 2, 3, 4], [5, 6, 7], [8, 9, 10]]
+
+解释:
+输入被分成了几个连续的部分，并且每部分的长度相差不超过1.前面部分的长度大于等于后面部分的长度。
+
+提示:
+
+root 的长度范围： [0, 1000].
+
+输入的每个节点的大小范围：[0, 999].
+
+k 的取值范围： [1, 50].
+```
+
+### 分析
+
+首先记录得出原链表的长度，再来计算切分每部分的平均长度和其余数，接着将原链表依次放入结果数组中，每次放入的链表需要和原链表断开连接，**将切断上一部分的最后一个节点和下一部分的第一个节点之间的链接**，并寻找到下次循环的起始节点。
+
+### 实现
+
+```java
+public ListNode[] splitListToParts(ListNode root, int k) {
+        int len=listNodeLen(root);
+        int average_size = len / k;
+        int left = len % k;
+        ListNode[] res=new ListNode[k];
+        List<ListNode> list=new ArrayList<>();
+       for(int i=0;i<k;i++){
+           	//将余数均分
+            int size=average_size+(i<left?1:0);
+            if(size==0){
+                res[i]=null;
+            }else{
+                ListNode tail=getTail(root,size);
+                ListNode newRoot=tail.next;
+                //将当前插入结果中的链表与原链表断开连接
+                tail.next=null;
+                res[i]=root;
+                //从下一个位置继续
+                root=newRoot;
+            }
+        }
+        return res;
+    }
+    private int listNodeLen(ListNode root){
+        int len=0;
+        while (root!=null){
+            len++;
+            root=root.next;
+        }
+        return len;
+    }
+
+    //根据长度获取链表的相应的尾指针
+    private ListNode getTail(ListNode root,int size){
+        for (int i = 1; i < size; i++) {
+            assert root!=null;
+            root=root.next;
+        }
+        return root;
+    }
+```
+## 817.链表组件
+### 描述
+
+给定一个链表（链表结点包含一个整型值）的头结点 head。
+
+同时给定列表 G，该列表是上述链表中整型值的一个子集。
+
+返回列表 G 中**组件的个数**，这里对组件的定义为：链表中一段最长连续结点的值（该值必须在列表 G 中）构成的集合。
+
+示例 1：
+
+```
+输入: 
+head: 0->1->2->3
+G = [0, 1, 3]
+
+输出: 2
+
+解释: 
+链表中,0 和 1 是相连接的，且 G 中不包含 2，所以 [0, 1] 是 G 的一个组件，同理 [3] 也是一个组件，故返回 2。
+```
+
+示例 2：
+
+```
+
+输入: 
+head: 0->1->2->3->4
+G = [0, 3, 1, 4]
+
+输出: 2
+
+解释: 
+链表中，0 和 1 是相连接的，3 和 4 是相连接的，所以 [0, 1] 和 [3, 4] 是两个组件，故返回 2。
+```
+
+**注意:**
+
+如果 N 是给定链表 head 的长度，1 <= N <= 10000。
+链表中每个结点的值所在范围为 [0, N - 1]。
+1 <= G.length <= 10000
+G 是链表中所有结点的值的一个子集.
+
+### 分析
+
+用一个Set存储G中所有的元素，并设置两个变量count用于记录组件个数，curCount用于记录当前组件的长度。然后遍历链表，若当前节点存在于该Set中，再判断当前节点是否为一个新的组件，若是新的组件则将count累加，后再将curCount累加；若不存在于该Set中，则说明当前组件遍历结束，将当前组件长度curCount置为0。
+
+### 实现
+
+```java
+public int numComponents(ListNode head, int[] G) {
+        Set<Integer> gSet=new HashSet<>();
+        for (int i = 0; i < G.length; i++) {
+            gSet.add(G[i]);
+        }
+        ListNode cur=head;
+        int count=0,curCount=0;
+        //遍历链表
+        while (cur!=null){
+            //当G中包含当前结点的时候
+            if (gSet.contains(cur.val)){
+                //如果当前组件的长度为0，证明是一个新的组件，则组件的计数器加1
+                if (curCount==0){
+                    count++;
+                }
+                //统计当前组件的长度
+                curCount++;
+            }else {
+                //如果G中不包含当前结点的时候，则将组件长度置为0
+                curCount=0;
+            }
+            cur=cur.next;
+        }
+        return count;
+    }
+```
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)
