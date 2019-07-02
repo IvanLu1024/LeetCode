@@ -2,9 +2,7 @@ package graph;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @Author Ivan 15:03
@@ -55,12 +53,53 @@ public class Solution210 {
         return false;
     }
 
+    public int[] findOrder1(int numCourses, int[][] prerequisites){
+        int[] res=new int[numCourses];
+        List<Integer> order=new ArrayList<>();
+        int[] indegrees=new int[numCourses];
+        //存储入度为0的节点
+        Queue<Integer> queue=new LinkedList<>();
+        List<Integer>[] graph=new List[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph[i]=new ArrayList<>();
+        }
+        for (int[] pre:prerequisites){
+            graph[pre[1]].add(pre[0]);
+            indegrees[pre[0]]++;
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i]==0){
+                queue.offer(i);
+            }
+        }
+        //BFS
+        while (!queue.isEmpty()){
+            Integer cur = queue.poll();
+            order.add(cur);
+            for (int i:graph[cur]){
+                indegrees[i]--;
+                if (indegrees[i]==0){
+                    queue.offer(i);
+                }
+            }
+        }
+        if (order.size()!=numCourses){
+            return new int[0];
+        }
+        for (int i = 0; i < numCourses; i++) {
+            res[i]=order.get(i);
+        }
+        return res;
+
+    }
+
+
     @Test
     public void test(){
         int num=4;
         //[1,0],[2,0],[3,1],[3,2]
         int[][] pres={{1,0},{2,0},{3,1},{3,2}};
-        int[] order = findOrder(num, pres);
+        int[] order = findOrder1(num, pres);
         for (int i = 0; i < order.length; i++) {
             System.out.print(order[i]+",");
         }
