@@ -37,6 +37,23 @@ public class Solution202 {
         return false;
     }
 
+    //使用快慢指针
+    public boolean isHappy1(int n) {
+        if(n<1){
+            return false;
+        }
+        int slow=n;
+        int fast=n;
+        do{
+            slow=getHappy(slow);
+            fast=getHappy(getHappy(fast));
+        }while(fast!=slow);
+        if(fast==1){
+            return true;
+        }
+        return false;
+    }
+
     private int getHappy(int n) {
         int t,sum=0;
         while (n>0){
