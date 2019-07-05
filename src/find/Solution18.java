@@ -32,41 +32,39 @@ import java.util.*;
 
 public class Solution18 {
 
-    //对撞指针法，将问题简化为3->2
-    public List<List<Integer>> fourSum1(int[] nums, int target){
-        List<List<Integer>> res=new ArrayList<>();
-        if (nums==null||nums.length<4){
+    //对撞指针法，将问题简化为4->3->2
+    public List<List<Integer>> fourSum(int[] nums, int target){
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length < 4) {
             return res;
         }
         Arrays.sort(nums);
         for (int i = 0; i < nums.length - 3; i++) {
             //去重
-            if (i==0||nums[i]!=nums[i-1]){
-                //转化为three sum
-                for (int j =i+1; j <nums.length-2; j++) {
-                    //去重
-                    if (j==i+1||nums[j]!=nums[j-1]){
-                        //设置对撞指针
-                        int l=j+1,h=nums.length-1;
-                        //设置新的搜索目标
-                        int newTarget=target-nums[i]-nums[j];
-                        //转化为two sum
-                        while (l<h){
-                            if (nums[l]+nums[h]==newTarget){
-                                res.add(Arrays.asList(nums[i],nums[j],nums[l],nums[h]));
-                                //去重操作
-                                while (l<h&&nums[l]==nums[l+1]) l++;
-                                while (l<h&&nums[h]==nums[h-1]) h--;
-                                l++;
-                                h--;
-                            }else if (nums[l]+nums[h]<newTarget){
-                                //增大
-                                l++;
-                            }else {
-                                //减小
-                                h--;
-                            }
-                        }
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+            //转化为three sum
+            for (int j = i + 1; j < nums.length - 2; j++) {
+                //去重
+                if (j > i + 1 && nums[j] == nums[j - 1]) continue;
+                //设置对撞指针
+                int l = j + 1, h = nums.length - 1;
+                //设置新的搜索目标
+                int newTarget = target - nums[i] - nums[j];
+                //转化为two sum
+                while (l < h) {
+                    if (nums[l] + nums[h] == newTarget) {
+                        res.add(Arrays.asList(nums[i], nums[j], nums[l], nums[h]));
+                        //去重操作
+                        while (l < h && nums[l] == nums[l + 1]) l++;
+                        while (l < h && nums[h] == nums[h - 1]) h--;
+                        l++;
+                        h--;
+                    } else if (nums[l] + nums[h] < newTarget) {
+                        //增大
+                        l++;
+                    } else {
+                        //减小
+                        h--;
                     }
                 }
 
@@ -79,7 +77,7 @@ public class Solution18 {
     @Test
     public void test(){
         int[] nums={1, 0, -1, 0, -2, 2};
-        List<List<Integer>> lists = fourSum1(nums,0);
+        List<List<Integer>> lists = fourSum(nums,0);
         System.out.println(lists);
 
     }
