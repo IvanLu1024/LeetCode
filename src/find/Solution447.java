@@ -31,21 +31,21 @@ import java.util.Map;
 public class Solution447 {
 
     public int numberOfBoomerangs(int[][] points) {
-        int res=0;
+        int res = 0;
         for (int i = 0; i < points.length; i++) {
             //记录元组i到其他所有点的距离对应的次数
-            Map<Integer,Integer> record=new HashMap<>();
-            for (int j =0; j <points.length ; j++) {
-                if (i!=j){
-                    int distance= (int) (Math.pow((points[i][0]-points[j][0]),2)+Math.pow((points[i][1]-points[j][1]),2));
-                    record.put(distance,record.getOrDefault(distance,0)+1);
+            Map<Double, Integer> record = new HashMap<>();
+            for (int j = 0; j < points.length; j++) {
+                if (i != j) {
+                    //欧式距离
+                    double distance = Math.pow((points[i][0] - points[j][0]), 2) + Math.pow((points[i][1] - points[j][1]), 2);
+                    record.put(distance, record.getOrDefault(distance, 0) + 1);
                 }
             }
-            for (Integer c:record.values())
-            {
-                if (c>=2)
-                {
-                    res+=c*(c-1);
+            //从c个方案里面挑选出2个，即Cn2的排列
+            for (Integer c : record.values()) {
+                if (c >= 2) {
+                    res += c * (c - 1);
                 }
             }
 
