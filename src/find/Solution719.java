@@ -50,7 +50,7 @@ public class Solution719 {
     }
 
     /**
-     * 我们首先对nums进行排序，这样就可以得到distance的最小值left和最大值right了。
+     * 我们首先对nums进行排序，这样就可以得到distance的最小值low和最大值high了。
      * 然后二分查找：对于一个介于low和high之间的数mid，我们统计差值小于mid的一共有多少个，
      * 如果小于k，那么说明说明mid的取值偏小，所以修改low的值；否则修改high的值。这样不断迭代，
      * 最终当low > high的时候，low即为所求。
@@ -64,8 +64,9 @@ public class Solution719 {
         int n=nums.length;
         int l=0,h=nums[n-1]-nums[0];
         while (l<=h){
-            int mid=(h+l)/2,j=0,count=0;
+            int mid=l+(h-l)/2,j=0,count=0;
             for (int i = 0; i < n; i++) {
+                //统计差值小于mid一共有多少对，由于此时数组是递增的
                 while (j<n&&nums[j]-nums[i]<=mid){
                     j++;
                 }
@@ -79,6 +80,7 @@ public class Solution719 {
         }
         return l;
     }
+
     @Test
     public void test(){
         int[] nums={1,6,1};
