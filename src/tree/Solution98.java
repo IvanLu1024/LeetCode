@@ -58,34 +58,24 @@ public class Solution98 {
 
     }
 
-    public boolean isValidBST1(TreeNode root){
-        return isValid(root,Integer.MIN_VALUE,Integer.MAX_VALUE);
-
+    private boolean flag=true;	//判断标志
+    private TreeNode pre=null;	//用于记录本次遍历的上一个结点
+    public boolean isValidBST1(TreeNode root) {
+        dfs(root);
+        return flag;
     }
-    private boolean isValid(TreeNode root,int min,int max){
-        if (root==null){
-            return true;
-        }
-        //当前结点不满足的时候返回false
-        if (root.val<min||root.val>max){
-            return false;
-        }
-        if (root.left!=null){
-            if (root.left.val>=root.val){
-                return false;
-            }
-        }
-        if (root.right!=null){
-            if (root.right.val<=root.val){
-                return false;
-            }
-        }
-        //分别将左右子树进行递归，左子树满足小于当前的结点的值（max：val-1是要确保左子树中不重复出现当前结点的值），
-        // 右子树同理
-        return isValid(root.left,min,root.val-1)&&isValid(root.right,root.val+1,max);
+    private void dfs(TreeNode node){
+        if(node==null)
+            return;
+        dfs(node.left);
+        //不满足升序排序
+        if(pre!=null&&pre.val>=node.val)
+            flag=false;
+        pre=node;
+        dfs(node.right);
     }
 
-    private  Integer pre=null;
+
     public boolean isValidBST2(TreeNode root){
         return inOrder1(root);
     }
@@ -98,11 +88,11 @@ public class Solution98 {
         }
 
         //验证当前结点值是否满足中序遍历
-        if (pre!=null&&root.val>=pre){
+        if (pre!=null&&root.val>=pre.val){
             return false;
         }
         //记录前一个结点的值
-        pre=root.val;
+        pre=root;
 
         if (!inOrder1(root.right)){
             return false;
