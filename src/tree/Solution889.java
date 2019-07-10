@@ -37,7 +37,7 @@ public class Solution889 {
 
         int val = pre[preStart];
         TreeNode root = new TreeNode(val);
-        //在前序中寻找左子树的范围
+        //在前序中寻找右子树的范围
         int prePost=preStart;
         for (int i = preStart; i <=preEnd ; i++) {
             if (post[postEnd-1]==pre[i]){
@@ -46,7 +46,7 @@ public class Solution889 {
             }
         }
 
-        //在中序中寻找左子树的范围
+        //在后序中寻找左子树的范围
         int postPost=postStart;
         for (int i = postStart; i <= postEnd; i++) {
             if (pre[preStart+1]==post[i]){
@@ -54,7 +54,8 @@ public class Solution889 {
                 break;
             }
         }
-        //这时只含有左子树的时候
+        //这时只含有左子树或只含有右子树
+        // 这里设定为只有左子树
         if (pre[prePost]==post[postPost]){
             root.left=build(pre,post,preStart+1,preEnd,postStart,postEnd-1);
         }
