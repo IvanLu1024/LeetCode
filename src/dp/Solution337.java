@@ -25,7 +25,6 @@ public class Solution337 {
             res=Math.max(res,root.val+tryRob(root.left,false)+tryRob(root.right,false));
         }
         return res;
-
     }
 
     public int rob1(TreeNode root) {
@@ -34,6 +33,7 @@ public class Solution337 {
 
     }
 
+    //res[0]:不选择根节点的最大收益，res[1]:选择根节点的最大收益
     private int[] tryRob(TreeNode root){
         if (root==null){
             return new int[2];
@@ -42,10 +42,10 @@ public class Solution337 {
         int[] rightResult = tryRob(root.right);
         int[] res=new int[2];
 
-        //下标为0，表示不选当前结点
-        res[0]=leftResult[1]+rightResult[1];
-        //下标为1，表示选择当前结点
-        res[1]=Math.max(res[0],root.val+leftResult[0]+rightResult[0]);
+        //下标为0，表示不选当前结点的最大收益
+        res[0]=Math.max(leftResult[1],leftResult[0])+Math.max(rightResult[1],rightResult[0]);
+        //下标为1，表示选择当前结点的最大收益
+        res[1]=root.val+leftResult[0]+rightResult[0];
         return res;
     }
     @Test
