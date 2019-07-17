@@ -1,4 +1,4 @@
-package array;
+package math;
 
 import org.junit.Test;
 
@@ -23,19 +23,19 @@ import org.junit.Test;
 public class Solution69 {
     //使用二分查找的方法
     public int mySqrt(int x) {
-        //为了避免整型的溢出，所以中间采用long类型来存储
-        long l=0,h=x;
+        int l=0,h=x;
         while (l<=h){
-            long mid=l+(h-l)/2;
-            if (mid*mid<x){
+            int mid=l+(h-l)/2;
+            //为了避免整型的溢出，
+            if (mid<x/mid){
                 l=mid+1;
-            }else if (mid*mid==x){
-                return (int) mid;
+            }else if (mid==x/mid){
+                return mid;
             }else {
                 h=mid-1;
             }
         }
-        return (int) h;
+        return h;
     }
     @Test
     public void test(){
