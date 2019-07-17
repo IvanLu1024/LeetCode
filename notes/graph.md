@@ -1,3 +1,120 @@
+## 785.判断二分图
+
+### 描述
+
+给定一个无向图graph，当这个图为二分图时返回true。
+
+如果我们能将一个图的节点集合分割成两个独立的子集A和B，并使图中的每一条边的两个节点一个来自A集合，一个来自B集合，我们就将这个图称为二分图。
+
+graph将会以邻接表方式给出，graph[i]表示图中与节点i相连的所有节点。每个节点都是一个在0到graph.length-1之间的整数。这图中没有自环和平行边： graph[i] 中不存在i，并且graph[i]中没有重复的值。
+
+
+示例 1:
+输入: [[1,3], [0,2], [1,3], [0,2]]
+输出: true
+解释: 
+无向图如下:
+0----1
+|    |
+|    |
+3----2
+我们可以将节点分成两组: {0, 2} 和 {1, 3}。
+
+示例 2:
+输入: [[1,2,3], [0,2], [0,1,3], [0,2]]
+输出: false
+解释: 
+无向图如下:
+0----1
+| \  |
+|  \ |
+3----2
+我们不能将节点分割成两个独立的子集。
+注意:
+
+graph 的长度范围为 [1, 100]。
+graph[i] 中的元素的范围为 [0, graph.length - 1]。
+graph[i] 不会包含 i 或者有重复的值。
+图是无向的: 如果j 在 graph[i]里边, 那么 i 也会在 graph[j]里边。
+
+### 分析
+
+如果可以用两种颜色对图中的节点进行着色，并且保证相邻的节点颜色不同，那么这个图就是二分图。
+
+### 实现
+
+DFS：
+
+```java
+	//将一条边上的两个端点着上不同的颜色，若能确保每一对端点都是不同的颜色，那么就是二分图
+    int[] colors;//0:未上色；1：红色；-1：黑色
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        colors=new int[n];
+        for (int i = 0; i < n; i++) {
+            if (colors[i]==0&&!dfs(graph,i,1)){
+                return false;
+            }
+        }
+        return true;
+    }
+	
+	//判断相邻节点的颜色是否不相同
+    private boolean dfs(int[][] graph,int cur,int curColor){
+        //若与预期上色不一致就说明不是二分图
+        if (colors[cur]!=0){
+            return curColor==colors[cur];
+        }
+        colors[cur]=curColor;
+        for (int next:graph[cur]){
+            if (!dfs(graph,next,-curColor)){
+                return false;
+            }
+        }
+        return true;
+    }
+```
+
+BFS：
+
+```java
+//BFS解法
+    public boolean isBipartite1(int[][] graph){
+        int n = graph.length;
+        colors=new int[n];
+        //依次判断每一对邻边的着色情况
+        for (int i = 0; i < n; i++) {
+            if (colors[i]==0&&!bfs(graph,i)){
+                return false;
+            }
+        }
+        return true;
+
+    }
+	
+	//判断相邻节点颜色是否不相同
+    private boolean bfs(int[][] graph,int cur){
+        Queue<Integer> queue=new LinkedList<>();
+        queue.offer(cur);
+        colors[0]=1;
+        while (!queue.isEmpty()){
+            int curNode = queue.poll();
+            int curColor=colors[curNode];
+            for(int next:graph[curNode]){
+                if (colors[next]==0){
+                    colors[next]=-curColor;
+                    queue.offer(next);
+                }else if (colors[next]==curColor){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+```
+
+
+
 # 拓扑排序
 
 在图论中，拓扑排序（Topological Sorting）是一个**有向无环图**（DAG, Directed Acyclic Graph）的所有顶点的线性序列。且该序列必须满足下面两个条件：
@@ -436,11 +553,6 @@ public int[] findOrder(int numCourses, int[][] prerequisites){
 
 
 
-
-
-
-
 # 参考资料
 
 - <https://blog.csdn.net/dm_vincent/article/details/7714519>
-- 

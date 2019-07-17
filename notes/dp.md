@@ -4,7 +4,9 @@
 # 常规动态规划问题
 相关题目：
 * [70.爬楼梯](#70)
-## 70.爬楼梯
+## 70
+
+爬楼梯
 
 ### 描述
 
@@ -60,11 +62,7 @@ public int climbStairs(int n) {
     }
 ```
 
-
-
-
-
-## 发现重叠子问题
+# 发现重叠子问题
 相关题目：
 * [343.整数拆分](#343)
 * [279.完全平方数](#279)
@@ -72,11 +70,13 @@ public int climbStairs(int n) {
 * [62.不同路径](#62)
 * [63.不同路径（2）](#63)
 
-## 343.整数拆分
+## 343
+
+整数拆分
 
 ### 描述
 
-给定一个正整数 *n*，将其拆分为**至少**两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的最大乘积。
+给定一个正整数 *n*，将其拆分为**至少**两个正整数的和，并使这些整数的乘积最大化。 返回你可以获得的**最大乘积**。
 
 **示例 1:**
 
@@ -96,7 +96,17 @@ public int climbStairs(int n) {
 
 **说明:** 你可以假设 *n* 不小于 2 且不大于 58。
 
+### 分析
+
+F（0）=0，F（1）=1，F（2）=1，F(3)=2
+
+i>3：
+
+F（i）=max{F（i），j*F（i-j）,j * (i-j) }
+
 ### 实现
+
+记忆化搜索：
 
 ```java
     //记忆化搜索
@@ -128,8 +138,11 @@ public int climbStairs(int n) {
     private int max3(int a,int b,int c){
         return Math.max(a,Math.max(b,c));
     }
+```
+DP：
 
-    public int integerBreak(int n) {
+```java
+public int integerBreak(int n) {
         assert n>=2;
         memo=new int[n+1];
         return breakInteger2(n);
@@ -147,11 +160,14 @@ public int climbStairs(int n) {
         return memo[n];
     }
 ```
-## 279.完全平方数
+
+## 279
+
+完全平方数
 
 ### 描述
 
-给定正整数 *n*，找到若干个完全平方数（比如 `1, 4, 9, 16, ...`）使得它们的和等于 *n*。你需要让组成和的完全平方数的个数最少。
+给定正整数 *n*，找到若干个完全平方数（比如 `1, 4, 9, 16, ...`）使得它们的和等于 *n*。你需要让组成和的完全平方数的**个数最少**。
 
 **示例 1:**
 
@@ -197,7 +213,10 @@ public int numSquares(int n){
         return memo[n];
     }
 ```
-## 91.解码方法
+## 91**
+
+解码方法
+
 ### 描述
 
 一条包含字母 `A-Z` 的消息通过以下方式进行了编码：
@@ -231,11 +250,10 @@ public int numSquares(int n){
 
 思路()：
 
-1. s[i]是编码、s[i-1]是编码、s[i-1:i+1]是编码。nums[i] = nums[i-1] + nums[i-2]
-2. s[i]是编码、s[i-1]不是编码。nums[i] = nums[i-1]
-3. s[i]不是编码、s[i-1]是编码、s[i-1:i+1]是编码。nums[i] = nums[i-2]
-4. s[i]不是编码、s[i-1]是编码、s[i-1:i+1]不是编码。nums[i] = 0
-5. 都不是编码。nums[i] = 0
+1. s[i]是编码、s[i-1,i]是编码。nums[i] = nums[i-1] + nums[i-2]
+2. s[i]是编码、s[i-1,i]不是编码。nums[i] = nums[i-1]
+3. s[i]不是编码、s[i-1,i]是编码。nums[i] = nums[i-2]
+4. 都不是编码。nums[i] = 0
 
 ### 实现
 
@@ -245,7 +263,7 @@ public int numDecodings(String s) {
         if (n==0){
             return 0;
         }
-        //memo[i]表示字符串s中下标为(i-1)的解码方法次数
+        //memo[i]表示前(i-1)位字符串的解码方法次数
         int[] memo=new int[n+1];
         memo[0]=1;
         if (s.charAt(0)>'0'){
@@ -269,11 +287,9 @@ public int numDecodings(String s) {
     }
 ```
 
+## 62
 
-
-
-
-## 62.不同路径
+不同路径
 
 ### 描述
 
@@ -341,7 +357,9 @@ F(i , j)也均为1。
     }
 ```
 
-## 63.不同路径(2)
+## 63
+
+不同路径(2)
 
 ### 描述
 
@@ -427,11 +445,16 @@ public int uniquePathsWithObstacles(int[][] obstacleGrid) {
 
 
 
-## 状态的定义和状态转移
+# 状态的定义和状态转移
 
 相关题目：
 * [198.打家劫舍](#198)
-## 198.打家劫舍
+* [213.打家劫舍（2）](#213)
+## 198
+
+打家劫舍
+
+### 描述
 
 你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，**如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警**。
 
@@ -489,7 +512,125 @@ public int rob(int[] nums) {
     }
 ```
 
-# 0-1背包问题 
+## 213
+
+打家劫舍（2）
+
+### 描述
+
+你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。**这个地方所有的房屋都围成一圈，这意味着第一个房屋和最后一个房屋是紧挨着的**。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+
+给定一个代表每个房屋存放金额的非负整数数组，计算你在不触动警报装置的情况下，能够偷窃到的最高金额。
+
+示例 1:
+
+输入: [2,3,2]
+输出: 3
+解释: 你不能先偷窃 1 号房屋（金额 = 2），然后偷窃 3 号房屋（金额 = 2）, 因为他们是相邻的。
+示例 2:
+
+输入: [1,2,3,1]
+输出: 4
+解释: 你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+
+### 分析
+
+与[198题](#198)类似，相当于做两次抢劫，一次的范围是[0,n-2]，另一次的范围是[1,n-1]，取两次抢劫的最大值即可。
+
+### 实现
+
+```java
+public int rob(int[] nums) {
+        if(nums==null||nums.length==0)
+            return 0;
+        int n=nums.length;
+        if(n==1)
+            return nums[0];
+        if(n==2)
+            return Math.max(nums[0],nums[1]);
+        int res=Math.max(rob(nums,0,n-2),rob(nums,1,n-1));
+        return res;
+    }
+    //抢劫：起始点为l,终点为h的最大收益
+    private int rob(int[] nums,int l,int h){
+        int[] memo=new int[h-l+1];
+        memo[0]=nums[l];
+        memo[1]=Math.max(nums[l],nums[l+1]);
+        for(int i=2;i<=h-l;i++){
+            memo[i]=Math.max(nums[i+l]+memo[i-2],memo[i-1]);
+        }
+        return memo[h-l];
+    }
+```
+
+## 337
+
+打家劫舍（3）
+
+### 描述
+
+在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，**聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”**。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+
+计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+
+示例 1:
+
+输入: [3,2,3,null,3,null,1]
+
+     3
+    / \
+    2   3
+      \   \ 
+       3   1
+
+
+输出: 7 
+解释: 小偷一晚能够盗取的最高金额 = 3 + 3 + 1 = 7.
+示例 2:
+
+输入: [3,4,5,1,3,null,1]
+
+     	 3
+    	/ \
+    	4   5
+       / \   \ 
+      1    3   1
+
+
+输出: 9
+解释: 小偷一晚能够盗取的最高金额 = 4 + 5 = 9.
+
+### 分析
+
+能盗取的最高金额为 抢劫该节点+抢劫该节点的左孩子的左右子树+抢劫该节点的右孩子的左右子树 与 抢劫该节点的左子树+抢劫该节点的右子树的和  的最大值。
+
+### 实现
+
+```java
+public int rob(TreeNode root) {
+        int[] res = tryRob(root);
+        return Math.max(res[0],res[1]);
+
+    }
+    //res[0]:不选择根节点的最大收益，res[1]:选择根节点的最大收益
+    private int[] tryRob(TreeNode root){
+        if (root==null){
+            return new int[2];
+        }
+        int[] leftResult = tryRob(root.left);
+        int[] rightResult = tryRob(root.right);
+        int[] res=new int[2];
+
+        //下标为0，表示不选当前结点的最大收益
+        res[0]=Math.max(leftResult[1],leftResult[0])+Math.max(rightResult[1],rightResult[0]);
+        //下标为1，表示选择当前结点的最大收益
+        res[1]=root.val+leftResult[0]+rightResult[0];
+        return res;
+    }
+```
+
+# 0-1背包问题 *
 
 ### 描述
 
@@ -639,7 +780,9 @@ public int knapsack(int[] w, int[] v, int C){
     }
 ```
 
-## 416.分割等和子集
+## 416*
+
+分割等和子集
 
 ### 描述
 
@@ -750,9 +893,175 @@ public boolean canPartition(int[] nums) {
 - 多维费用背包问题：要考虑物品的体积和重量两个维度？三维数组实现
 - 物品之间可以有互相排斥；也可以互相依赖
 
+相关题目：
+
+- [474.一和零](#474)
+- [494.目标和](#494)
+
+## 474*
+
+一和零
+
+### 描述
+
+在计算机界中，我们总是追求用有限的资源获取最大的收益。
+
+现在，假设你分别支配着 m 个 0 和 n 个 1。另外，还有一个仅包含 0 和 1 字符串的数组。
+
+你的任务是使用给定的 m 个 0 和 n 个 1 ，找到能拼出存在于数组中的字符串的最大数量。每个 0 和 1 至多被使用一次。
+
+注意:
+
+给定 0 和 1 的数量都不会超过 100。
+给定字符串数组的长度不会超过 600。
+
+示例 1:
+
+```
+输入: Array = {"10", "0001", "111001", "1", "0"}, m = 5, n = 3
+输出: 4
+```
+
+解释: 总共 4 个字符串可以通过 5 个 0 和 3 个 1 拼出，即 "10","0001","1","0" 。
+
+示例 2:
+
+```
+输入: Array = {"10", "0", "1"}, m = 1, n = 1
+输出: 2
+```
+
+
+
+解释: 你可以拼出 "10"，但之后就没有剩余数字了。更好的选择是拼出 "0" 和 "1" 。
+
+### 分析
+
+二维背包，1和0的数量相当于背包容量。memo[i] [j]表示0的个数为i，1的个数为j能拼出字符串的最大数量。
+
+考虑两种情况：
+
+1. **使用当前字符串（背上该物品）**，在0的数量为i-count0(count0:当前字符串0的个数)，1的数量为j-count1(count1:当前字符串1的个数)的基础上再加一。
+2. 不使用当前字符串（不背该物品）
+
+### 实现
+
+```java
+private int[][] memo;
+    public int findMaxForm(String[] strs, int m, int n) {
+        memo=new int[m+1][n+1];
+        for (String str:strs){
+            int count0=0;
+            int count1=0;
+            char[] chars = str.toCharArray();
+            for (int i = 0; i <chars.length ; i++) {
+                if (chars[i]=='0'){
+                    count0++;
+                }
+                if (chars[i]=='1'){
+                    count1++;
+                }
+            }
+            //从右向左
+            for (int i = m; i >=count0 ; i--) {
+                for (int j = n; j >=count1 ; j--) {
+                    memo[i][j]=Math.max(memo[i][j],memo[i-count0][j-count1]+1);
+                }
+            }
+        }
+        return memo[m][n];
+    }
+```
+
+## 494
+
+目标和
+
+### 描述
+
+给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
+
+返回可以使最终数组和为目标数 S 的所有添加符号的方法数。
+
+示例 1:
+
+输入: nums: [1, 1, 1, 1, 1], S: 3
+输出: 5
+解释: 
+
+-1+1+1+1+1 = 3
++1-1+1+1+1 = 3
++1+1-1+1+1 = 3
++1+1+1-1+1 = 3
++1+1+1+1-1 = 3
+
+一共有5种方法让最终目标和为3。
+注意:
+
+数组的长度不会超过20，并且数组中的值全为正数。
+初始的数组的和不会超过1000。
+保证返回的最终结果为32位整数。
+
+### 分析
+
+sum(P)表示所有正数的和，sum(N)表示所有负数的绝对值之和。
+
+sum(P)-sum(N)=S
+
+sum(nums)=sum(P)+sum(N)
+
+-->S+sum(nums)=2sum(P)
+
+​	-->sum(P)=(S+sum(nums))/2
+
+这样就在该数组中寻找和为sum(P)的最大方式数，即有多少种方式使得元素之和为sum(P)。
+
+因为对于数组中的每个元素，都有两种选择，要么取，要么不取。这样就转化成为了0-1背包问题，其中背包的容量为sum(P)。
+
+### 实现
+
+```java
+public int findTargetSumWays(int[] nums, int S) {
+        int n = nums.length;
+        if (n==0){
+            return 0;
+        }
+        int sum=0;
+        for (int i = 0; i < n; i++) {
+            sum+=nums[i];
+        }
+        if (sum < S || (sum + S) % 2 != 0) {
+            return 0;
+        }
+        int p=(sum+S)/2;
+        //memo[i]:和为i最多有多少种方式
+        int[] memo=new int[p+1];
+        //和为0的情况只有一种，那就是所有元素均不取
+        memo[0]=1;
+        //对于每一个元素都有不取和取两种选择
+    	//从右向左
+        for(int num:nums){
+            for(int i=p;i>=num;i--){
+                memo[i]+=memo[i-num];
+            }
+        }
+        return memo[p];
+    }
+```
+
 # 完全背包问题
 
-## 377.组合总和（4）
+完全背包问题：每个物品可以**无限使用**
+
+相关题目：
+
+- [377.组合总和（4）](#377)
+- [139.单词拆分](#139)
+- [322.零钱兑换](#322)
+
+## 377
+
+组合总和（4）
 
 ### 描述
 
@@ -827,9 +1136,9 @@ dp[4]=dp[3]+dp[2]+dp[1]=7
     }
 ```
 
+## 139
 
-
-## 139.单词拆分
+单词拆分
 
 ### 描述
 
@@ -837,7 +1146,7 @@ dp[4]=dp[3]+dp[2]+dp[1]=7
 
 说明：
 
-拆分时可以重复使用字典中的单词。
+拆分时可以**重复使用字典中的单词**。
 你可以假设字典中没有重复的单词。
 
 ```
@@ -892,11 +1201,9 @@ public boolean wordBreak(String s, List<String> wordDict) {
     }
 ```
 
+## 322**
 
-
-# 
-
-## 322.零钱兑换
+零钱兑换
 
 ### 描述
 
@@ -918,7 +1225,7 @@ public boolean wordBreak(String s, List<String> wordDict) {
 
 ### 分析
 
-由于每种硬币的数量是无限的，那么这一题就是一道完全背包问题。
+由于每种硬币的数量是**无限的**，那么这一题就是一道完全背包问题。
 
 状态转移方程：
 
@@ -973,9 +1280,11 @@ public int coinChange(int[] coins, int amount) {
     	int[] memo=new int[amount+1];
         Arrays.fill(memo,amount+1);
         memo[0]=0;
-        for (int coin:coins){
-            for (int i = coin; i <=amount; i++) {
-                memo[i]=Math.min(memo[i],memo[i-coin]+1);
+        for(int i=1;i<=amount;i++){
+            for(int coin:coins){
+                if(i>=coin){
+                    memo[i]=Math.min(memo[i],memo[i-coin]+1);
+                }
             }
         }
         if (memo[amount]==amount+1){
@@ -985,156 +1294,7 @@ public int coinChange(int[] coins, int amount) {
     }
 ```
 
-# 0-1背包变种
-
-## 474.一和零
-
-### 描述
-
-在计算机界中，我们总是追求用有限的资源获取最大的收益。
-
-现在，假设你分别支配着 m 个 0 和 n 个 1。另外，还有一个仅包含 0 和 1 字符串的数组。
-
-你的任务是使用给定的 m 个 0 和 n 个 1 ，找到能拼出存在于数组中的字符串的最大数量。每个 0 和 1 至多被使用一次。
-
-注意:
-
-给定 0 和 1 的数量都不会超过 100。
-给定字符串数组的长度不会超过 600。
-
-示例 1:
-
-```
-输入: Array = {"10", "0001", "111001", "1", "0"}, m = 5, n = 3
-输出: 4
-```
-
-解释: 总共 4 个字符串可以通过 5 个 0 和 3 个 1 拼出，即 "10","0001","1","0" 。
-
-示例 2:
-
-```
-输入: Array = {"10", "0", "1"}, m = 1, n = 1
-输出: 2
-```
-
-
-
-解释: 你可以拼出 "10"，但之后就没有剩余数字了。更好的选择是拼出 "0" 和 "1" 。
-
-### 分析
-
-二维背包，1和0的数量相当于背包容量。memo[i] [j]表示0的个数为i，1的个数为j能拼出字符串的最大数量。
-
-考虑两种情况：
-
-1. 使用当前字符串（背上该物品），在0的数量为i-count0(count0:当前字符串0的个数)，1的数量为j-count1(count1:当前字符串1的个数)的基础上再加一。
-2. 不使用当前字符串（不背该物品）
-
-### 实现
-
-```java
-private int[][] memo;
-    public int findMaxForm(String[] strs, int m, int n) {
-        memo=new int[m+1][n+1];
-        for (String str:strs){
-            int count0=0;
-            int count1=0;
-            char[] chars = str.toCharArray();
-            for (int i = 0; i <chars.length ; i++) {
-                if (chars[i]=='0'){
-                    count0++;
-                }
-                if (chars[i]=='1'){
-                    count1++;
-                }
-            }
-            for (int i = m; i >=count0 ; i--) {
-                for (int j = n; j >=count1 ; j--) {
-                    memo[i][j]=Math.max(memo[i][j],memo[i-count0][j-count1]+1);
-                }
-            }
-        }
-        return memo[m][n];
-    }
-```
-
-## 494.目标和
-
-### 描述
-
-给定一个非负整数数组，a1, a2, ..., an, 和一个目标数，S。现在你有两个符号 + 和 -。对于数组中的任意一个整数，你都可以从 + 或 -中选择一个符号添加在前面。
-
-返回可以使最终数组和为目标数 S 的所有添加符号的方法数。
-
-示例 1:
-
-输入: nums: [1, 1, 1, 1, 1], S: 3
-输出: 5
-解释: 
-
--1+1+1+1+1 = 3
-+1-1+1+1+1 = 3
-+1+1-1+1+1 = 3
-+1+1+1-1+1 = 3
-+1+1+1+1-1 = 3
-
-一共有5种方法让最终目标和为3。
-注意:
-
-数组的长度不会超过20，并且数组中的值全为正数。
-初始的数组的和不会超过1000。
-保证返回的最终结果为32位整数。
-
-### 分析
-
-sum(P)表示所有正数的和，sum(N)表示所有负数的绝对值之和。
-
-sum(P)-sum(N)=S
-
-sum(nums)=sum(P)+sum(N)
-
--->S+sum(nums)=2sum(P)
-
-​	-->sum(P)=(S+sum(nums))/2
-
-这样就在该数组中寻找和为sum(P)的最大方式数，即有多少种方式使得元素之和为sum(P)。
-
-因为对于数组中的每个元素，都有两种选择，要么取，要么不取。这样就转化成为了0-1背包问题，其中背包的容量为sum(P)。
-
-### 实现
-
-```java
-public int findTargetSumWays(int[] nums, int S) {
-        int n = nums.length;
-        if (n==0){
-            return 0;
-        }
-        int sum=0;
-        for (int i = 0; i < n; i++) {
-            sum+=nums[i];
-        }
-        if (sum < S || (sum + S) % 2 != 0) {
-            return 0;
-        }
-        int p=(sum+S)/2;
-        //memo[i]:和为i最多有多少种方式
-        int[] memo=new int[p+1];
-        //和为0的情况只有一种，那就是所有元素均不取
-        memo[0]=1;
-        //对于每一个元素都有不取和取两种选择
-        for(int i=0;i<n;i++){
-            for(int j=p;j>=nums[i];j--){
-                memo[j]=memo[j]+ memo[j-nums[i]];
-            }
-        }
-        return memo[p];
-    }
-```
-
 # LIC(最长上升子序列)
-
-
 
 相关问题：
 
