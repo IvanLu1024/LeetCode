@@ -36,26 +36,45 @@ import java.util.List;
  */
 public class Solution60 {
     private boolean[] used;
-    //回溯法，效率很低
+    private int[] memo;
+    //回溯法+剪枝
     public String getPermutation(int n, int k) {
-        List<String> res = new ArrayList<>();
+        memo=new int[n+1];
         used=new boolean[n+1];
-        generate(n,1,new StringBuilder(),res);
-        return res.get(k-1);
-    }
-    private void generate(int n,int index, StringBuilder s, List<String> res){
-        if (s.length()==n){
-            res.add(s.toString());
-            return;
+        factorial(n,memo);
+        int[] nums=new int[n];
+        for (int i = 0; i < n; i++) {
+            nums[i]=i+1;
         }
-        for (int i = 1; i <=n ; i++) {
-            if (!used[i]){
-                s.append(i);
-                used[i]=true;
-                generate(n,index+1,s,res);
-                s.deleteCharAt(s.length()-1);
-                used[i]=false;
+        return generate(nums,0,n,k,"");
+    }
+    private String generate(int[] nums,int index,int n,int k,String s){
+        if (index==n){
+            return s;
+        }
+        //获取当前节点中叶子结点的个数
+        int ps=memo[n-index-1];
+        for (int i = 0; i < n; i++) {
+            if (used[i]) continue;
+            //若当前叶子总数小于k直接跳过
+            if (ps<k){
+                k-=ps;
+                continue;
             }
+            s=s+nums[i];
+            used[i]=true;
+            return generate(nums,index+1,n,k,s);
+        }
+        return "";
+
+    }
+
+    private void factorial(int n,int[] memo){
+        int f=1;
+        memo[0]=1;
+        for (int i = 1; i <=n; i++) {
+            f*=i;
+            memo[i]=f;
         }
     }
 
@@ -89,8 +108,8 @@ public class Solution60 {
     }
     @Test
     public void test(){
-        int n=4,k=9;
-        String s = getPermutation1(n, k);
+        int n=3,k=3;
+        String s = getPermutation(n, k);
         System.out.println(s);
     }
 }
