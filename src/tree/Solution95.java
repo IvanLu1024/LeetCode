@@ -1,4 +1,4 @@
-package dp;
+package tree;
 
 import org.junit.Test;
 import tree.TreeNode;
