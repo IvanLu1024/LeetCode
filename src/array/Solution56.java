@@ -1,5 +1,7 @@
 package array;
 
+import org.junit.Test;
+
 import java.util.*;
 
 /**
@@ -18,55 +20,49 @@ import java.util.*;
  *
  */
 public class Solution56 {
-    public class Interval {
-        int start;
-        int end;
-        Interval() { start = 0; end = 0; }
-        Interval(int s, int e) { start = s; end = e; }
-    }
 
-
-    private class myComparable implements Comparator<Interval> {
-        @Override
-        public int compare(Interval i1, Interval i2) {
-            if (i1.start!=i2.start){
-                return i1.start-i2.start;
-            }else {
-                return i1.end-i2.end;
-            }
-        }
-    }
-
-    public List<Interval> merge(List<Interval> intervals) {
-        List<Interval> res=new LinkedList<>();
-        int n =intervals.size();
-        if (n==0){
-            return res;
+    public int[][] merge(int[][] intervals) {
+        int n = intervals.length;
+        if (n<=1){
+            return intervals;
         }
         //将区间集合按照起始点升序排列
-        Collections.sort(intervals,new  myComparable());
-        res.add(intervals.get(0));
-        for (Interval i:intervals){
-            if (isCross(i,((LinkedList<Interval>) res).getLast())){
-                Interval newInterval = merge(i, ((LinkedList<Interval>) res).getLast());
-                //先删除旧的区间
-                ((LinkedList<Interval>) res).removeLast();
-                //再插入新的区间
-                res.add(newInterval);
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0]-o2[0];
+            }
+        });
+        LinkedList<int[]> list=new LinkedList<>();
+        list.add(intervals[0]);
+        for (int i = 1; i < n; i++) {
+            if (isCross(intervals[i],list.getLast())){
+                //先删除原区间
+                int[] last = list.removeLast();
+                int[] merge = merge(intervals[i], last);
+                //再插入合并以后的区间
+                list.add(merge);
             }else {
-                res.add(i);
+                list.add(intervals[i]);
             }
         }
+        int[][] res = list.toArray(new int[list.size()][2]);
         return res;
     }
 
+    //合并两个区间，起始点取最小值，终点取最大值
+    private int[] merge(int[] interval1,int[] interval2){
+        return new int[]{Math.min(interval1[0],interval2[0]),Math.max(interval1[1],interval2[1])};
+    }
     //判断两个区间是否重叠
-    private boolean isCross(Interval i1,Interval i2){
-        return i1.start<=i2.end;
+    private boolean isCross(int[] interval1,int[] interval2){
+        return interval1[0]<=interval2[1];
     }
 
-    //合并两个区间，起始点取最小值，终点取最大值
-    private Interval merge(Interval i1,Interval i2){
-        return new Interval(Math.min(i1.start,i2.start),Math.max(i1.end,i2.end));
+    @Test
+    public void test(){
+        int[][] intervals={{1,3},{2,6},{8,10},{15,18}};
+        int[][] res = merge(intervals);
+        System.out.println(res);
     }
 }
