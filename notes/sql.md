@@ -944,3 +944,32 @@ JOIN Employee e ON m.Salary=e.Salary and m.DepartmentId=e.DepartmentId
 JOIN Department d ON e.DepartmentId=d.Id;
 ```
 
+# 补充：
+
+## 给定一个成绩表(course)，查询出所有科目都及格的学生？
+
+```
++----+------+------+-------+------+
+| id | sid  | cid  | grade | name |
++----+------+------+-------+------+
+|  1 |    1 |    1 | 90    | 张三 |
+|  2 |    1 |    2 | 80    | 张三 |
+|  3 |    2 |    1 | 59    | 李四 |
+|  4 |    2 |    2 | 99    | 李四 |
++----+------+------+-------+------+
+```
+
+- 思路:
+
+  要求是所有课程成绩均大于60以上的学生，则**只要一门成绩小于60，就不满足条件**。
+
+​       显然，只要先查出有成绩小于60的学生，然后将其排除掉，那么剩下的即为所有课程成绩都大于60的学生。
+
+```sql
+select distinct sid,name
+from course
+where sid not in (select sid from course where grade<60);
+```
+
+
+

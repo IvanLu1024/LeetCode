@@ -145,11 +145,6 @@ DP：
 public int integerBreak(int n) {
         assert n>=2;
         memo=new int[n+1];
-        return breakInteger2(n);
-
-    }
-
-    private int breakInteger(int n){
         memo[1]=1;
         for (int i = 2; i <=n ; i++) {
             for (int j = 1; j <=i ; j++) {
@@ -158,7 +153,11 @@ public int integerBreak(int n) {
             }
         }
         return memo[n];
+
     }
+private int max3(int x,int y,int z){
+    return Math.max(x,Math.max(y,z));
+}
 ```
 
 ## 279
@@ -1058,6 +1057,7 @@ public int findTargetSumWays(int[] nums, int S) {
 - [377.组合总和（4）](#377)
 - [139.单词拆分](#139)
 - [322.零钱兑换](#322)
+- [518.零钱兑换（2）](#518)
 
 ## 377
 
@@ -1294,15 +1294,84 @@ public int coinChange(int[] coins, int amount) {
     }
 ```
 
+## 518
+
+零钱兑换(2)
+
+### 描述
+
+给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币**组合数**。假设每一种面额的硬币有无限个。 
+
+示例 1:
+
+输入: amount = 5, coins = [1, 2, 5]
+输出: 4
+解释: 有四种方式可以凑成总金额:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+示例 2:
+
+输入: amount = 3, coins = [2]
+输出: 0
+解释: 只用面额2的硬币不能凑成总金额3。
+示例 3:
+
+输入: amount = 10, coins = [10] 
+输出: 1
+
+
+注意:
+
+你可以假设：
+
+0 <= amount (总金额) <= 5000
+1 <= coin (硬币面额) <= 5000
+硬币种类不超过 500 种
+结果符合 32 位符号整数
+
+### 分析
+
+状态转移方程：
+
+F(i,j)：表示使用下标0到i的硬币，组成金额总额为j的组合数
+
+使用当前金额的硬币和不使用当前金额的硬币的组合数相加
+
+```
+F(i,j)=F(i-1,j)+F(i,j-coin[i])
+```
+
+### 实现
+
+```java
+public int change(int amount, int[] coins) {
+        int c=amount;
+        //memo[i]表示容量为i的背包的组合数
+        int[] memo=new int[c+1];
+        memo[0]=1;
+        for(int coin:coins){
+            for(int i=coin;i<=c;i++){
+                memo[i]+=memo[i-coin];
+            }
+        }
+        return memo[c];
+    }
+```
+
 # LIC(最长上升子序列)
 
 相关问题：
 
 * [674.最长连续递增子序列](#674)
 * [300.最长上升子序列](#300)
-* [376.摆动序列](#376)
 * [354.俄罗斯套娃信封问题](#354)
-## 674.最长连续递增子序列
+* [376.摆动序列](#376)
+* [435.无重叠区间](#435)
+## 674
+
+最长连续递增子序列
 
 ### 描述
 
@@ -1349,7 +1418,9 @@ public int findLengthOfLCIS(int[] nums) {
         return maxLen;
     }
 ```
-## 300.最长上升子序列
+## 300
+
+最长上升子序列
 
 ### 描述
 
@@ -1374,20 +1445,21 @@ public int findLengthOfLCIS(int[] nums) {
 
 - DP：
 
-LIS(i)表示以第i个数字为结尾的最长上升子序列的长度，即[0,..,i]的范围内，选择数字nums[i]可以获得的最长上升子序列的长度。
+LIS(i)表示**以第i个数字为结尾的最长上升子序列的长度**，即[0,..,i]的范围内，选择数字nums[i]可以获得的最长上升子序列的长度。
 
 LIS(i) = max(1+LIS(j) if nums[i]>nums[j])，j<i
 
 - 二分搜索：
 
-```java
-memo[i]: 所有长度为i+1的递增子序列中, 最小的那个序列尾数.
-        由定义知memo数组必然是一个递增数组, 可以用 max 来表示最长递增子序列的长度. 
-        对数组进行迭代, 依次判断每个数num将其插入memo数组相应的位置:
-        1. num > memo[maxL], 表示num比所有已知递增序列的尾数都大, 将num添加入数组
-           数组尾部, 并将最长递增序列长度max加1
-        2. memo[i-1] < num <= memo[i], 只更新相应的memo[i]
-```
+  memo[i]: 所有长度为i+1的递增子序列中, 最小的那个序列尾数.
+          由定义知memo数组必然是一个递增数组, 可以用 max 来表示最长递增子序列的长度. 
+          对数组进行迭代, 依次判断每个数num将其插入memo数组相应的位置:
+
+             1. num > memo[maxL], 表示num比所有已知递增序列的尾数都大, 将num添加入数组
+             数组尾部, 并将最长递增序列长度max加1
+             2. memo[i-1] < num <= memo[i], 只更新相应的memo[i]
+
+
 
 ### 实现
 
@@ -1415,7 +1487,8 @@ public int lengthOfLIS(int[] nums) {
         return max;
     }
 ```
-二分查找解法：
+**二分查找解法：
+
 ```java
 public int lengthOfLIS(int[] nums){
         int maxLen=0;
@@ -1439,7 +1512,9 @@ public int lengthOfLIS(int[] nums){
         return maxLen;
     }
 ```
-## 354.俄罗斯套娃问题
+## 354
+
+俄罗斯套娃问题
 
 ### 描述
 
@@ -1524,11 +1599,11 @@ public int maxEnvelopes(int[][] envelopes){
             }
         });
         for (int[] envelope:envelopes){
-            int l=0,h=len-1;
-            while (l<=h){
+            int l=0,h=len;
+            while (l<h){
                 int mid=l+(h-l)/2;
                 if (envelope[1]>memo[mid])  l=mid+1;
-                else h=mid-1;
+                else h=mid;
             }
             memo[l]=envelope[1];
             if (l==len){
@@ -1538,7 +1613,9 @@ public int maxEnvelopes(int[][] envelopes){
         return len;
     }
 ```
-## 376.摆动序列
+## 376
+
+摆动序列
 
 ### 描述
 
@@ -1601,6 +1678,75 @@ public int wiggleMaxLength(int[] nums) {
         return Math.max(up[n-1],down[n-1]);
     }
 ```
+
+## 435
+
+无重叠区间
+
+### 描述
+
+给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。
+
+注意:
+
+可以认为区间的终点总是大于它的起点。
+区间 [1,2] 和 [2,3] 的边界相互“接触”，但没有相互重叠。
+
+示例 1:
+
+输入: [ [1,2], [2,3], [3,4], [1,3] ]
+
+输出: 1
+
+解释: 移除 [1,3] 后，剩下的区间没有重叠。
+
+示例 2:
+
+输入: [ [1,2], [1,2], [1,2] ]
+
+输出: 2
+
+解释: 你需要移除两个 [1,2] 来使剩下的区间没有重叠。
+
+示例 3:
+
+输入: [ [1,2], [2,3] ]
+
+输出: 0
+
+解释: 你不需要移除任何区间，因为它们已经是无重叠的了。
+
+### 分析
+
+首先将区间按照起始点进行排序，再遍历该区间，若当前区间的起始点大于或等于前一个区间的终点，那么证明这两个区间没有重叠，则直接拓展，记录最大不重叠的区间长度。
+
+### 实现
+
+```java
+public int eraseOverlapIntervals(int[][] intervals) {
+        int n=intervals.length;
+        if (n == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals,new Comparator<int [] >(){
+            public int compare(int [] a1,int [] a2) {
+                return a1[1] - a2[1];   //升序排列
+            }
+        });
+        int max=1;
+        //用于记录当前最大不重叠区间中的最后一个区间
+        int pre=0;
+        for(int i=1;i<n;i++){
+            if(intervals[i][0]>=intervals[pre][1]){
+                max++;
+                pre=i;
+            }
+        }
+        return n-max;
+    }
+```
+
+
 
 # LCS（最长公共子序列）
 
@@ -2003,6 +2149,315 @@ public int maxProfit(int[] prices, int fee) {
     }
 ```
 # 更多动态规划的问题
+
+相关题目：
+
+- [64.最小路径和](#64)
+- [72.编辑距离](#72)
+- [118.杨辉三角](#118)
+- [119.杨辉三角（2）](#119)
+
+## 64
+
+最小路径和
+
+### 描述
+
+给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+说明：每次只能向下或者向右移动一步。
+
+示例:
+
+输入:
+[
+  [1,3,1],
+  [1,5,1],
+  [4,2,1]
+]
+输出: 7
+解释: 因为路径 1→3→1→1→1 的总和最小。
+
+### 实现
+
+```java
+public int minPathSum(int[][] grid) {
+        int m = grid.length;
+        if (m==0){
+            return 0;
+        }
+        int n = grid[0].length;
+        int[][] memo=new int[m][n];
+        memo[0][0]=grid[0][0];
+        //先处理第一行(m=0),因为这一行只能右移得到
+        for (int i = 1; i < n; i++) {
+            memo[0][i]=memo[0][i-1]+grid[0][i];
+        }
+        //再处理第一列(n=0),因为这一列只能下移得到
+        for (int i = 1; i < m; i++) {
+            memo[i][0]=memo[i-1][0]+grid[i][0];
+        }
+
+        //处理其他的位置
+        for (int i = 1; i <m ; i++) {
+            for (int j = 1; j <n ; j++) {
+                memo[i][j]=grid[i][j]+Math.min(memo[i-1][j],memo[i][j-1]);
+            }
+        }
+        return memo[m-1][n-1];
+    }
+```
+
+优化空间复杂度：
+
+```java
+//优化空间复杂度——>空间复杂度为O（1）
+    public int minPathSum(int[][] grid){
+        int m = grid.length;
+        if (m==0){
+            return 0;
+        }
+        int n = grid[0].length;
+        //先处理第一行
+        for (int i = 1; i < m; i++) {
+            grid[i][0]+=grid[i-1][0];
+        }
+        //再处理第一列
+        for (int i = 1; i < n; i++) {
+            grid[0][i]+=grid[0][i-1];
+        }
+        //再处理其他位置
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                grid[i][j]=grid[i][j]+Math.min(grid[i-1][j],grid[i][j-1]);
+            }
+        }
+        return grid[m-1][n-1];
+    }
+```
+
+## 72*
+
+编辑距离
+
+### 描述
+
+给定两个单词 word1 和 word2，计算出将 word1 转换成 word2 所使用的最少操作数 。
+
+你可以对一个单词进行如下三种操作：
+
+插入一个字符
+删除一个字符
+替换一个字符
+示例 1:
+
+输入: word1 = "horse", word2 = "ros"
+输出: 3
+解释: 
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+示例 2:
+
+输入: word1 = "intention", word2 = "execution"
+输出: 5
+解释: 
+intention -> inention (删除 't')
+inention -> enention (将 'i' 替换为 'e')
+enention -> exention (将 'n' 替换为 'x')
+exention -> exection (将 'n' 替换为 'c')
+exection -> execution (插入 'u')
+
+### 分析
+
+状态：
+
+F[i] [j]表示word1的前 i 个字符，和word2的前 j 个字符的编辑距离
+
+转移方程：
+
+- 如果word1的第 i 个字符和word2的第 j 个字符相同的话，F[i] [j] = F[i - 1] [j - 1]
+- 如果word1的第 i 个字符和word2的第 j 个字符不同的话，F[i] [j] = min(F[i - 1] [j], F[i] [j - 1], F[i - 1] [j - 1]) + 1
+  - F[i - 1] [j]意味着插入word1的第 i 个字符
+  - F[i] [j - 1]意味着删除word2的第 j 个字符
+  - F[i - 1] [j - 1]意味着word1的第 i 个字符替换成word2的第 j 个字符
+    从这三种情况中，选一个编辑距离最小的，再加上一
+
+### 实现
+
+```java
+public int minDistance(String word1, String word2) {
+        if (word1 == null || word1.length() == 0) {
+            return word2.length();
+        }
+        if (word2 == null || word2.length() == 0) {
+            return word1.length();
+        }
+
+        int n1 = word1.length();
+        int n2 = word2.length();
+
+        //memo[i][j]: 从word1[0,i-1]转化为word2[0,j-1]的最少操作数
+        int[][] memo=new int[n1+1][n2+1];
+
+        for (int i = 0; i <= n1; i++) {
+            memo[i][0]=i;   //将word1[0,i-1]转化为word2[0,-1](空字符串)的最少操作就是将当前字符串的字符全部删除
+        }
+
+        for (int i = 0; i <= n2; i++) {
+            memo[0][i]=i;   //将word1[0,-1](空字符串)转化为word2[0,i-1]的最少操作就是插入当前字符
+        }
+
+        for (int i = 1; i <= n1; i++) {
+            for (int j = 1; j <= n2; j++) {
+                if (word1.charAt(i-1)==word2.charAt(j-1)){
+                    memo[i][j]=memo[i-1][j-1];
+                }else {
+                    memo[i][j]=1+min3(memo[i-1][j],memo[i][j-1],memo[i-1][j-1]);
+                    //1+memo[i-1][j]:表示插入操作
+                    //1+memo[i][j-1]:表示删除操作
+                    //1+memo[i-1][j-1]:表示替换操作
+                }
+            }
+        }
+        return memo[n1][n2];
+    }
+    private int min3(int i,int j,int k){
+        return Math.min(i,Math.min(j,k));
+    }
+```
+
+## 118
+
+### 描述
+
+给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+
+在杨辉三角中，每个数是它左上方和右上方的数的和。
+
+示例:
+
+输入: 5
+输出:
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+
+### 实现
+
+```java
+public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res=new ArrayList<>();
+        if (numRows<=0){
+            return res;
+        }
+        res.add(Arrays.asList(new Integer[]{1}));
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> row=new ArrayList<>();
+            row.add(1);
+            for (int j = 1; j <i ; j++) {
+                row.add(res.get(i-1).get(j-1)+res.get(i-1).get(j));
+            }
+            row.add(1);
+            res.add(row);
+        }
+        return res;
+    }
+```
+
+## 119
+
+### 描述
+
+给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+
+在杨辉三角中，每个数是它**左上方和右上方**的数的和。
+
+示例:
+
+输入: 3
+输出: [1,3,3,1]
+
+### 实现
+
+```java
+public List<Integer> getRow(int rowIndex) {
+        int[] memo=new int[rowIndex+1];
+        List<Integer> res=new ArrayList<>();
+        memo[0]=1;
+        if (rowIndex<0){
+            return res;
+        }
+        for (int i = 1; i <= rowIndex; i++) {
+            //必须从右到左进行递推，不然会造成中间结果的丢失
+            for (int j = i; j >=1 ; j--) {
+                memo[j]=memo[j-1]+memo[j];
+            }
+        }
+        for (int i = 0; i <= rowIndex; i++) {
+            res.add(memo[i]);
+        }
+
+        return res;
+    }
+```
+
+## 152
+
+乘积最大序列
+
+### 描述
+
+给定一个整数数组 nums ，找出一个序列中乘积最大的连续子序列（该序列至少包含一个数）。
+
+示例 1:
+
+输入: [2,3,-2,4]
+输出: 6
+解释: 子数组 [2,3] 有最大乘积 6。
+
+示例 2:
+
+输入: [-2,0,-1]
+输出: 0
+解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+
+### 分析
+
+由于该数组中存在负数的情况，若当前数值为负数则**将最大值和最小值数值交换**，以便得到更大的乘积。
+
+### 实现
+
+```java
+public int maxProduct(int[] nums) {
+        if (nums==null||nums.length==0){
+            return 0;
+        }
+        int max=1,min=1;
+        int res=Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i]<0){
+                max=max^min;
+                min=max^min;
+                max=max^min;
+            }
+            max=Math.max(max*nums[i],nums[i]);
+            min=Math.min(min*nums[i],nums[i]);
+
+            res=Math.max(res,max);
+        }
+        return res;
+    }
+```
+
+
+
+
+
 ## 5.最长回文子串
 
 ### 描述
@@ -2296,6 +2751,90 @@ public int minimumTotal(List<List<Integer>> triangle){
         return Math.min(a,Math.min(b,c));
     }
 ```
+## 600**
+
+不含连续1的非负整数
+
+### 描述
+
+给定一个正整数 n，找出小于或等于 n 的非负整数中，其二进制表示不包含 连续的1 的个数。
+
+示例 1:
+
+输入: 5
+输出: 5
+解释: 
+下面是带有相应二进制表示的非负整数<= 5：
+0 : 0
+1 : 1
+2 : 10
+3 : 11
+4 : 100
+5 : 101
+其中，只有整数3违反规则（有两个连续的1），其他5个满足规则。
+说明: 1 <= n <= 10^9
+
+### 分析
+
+首先，我们假设n比特组成的数字满足题目要求的个数是memo[n]，可以列举下n分别为0，1，2，3时的满足要求的数字的二进制（看作字符串）：
+n=0，则有0个数字符合，为空“”；
+n=1，则有“0”和“1”；
+n=2，则有“00”，“01”，“10”；
+n=3，则有“100“，”101“，”000“，”001“，”010“；
+
+当位数为n，我们可以通过在**位数为n-2的字符串前面加上”10“**（保证它一定满足不包含连续的”1“），以及**位数为n-1的字符串前面加上0**得到。
+
+也就是：memo[n] = memo[n-1] + memo[n-2] ；同时这个满足题目要求的数字最高两位一定是”10“开头。
+
+接下来我们要考虑一个问题，对于数字num，其比特位数是n，它的最高两位只能是”11“或者”10“：
+
+如果是”11“，那么结果就是memo[n]；
+如果是”10“，那么结果就是memo[n-1] + 这个数的低(n - 2)位满足要求的数字个数。
+
+> 来源于：https://leetcode-cn.com/problems/two-sum/solution/jian-dan-zhi-jie-de-fang-fa-by-xfarmer/
+
+```java
+public int findIntegers(int num) {
+        if (num==0){
+            return 1;
+        }
+        if (num==1){
+            return 2;
+        }
+        int bitCount=0;
+        while((num>>bitCount)>0){
+            bitCount++;
+        }
+        if ((num>>(bitCount-2))==3){
+            return fi(bitCount);
+        }else {
+            int mask=(1<<(bitCount-1))-1;
+            return fi(bitCount-1)+findIntegers(num&mask);
+        }
+    }
+
+    private int fi(int n){
+        if(n==0){
+            return 0;
+        }
+        if(n==1){
+            return 2;
+        }
+        if(n==2){
+            return 3;
+        }
+        int[] memo=new int[n+1];
+        memo[1]=2;
+        memo[2]=3;
+        for(int i=3;i<=n;i++){
+            memo[i]=memo[i-1]+memo[i-2];
+        }
+        return memo[n];
+    }
+```
+
+
+
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)

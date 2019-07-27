@@ -4,7 +4,9 @@
 * [225.用队列实现栈](#225)
 * [232.用栈实现队列](#232)
 * [432.全O(1)的数据结构](#432)
-## 146.LRU缓存机制
+## 146**
+
+LRU缓存机制
 
 ### 描述
 
@@ -172,7 +174,10 @@ LRUCache cache = new LRUCache( 2 /* 缓存容量 */ );
     }
 ```
 
-## 155.最小栈
+## 155
+
+最小栈
+
 ### 描述
 
 设计一个支持 push，pop，top 操作，并能在常数时间内检索到最小元素的栈。
@@ -195,7 +200,7 @@ minStack.getMin();   --> 返回 -2.
 ```
 ### 分析
 
-思路1：使用带有记录当前最小值的单链表实现
+思路1：使用**带有记录当前最小值**的单链表实现
 
 设置一个栈顶指针top，每次出栈和入栈都是操作栈顶指针。
 
@@ -312,7 +317,9 @@ class MinStack {
 
     }
 ```
-## 225.用队列实现栈
+## 225
+
+用队列实现栈
 
 ### 描述
 
@@ -331,7 +338,7 @@ class MinStack {
 
 ### 分析
 
-首先分析一下，队列和栈的区别在于出入元素顺序的不同。那么，利用队列实现先进先出（FIFO），就需要在入队的时候，将入队的元素放置到队头的位置。这里可以借鉴循环队列的思想，为了达到与入队序列逆序，那么需要将队列循环左移（n-1位）。例如：queue:[1,2,3]->push(4):[1,2,3,4]->[2,3,4,1]->...[4,3,2,1]。
+首先分析一下，队列和栈的区别在于出入元素顺序的不同。那么，利用队列实现先进先出（FIFO），就需要在入队的时候，将入队的元素放置到队头的位置。这里可以借鉴**循环队列**的思想，为了达到与入队序列逆序，那么需要将队列循环左移（n-1位）。例如：queue:[1,2,3]->push(4):[1,2,3,4]->[2,3,4,1]->...[4,3,2,1]。
 
 ### 实现
 
@@ -374,7 +381,85 @@ class MyStack {
 
 
 
-### 232
+## 232
+
+用栈实现队列
+
+### 描述
+
+使用栈实现队列的下列操作：
+
+push(x) -- 将一个元素放入队列的尾部。
+pop() -- 从队列首部移除元素。
+peek() -- 返回队列首部的元素。
+empty() -- 返回队列是否为空。
+示例:
+
+MyQueue queue = new MyQueue();
+
+queue.push(1);
+queue.push(2);  
+queue.peek();  // 返回 1
+queue.pop();   // 返回 1
+queue.empty(); // 返回 false
+说明:
+
+你只能使用标准的栈操作 -- 也就是只有 push to top, peek/pop from top, size, 和 is empty 操作是合法的。
+你所使用的语言也许不支持栈。你可以使用 list 或者 deque（双端队列）来模拟一个栈，只要是标准的栈操作即可。
+假设所有操作都是有效的 （例如，一个空的队列不会调用 pop 或者 peek 操作）。
+
+### 分析
+
+使用两个栈来实现队列，一个栈负责入队stack1，一个负责出队stack2，每当出队的栈stack2为空的时候就将入队栈stack2的元素压入，而当出队栈stack2不为空的时候，直接弹栈即可。
+
+### 实现
+
+```java
+class MyQueue {
+        Stack<Integer> stack1;
+        Stack<Integer> stack2;
+
+        /** Initialize your data structure here. */
+        public MyQueue() {
+            stack1 = new Stack<>();
+            stack2 = new Stack<>();
+        }
+
+        /** Push element x to the back of queue. */
+        public void push(int x) {
+            stack1.push(x);
+        }
+
+        /** Removes the element from in front of queue and returns that element. */
+        public int pop() {
+            if (!stack2.empty()){
+                return stack2.pop();
+            }
+            while (!stack1.empty()){
+                stack2.push(stack1.pop());
+            }
+            return stack2.pop();
+        }
+
+        /** Get the front element. */
+        public int peek() {
+            if (!stack2.empty()){
+                return stack2.peek();
+            }
+            while (!stack1.empty()){
+                stack2.push(stack1.pop());
+            }
+            return stack2.peek();
+        }
+
+        /** Returns whether the queue is empty. */
+        public boolean empty() {
+            return stack1.empty()&&stack2.empty();
+        }
+    }
+```
+
+
 
 ### 432
 实现一个数据结构支持以下操作：
