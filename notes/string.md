@@ -7,11 +7,8 @@
 * [387.字符串中的第一个唯一字符](#387)
 * [8.字符串转换整数 (atoi)](#8)
 * [43.字符串相乘](#43)
+* [415.字符串相加](#415)
 * [567.字符串的排列](#567)
-
-
-
-
 
 ## 14
 
@@ -56,7 +53,10 @@ public String longestCommonPrefix(String[] strs) {
         return sb.toString();
     }
 ```
-### 151
+## 翻转字符串
+
+## 151
+
 给定一个字符串，逐个翻转字符串中的每个单词。
 
 示例:  
@@ -126,7 +126,7 @@ public String reverseWords(String s) {
         return sb.toString();
     }
 ```
-### 541
+## 541
 给定一个字符串和一个整数 k，你需要对从字符串开头算起的每个 2k 个字符的前k个字符进行反转。如果剩余少于 k 个字符，则将剩余的所有全部反转。如果有小于 2k 但大于或等于 k 个字符，则反转前 k 个字符，并将剩余的字符保持原样。
 
 示例:
@@ -176,7 +176,7 @@ public String reverseStr(String s, int k) {
         }
     }
 ```
-### 557
+## 557
 给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
 
 示例 1:
@@ -219,7 +219,7 @@ public String reverseWords(String s) {
         }
     }
 ```
-### 387
+## 387
 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
 
 案例:
@@ -286,7 +286,7 @@ public int firstUniqChar(String s) {
         return index;
     }
 ```
-### 8
+## 8
 请你来实现一个 atoi 函数，使其能将字符串转换成整数。
 
 首先，该函数会根据需要丢弃无用的开头空格字符，直到寻找到第一个非空格的字符为止。
@@ -350,7 +350,12 @@ public int myAtoi(String str) {
         return res;
     }
 ```
-### 43
+## 43
+
+字符串相乘
+
+### 描述
+
 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
 
  示例 1:
@@ -371,54 +376,17 @@ public int myAtoi(String str) {
 
  **不能使用任何标准库的大数类型（比如 BigInteger）或直接将输入转换为整数来处理。**
 
-- 分析：
+### 分析
 
 由于num1和num2均为字符串并且长度是小于110的，那么这说明不能简单地将字符串转化为数字来直接
 进行乘积。
 
 这里可以将小学数学中乘法的过程回忆一下：**逐位相乘并加和**，那么字符串的相乘可以转化为这样的过程来求解。
 
+### 实现
 
-- 实现：
 ```java
-public String multiply(String num1, String num2) {
-        if (num1.length()==0||num2.length()==0){
-            return null;
-        }
-        int n1 = num1.length();
-        int n2 = num2.length();
-        char[] chars1 = num1.toCharArray();
-        char[] chars2 = num2.toCharArray();
-        if (chars1[0]=='0'||chars2[0]=='0'){
-            return "0";
-        }
-        int[ ] res = new int[n1+n2];
-        StringBuilder sb = new StringBuilder();
-        for (int i = n1-1; i >=0; i--) {
-            for (int j = n2-1; j >=0 ; j--) {
-                int i1 = chars1[i]-'0';
-                int j2 = chars2[j]-'0';
-                //当前位数的乘积
-                int mul = i1*j2;
-                int hIndex = i+j;
-                int lIndex = i+j+1;
-                //加上之前这一位上的数值
-                int sum = mul + res[lIndex];
-                //进位
-                res[hIndex]+=sum/10;
-                res[lIndex]=sum%10;
-            }
-        }
-        for(int i:res){
-            if (sb.length()==0&&i==0){
-                continue;
-            }
-            sb.append(i);
-        }
-        return sb.toString();
-    }
-
-    public String multiply1(String num1, String num2){
+   public String multiply1(String num1, String num2){
         int n1 = num1.length();
         int n2 = num2.length();
         char[] chars1 = num1.toCharArray();
@@ -442,6 +410,7 @@ public String multiply(String num1, String num2) {
         }
         StringBuilder sb = new StringBuilder();
         for(int i:res){
+            //防止首位为0的情况
             if (sb.length()==0&&i==0){
                 continue;
             }
@@ -451,7 +420,83 @@ public String multiply(String num1, String num2) {
 
     }
 ```
-### 567
+## 415
+
+字符串相加
+
+### 描述
+
+给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和。
+
+注意：
+
+num1 和num2 的长度都小于 5100.
+num1 和num2 都只包含数字 0-9.
+num1 和num2 都不包含任何前导零。
+你不能使用任何內建 BigInteger 库， 也不能直接将输入的字符串转换为整数形式。
+
+### 分析
+
+首先，计算出各位上的和；再处理进位。
+
+### 实现
+
+法1：
+
+```java
+public String addString(String num1,String num2){
+        //确保num1的长度较长
+        if (num1.length()<num2.length()){
+            String t=num1;
+            num1=num2;
+            num2=t;
+        }
+        if (num2.length()==1&&num2.charAt(0)=='0'){
+            return num1;
+        }
+        int n1=num1.length();
+        int n2=num2.length();
+        char[] chars1 = num1.toCharArray();
+        char[] chars2 = num2.toCharArray();
+        int[] res=new int[n1+1];
+        for (int i = n1-1,j=n2-1; i >=0; i--) {
+            if (j>=0){
+                int sum=chars1[i]-'0'+chars2[j]-'0';
+                res[i+1]=sum;
+                j--;
+            }else {
+                res[i+1]=chars1[i]-'0';
+            }
+        }
+        //进位处理
+        for (int i = n1; i >0; i--) {
+            int out=res[i]/10;
+            res[i-1]+=out;
+            res[i]%=10;
+        }
+        StringBuilder sb=new StringBuilder();
+        for (int i = 0; i <= n1; i++) {
+            if (sb.length()==0&&res[i]==0){
+                continue;
+            }
+            sb.append(res[i]);
+        }
+        return sb.toString();
+    }
+```
+
+
+
+
+
+
+
+## 567
+
+字符串的排列
+
+### 描述
+
 给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
 
 换句话说，第一个字符串的排列之一是第二个字符串的子串。
@@ -468,12 +513,12 @@ public String multiply(String num1, String num2) {
 输入: s1= "ab" s2 = "eidboaoo"
 输出: False
 
-
 **注意：
 输入的字符串只包含小写字母
 两个字符串的长度都在 [1, 10,000] 之间**
 
-- 实现：
+### 实现
+
 ```java
 public boolean checkInclusion(String s1, String s2) {
         if (s1==null|| s1.length()==0){

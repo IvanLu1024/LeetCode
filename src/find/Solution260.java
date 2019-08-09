@@ -31,10 +31,18 @@ public class Solution260 {
         for (int i:nums){
             diff^=i;
         }
-        int bitFlag=diff&(~(diff-1));
+
+        int mask=1;
+        //取异或值最后一个二进制位为1的数字作为mask，如果是1则表示两个数字在这一位上不同
+        while ((diff&1)==0){
+            mask=mask<<1;
+            diff=diff>>1;
+
+        }
         int[] res=new int[2];
+        //利用mask将原数组分成两个只有一个数字是出现一次其余都是出现两次的数组
         for(int i:nums){
-            if ((i&bitFlag)==0){
+            if ((i&mask)==0){
                 res[0]^=i;
             }else {
                 res[1]^=i;

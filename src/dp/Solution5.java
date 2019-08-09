@@ -75,17 +75,45 @@ public class Solution5 {
     }
 
     //从中间开始拓展
-    private int expand(String s,int l ,int r){
+    private int expand(String s, int l , int r){
         while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
             l--;
             r++;
         }
-        return r-l-1;
+        return r-l+1;
+    }
+
+    String res="";
+    public String longestPalindrome2(String s){
+        if (s==null||s.length()==0){
+            return "";
+        }
+        for (int i = 0; i < s.length(); i++) {
+            //i：中间位置，若回文串为偶数则是偏左的位置
+            helper(s, i, i);            //回文串长度为奇数
+            helper(s, i, i + 1);     //回文串长度为偶数
+
+        }
+        return res;
+    }
+
+    //从中间开始拓展
+    private void helper(String s, int l , int r){
+        while (l>=0&&r<s.length()&&s.charAt(l)==s.charAt(r)){
+            l--;
+            r++;
+        }
+        String cur=s.substring(l+1,r);
+        if (cur.length()>res.length()){
+            res=cur;
+        }
+
+
     }
     @Test
     public void test(){
         String s="cbbd";
-        String s1 = longestPalindrome1(s);
+        String s1 = longestPalindrome2(s);
         System.out.println(s1);
     }
 }

@@ -82,5 +82,28 @@ public class Solution435 {
         return n-max;
     }
 
+    public int eraseOverlapIntervals(int[][] intervals) {
+        int n=intervals.length;
+        if (n == 0) {
+            return 0;
+        }
+        Arrays.sort(intervals,new Comparator<int [] >(){
+            public int compare(int [] a1,int [] a2) {
+                return a1[1] - a2[1];   //升序排列
+            }
+        });
+
+        int max=1;
+        //用于记录当前最大不重叠区间中的最后一个区间
+        int pre=0;
+        for(int i=1;i<n;i++){
+            if(intervals[i][0]>=intervals[pre][1]){
+                max++;
+                pre=i;
+            }
+        }
+        return n-max;
+    }
+
 
 }

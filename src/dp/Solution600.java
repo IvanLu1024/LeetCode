@@ -24,30 +24,45 @@ import org.junit.Test;
  */
 public class Solution600 {
     public int findIntegers(int num) {
-        int[] memo = new int[2];
-        memo[0]=1;
-        for (int i = 1; i <= num; i++) {
-            if (isContains(i)){
-                memo[i%2]=memo[(i-1)%2]+1;
-            }else {
-                memo[i%2]=memo[(i-1)%2];
-            }
+        if (num==0){
+            return 1;
         }
-        return memo[num%2];
+        if (num==1){
+            return 2;
+        }
+        int bitCount=0;
+        while((num>>bitCount)>0){
+            bitCount++;
+        }
+        if ((num>>(bitCount-2))==3){
+            return fi(bitCount);
+        }else {
+            int mask=(1<<(bitCount-1))-1;
+            return fi(bitCount-1)+findIntegers(num&mask);
+        }
     }
-    private boolean isContains(int num){
-        String s = Integer.toBinaryString(num);
-        char[] chars = s.toCharArray();
-        for (int i = 1; i < s.length(); i++) {
-            if (chars[i]==chars[i-1]&&chars[i]=='1'){
-                return false;
-            }
+
+    private int fi(int n){
+        if(n==0){
+            return 0;
         }
-        return true;
+        if(n==1){
+            return 2;
+        }
+        if(n==2){
+            return 3;
+        }
+        int[] memo=new int[n+1];
+        memo[1]=2;
+        memo[2]=3;
+        for(int i=3;i<=n;i++){
+            memo[i]=memo[i-1]+memo[i-2];
+        }
+        return memo[n];
     }
     @Test
     public void test(){
-        int num=1000000000;
+        int num=4;
         int res = findIntegers(num);
         System.out.println(res);
     }

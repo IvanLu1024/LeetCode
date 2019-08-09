@@ -53,7 +53,7 @@ public class Solution78 {
     }
     @Test
     public void test(){
-        int[] nums={1,2,3,4};
+        int[] nums={1,2,3};
         List<List<Integer>> subsets = subsets(nums);
         System.out.println(subsets);
     }

@@ -5,9 +5,21 @@ import tree.TreeNode;
 import tree.TreeNodeUtils;
 import utils.ArrayUtils;
 
+import java.io.File;
+import java.io.InputStream;
 import java.util.*;
 
 public class Main {
+
+    static int a=1;
+
+    /*static {
+        a=2;
+        b=4;
+        System.out.println(a);
+    }*/
+
+    static int b=2;
 
 
     public void quickSort(int[] arr,int l ,int h){
@@ -57,6 +69,9 @@ public class Main {
         StringBuilder sb=new StringBuilder();
         String[] strs = s.trim().split("\\s");
         for (int i = strs.length-1; i >=0; i--) {
+            if (strs[i].length()==0){
+                continue;
+            }
             if (i!=0){
                 sb.append(strs[i].trim()+" ");
             }else {
@@ -255,19 +270,158 @@ public class Main {
         return res;
     }
 
+    private boolean[] used;
+    public List<List<Integer>> permute(int[] nums){
+        List<List<Integer>> res=new ArrayList<>();
+        if (nums==null||nums.length==0){
+            return res;
+        }
+        used=new boolean[nums.length];
+        generate(nums,0,new ArrayList<>(),res);
+        return res;
+    }
+
+    private void generate(int[] nums,int index,List<Integer> list,List<List<Integer>> res){
+        if (index==nums.length){
+            res.add(new ArrayList<>(list));
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (!used[i]){
+                used[i]=true;
+                list.add(nums[i]);
+                generate(nums,index+1,list,res);
+                used[i]=false;
+                list.remove(list.size()-1);
+            }
+        }
+    }
+
+    public int maxSubArray(int[] nums){
+        int res=Integer.MIN_VALUE;
+        int curMax=0;
+        for (int i:nums) {
+            if (curMax>=0){
+                curMax+=i;
+            }else {
+                curMax=i;
+            }
+            res=Math.max(res,curMax);
+
+        }
+        return res;
+    }
+
+    public List<Integer> topk(Integer[] nums,int k){
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Comparator.reverseOrder());
+        k=nums.length-k+1;
+        for (int i:nums){
+            pq.offer(i);
+            if (pq.size()>k){
+                pq.poll();
+            }
+        }
+        List<Integer> res=new ArrayList<>();
+        for (int i:pq){
+            res.add(i);
+        }
+        return res;
+    }
+
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1==null||s1.length()==0){
+            return true;
+        }
+        int[] isContains1=new int[26];
+        int[] isContains2=new int[26];
+        for (char c:s1.toCharArray()){
+            isContains1[c-'a']++;
+        }
+        for (int i = 0; i < s2.length(); i++) {
+            if (i>=s1.length()){
+                isContains2[s2.charAt(i-s1.length())-'a']--;
+            }
+            isContains2[s2.charAt(i)-'a']++;
+            if (Arrays.equals(isContains1,isContains2)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hasPathSum(TreeNode root, int sum) {
+        if (root==null){
+            return false;
+        }
+        if (root.left==null&&root.right==null){
+            if (root.val==sum){
+            return true;
+            }else {
+                return false;
+            }
+        }
+        return hasPathSum(root.left,sum-root.val)||hasPathSum(root.right,sum-root.val);
+    }
+
+    public int minBean(int[] nums){
+        int n = nums.length;
+        if (n<6){
+            return 0;
+        }
+        //memo[i]:表示松鼠跳到下标为(i-1)的位置的捡豆子最少数量
+        int[] memo=new int[n+1];
+        memo[0] = 0;
+        memo[3] = nums[2];
+        memo[4] = nums[3];
+        memo[5] = nums[4];
+        memo[6] = nums[2] + nums[5];
+        memo[7] = nums[2] + nums[6];
+        for (int i = 8; i <=n; i++) {
+            memo[i] = (Math.min(Math.min(memo[i-3] ,memo[i - 4]),memo[i - 5])+nums[i-1]);
+        }
+        return memo[n];
+    }
+
+
+
+
+
+
+
+
 
 
     @Test
     public void test(){
-        int[] arr={2, 7, 11, 15};
-        /*ListNode head = LinkedListUtils.createLinkedList(arr, arr.length);
-        ListNode reverseList = reverseList(head);
-        LinkedListUtils.printLinkedList(reverseList);*/
-        int target=9;
-        int[] res = twoSum(arr, target);
-        System.out.println("num1:"+res[0]+",num2:"+res[1]);
+
+
+        String str=new StringBuilder("计算机").append("软体").toString();
+        String str2="计算机软体";
+        /*String str2="java";
+        System.out.println(str2.intern()==str2);*/
+        System.out.println(str.intern()==str2);
 
     }
+
+    private void FileRead(String filePath){
+        File file = new File(filePath);
+        File[] files = file.listFiles();
+        List<Integer> list=new ArrayList<>();
+        int i=1;
+        for (File f:files){
+            if (f.getName().contains("Solution")){
+                String[] solutions = f.getName().split("\\.");
+                String substring = solutions[0].substring(8);
+                int num = Integer.parseInt(substring);
+                list.add(num);
+                Collections.sort(list);
+            }
+        }
+        System.out.println(list);
+        System.out.println(list.size());
+    }
+
+
+
 
 
 }

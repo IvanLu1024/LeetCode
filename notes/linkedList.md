@@ -167,9 +167,10 @@ public ListNode deleteDuplicates(ListNode head) {
 
 ```java
 public ListNode partition(ListNode head, int x) {
-        if (head==null){
+        if (head==null||head.next==null){
             return head;
         }
+    	ListNode cur=head;
         //左部分:记录小于x的结点
         ListNode left=new ListNode(-1);
         //右部分:记录大于或等于x的结点
@@ -177,16 +178,16 @@ public ListNode partition(ListNode head, int x) {
         //记录左右部分的头结点
         ListNode leftHead=left,rightHead=right;
         //
-        while (head!=null){
+        while (cur!=null){
             //遇到小于x的结点，用left记录
-            if (head.val<x){
+            if (cur.val<x){
                 left.next=head;
                 left=left.next;
             }else {
                 right.next=head;
                 right=right.next;
             }
-            head=head.next;
+            cur=cur.next;
         }
         //链接左右两部分
         left.next=rightHead.next;
@@ -319,7 +320,7 @@ public ListNode addTwoNumbers2(ListNode l1, ListNode l2){
 
 ### 分析
 
-使用三个栈来实现，首先将链表1和链表2中的数值都分别入栈stack1和stack2。再利用另一个栈来记录两数相加之后各位数的情况，
+使用**三个栈**来实现，首先将链表1和链表2中的数值都分别入栈stack1和stack2。再利用另一个栈来记录两数相加之后各位数的情况，
 
 ### 实现
 

@@ -1146,6 +1146,7 @@ num[l,h]为滑动窗口，根据具体的要求，通过遍历的时候，来改
  * [438.找到字符串中所有字母异位词](#438)
  * [76.最小覆盖子串](#76)
  * [713.乘积小于K的子数组](#713)
+ * [剑指Offer-和为 S 的连续正数序列](https://cyc2018.github.io/CS-Notes/#/notes/%E5%89%91%E6%8C%87%20Offer%20%E9%A2%98%E8%A7%A3%20-%2050~59?id=_572-%e5%92%8c%e4%b8%ba-s-%e7%9a%84%e8%bf%9e%e7%bb%ad%e6%ad%a3%e6%95%b0%e5%ba%8f%e5%88%97)
 
 ## 209*
 
@@ -1779,6 +1780,7 @@ public boolean searchMatrix(int[][] matrix, int target){
 * [42.接雨水](#42)
 * [128.最长连续序列](#128)
 * [69.X的平方根](#69)
+* [581. 最短无序连续子数组](#581)
 
 ## 717
 
@@ -2563,6 +2565,61 @@ public int longestConsecutive(int[] nums) {
         return maxLen;
     }
 ```
+## 581*
+
+最短无序连续子数组
+
+### 描述
+
+给定一个整数数组，你需要寻找一个连续的子数组，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+
+你找到的子数组应是最短的，请输出它的长度。
+
+示例 1:
+
+输入: [2, 6, 4, 8, 10, 9, 15]
+输出: 5
+解释: 你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+说明 :
+
+输入的数组长度范围在 [1, 10,000]。
+输入的数组可能包含重复元素 ，所以升序的意思是<=。
+
+### 实现
+
+```java
+public int findUnsortedSubarray(int[] nums) {
+        if(nums==null||nums.length==0){
+            return 0;
+        }
+        int n=nums.length;
+        int reIndex1=0;
+        int max=nums[0];
+        //从左向右寻找最后一个逆序的下标
+        for(int i=1;i<n;i++){
+            if(nums[i]<max){
+                reIndex1=i;
+            }
+            max=Math.max(max,nums[i]);
+        }
+        
+        int reIndex2=1;
+        int min=nums[n-1];
+        //从右向左寻找最后一个逆序的下标
+        for(int i=n-2;i>=0;i--){
+            if(nums[i]>min){
+                reIndex2=i;
+            }
+            min=Math.min(min,nums[i]);
+        }
+        int count=reIndex1-reIndex2+1;
+        return count;
+        
+    }
+```
+
+
+
 # 参考资料
 
 [玩儿转算法面试 - 课程官方代码仓](https://github.com/liuyubobobo/Play-with-Algorithm-Interview)

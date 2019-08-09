@@ -53,6 +53,11 @@ public class Solution25 {
             head.next=cur;
             tail.next=next;
             cur=next;
+            /*ListNode next = cur.next;
+            pre.next=cur;
+            cur.next=tail;
+            tail.next=next;
+            cur=next;*/
         }
         return tail;
     }

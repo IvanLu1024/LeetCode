@@ -2156,6 +2156,13 @@ public int maxProfit(int[] prices, int fee) {
 - [72.编辑距离](#72)
 - [118.杨辉三角](#118)
 - [119.杨辉三角（2）](#119)
+- [152.乘积最大序列](#152)
+- [5.最长回文子串](#5)
+- [53.最大子序和](#53)
+- [120.三角形最小路径和](#120)
+- [221.最大的正方形](#221)
+
+- [85.最大矩形](#85)
 
 ## 64
 
@@ -2406,6 +2413,97 @@ public List<Integer> getRow(int rowIndex) {
     }
 ```
 
+## 120
+
+三角形最小路径和
+
+### 描述
+
+给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
+
+例如，给定三角形：
+
+```java
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+```
+
+自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+
+说明：
+
+如果你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题，那么你的算法会很加分
+
+### 分析
+
+状态转移方程为：
+
+```
+ f(0,0)=t[0][0]
+
+- f(i,0)=t[i][0]+f(i-1,0)
+- f(i,i)=t[i][i]+f(i-1,i-1)
+- f(i,j)=t[i][j]+min{f(i-1,j-1),f(i-1,j)}
+```
+
+### 实现
+
+```java
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        if (n==0){
+            return 0;
+        }
+        for (int i = 1; i < n; i++) {
+            triangle.get(i).set(0,triangle.get(i-1).get(0)+triangle.get(i).get(0));
+            triangle.get(i).set(i,triangle.get(i).get(i)+triangle.get(i-1).get(i-1));
+            for (int j = 1; j <i ; j++) {
+                triangle.get(i).set(j,triangle.get(i).get(j)+Math.min(triangle.get(i-1).get(j-1),triangle.get(i-1).get(j)));
+            }
+        }
+        int min=Integer.MAX_VALUE;
+        for(int i:triangle.get(n-1)){
+            min=Math.min(min,i);
+        }
+        
+        return min;
+    }
+```
+
+```java
+public int minimumTotal(List<List<Integer>> triangle){
+        int n = triangle.size();
+        if (n==0){
+            return 0;
+        }
+        int[] memo=new int[n];
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j >= 0; j--) {
+                if (j==0){
+                    memo[j]+=triangle.get(i).get(0);
+                }else if (i==j){
+                    memo[j]=triangle.get(i).get(i)+memo[i-1];
+                }else {
+                    memo[j]=triangle.get(i).get(j)+Math.min(memo[j],memo[j-1]);
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            System.out.print(memo[i]+" ");
+        }
+        int min=memo[0];
+        for (int i = 0; i < n; i++) {
+            min=Math.min(min,memo[i]);
+        }
+        return min;
+        
+    }
+```
+
 ## 152
 
 乘积最大序列
@@ -2458,7 +2556,9 @@ public int maxProduct(int[] nums) {
 
 
 
-## 5.最长回文子串
+## 5
+
+最长回文子串
 
 ### 描述
 
@@ -2558,7 +2658,9 @@ public String longestPalindrome(String s) {
     }
 ```
 
-## 53.最大子序和
+## 53
+
+最大子序和
 
 ### 描述
 
@@ -2597,96 +2699,9 @@ public int maxSubArray(int[] nums){
         return max;
     }
 ```
-## 120.三角形最小路径和
+## 221
 
-### 描述
-
-给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。
-
-例如，给定三角形：
-
-```java
-[
-     [2],
-    [3,4],
-   [6,5,7],
-  [4,1,8,3]
-]
-```
-自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
-
-说明：
-
-如果你可以只使用 O(n) 的额外空间（n 为三角形的总行数）来解决这个问题，那么你的算法会很加分
-
-### 分析
-
-状态转移方程为：
-
-```
- f(0,0)=t[0][0]
-
-- f(i,0)=t[i][0]+f(i-1,0)
-- f(i,i)=t[i][i]+f(i-1,i-1)
-- f(i,j)=t[i][j]+min{f(i-1,j-1),f(i-1,j)}
-```
-
-### 实现
-
-```java
-    public int minimumTotal(List<List<Integer>> triangle) {
-        int n = triangle.size();
-        if (n==0){
-            return 0;
-        }
-        for (int i = 1; i < n; i++) {
-            triangle.get(i).set(0,triangle.get(i-1).get(0)+triangle.get(i).get(0));
-            triangle.get(i).set(i,triangle.get(i).get(i)+triangle.get(i-1).get(i-1));
-            for (int j = 1; j <i ; j++) {
-                triangle.get(i).set(j,triangle.get(i).get(j)+Math.min(triangle.get(i-1).get(j-1),triangle.get(i-1).get(j)));
-            }
-        }
-        int min=Integer.MAX_VALUE;
-        for(int i:triangle.get(n-1)){
-            min=Math.min(min,i);
-        }
-        
-        return min;
-    }
-```
-```java
-public int minimumTotal(List<List<Integer>> triangle){
-        int n = triangle.size();
-        if (n==0){
-            return 0;
-        }
-        int[] memo=new int[n];
-        for (int i = 0; i < n; i++) {
-            for (int j = i; j >= 0; j--) {
-                if (j==0){
-                    memo[j]+=triangle.get(i).get(0);
-                }else if (i==j){
-                    memo[j]=triangle.get(i).get(i)+memo[i-1];
-                }else {
-                    memo[j]=triangle.get(i).get(j)+Math.min(memo[j],memo[j-1]);
-                }
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            System.out.print(memo[i]+" ");
-        }
-        int min=memo[0];
-        for (int i = 0; i < n; i++) {
-            min=Math.min(min,memo[i]);
-        }
-        return min;
-        
-    }
-```
-
-
-
-## 221.最大的正方形
+最大的正方形
 
 ### 描述
 
@@ -2751,6 +2766,80 @@ public int minimumTotal(List<List<Integer>> triangle){
         return Math.min(a,Math.min(b,c));
     }
 ```
+## 85
+
+最大的矩形
+
+### 描述
+
+给定一个仅包含 0 和 1 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
+
+示例:
+
+输入:
+[
+  ["1","0","1","0","0"],
+  ["1","0","1","1","1"],
+  ["1","1","1","1","1"],
+  ["1","0","0","1","0"]
+]
+输出: 6
+
+### 实现
+
+```java
+public int maximalRectangle(char[][] matrix) {
+        int m = matrix.length;
+        if (m==0){
+            return 0;
+        }
+        int n = matrix[0].length;
+        //存储左边界
+        int[] left=new int[n];
+        int[] right=new int[n];
+        int[] height=new int[n];
+        Arrays.fill(right,n);
+        int max=0;
+        for (int i = 0; i < m; i++) {
+            int leftBound=0;
+            int rightBound=n;
+            //计算高度
+            for (int j = 0; j < n; j++) {
+                //从当前位置开始的高度
+                if (matrix[i][j]=='0'){
+                    height[j]=0;
+                }else {
+                    height[j]++;
+                }
+            }
+            //计算左边界
+            for (int j = 0; j < n; j++) {
+                //当遇到0的时候，左边界从j+1开始寻找
+                if (matrix[i][j]=='0'){
+                    left[j]=0;
+                    leftBound=j+1;
+                }else {
+                    left[j]=Math.max(left[j],leftBound);
+                }
+            }
+            //计算右边界
+            for (int j = n-1; j >=0 ; j--) {
+                if (matrix[i][j]=='0'){
+                    rightBound=j;
+                    right[j]=n;
+                }else {
+                    right[j]=Math.min(right[j],rightBound);
+                }
+            }
+
+            for (int j = 0; j < n; j++) {
+                max=Math.max((right[j]-left[j])*height[j],max);
+            }
+        }
+        return max;
+    }
+```
+
 ## 600**
 
 不含连续1的非负整数

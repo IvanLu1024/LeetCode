@@ -75,11 +75,11 @@ public class Solution354 {
             }
         });
         for (int[] envelope:envelopes){
-            int l=0,h=len-1;
-            while (l<=h){
+            int l=0,h=len;
+            while (l<h){
                 int mid=l+(h-l)/2;
                 if (envelope[1]>memo[mid])  l=mid+1;
-                else h=mid-1;
+                else h=mid;
             }
             memo[l]=envelope[1];
             if (l==len){

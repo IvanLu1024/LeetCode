@@ -29,9 +29,6 @@ public class Solution215 {
 
         }
         return nums[k];
-
-
-
     }
 
 
@@ -85,9 +82,9 @@ public class Solution215 {
 
     @Test
     public void test(){
-        int[] nums = {3, 2, 1, 5, 6, 4};
-        int kthLargest = findKthLargest1(nums, 2);
-        System.out.println(kthLargest);
+
+        String s="abc";
+        System.out.println(s.substring(0,2));
 
     }
 }

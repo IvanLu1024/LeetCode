@@ -74,10 +74,11 @@ public class Solution10 {
         if (p[j]=='*'){
             //若*前面的元素可以匹配上则继续向前匹配
             if (i>-1&&(p[j-1]=='.'||p[j-1]==s[i])) {
-                if (match(s, p, i - 1, j))
+                if (match(s, p, i - 1, j)){
                     return true;
+                }
             }
-            //如果中间出现了一个不满足的情况，马上回溯到不匹配这个字符的状态
+            //表明直接跳过*
             return match(s,p,i,j-2);
         }
         //如果j遇到的不是“*”，那么我们就直接看s[i]和p[j]是否匹配，若不匹配就说明错了，返回
@@ -88,8 +89,8 @@ public class Solution10 {
 
     @Test
     public void test(){
-        String s="aaa";
-        String p="aaaaaa";
+        String s="mississippi";
+        String p="mis*is*p*.";
         boolean b = isMatch(s, p);
         System.out.println(b);
 

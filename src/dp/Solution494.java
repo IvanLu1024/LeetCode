@@ -72,6 +72,8 @@ public class Solution494 {
     public void test(){
         int[] nums={1, 1, 1, 1, 1};
         int S=3;
+        String s="";
+        s.toCharArray();
         int res = findTargetSumWays(nums, S);
         System.out.println(res);
     }

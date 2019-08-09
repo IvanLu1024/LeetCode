@@ -878,6 +878,7 @@ public class CompeteTree {
  * [530.二叉搜索树的最小绝对差](#530)
  * [173.二叉搜索树的迭代器](#173)
  * [-897.递增顺序查找树](#897)
+ * [-538.把二叉搜索树转化为累加树](#538)
 
 ## 96
 
@@ -1492,21 +1493,10 @@ public TreeNode sortedListToBST(ListNode head) {
 
 ### 实现
 
+
+
 ```java
-private List<Integer> res=new ArrayList<>();
-    public int kthSmallest(TreeNode root, int k) {
-        inOrder(root);
-        return res.get(k-1);
-    }
-    private void inOrder(TreeNode root){
-        if (root==null){
-            return ;
-        }
-        inOrder(root.left);
-        res.add(root.val);
-        inOrder(root.right);
-    }
-    public int kthSmallest1(TreeNode root, int k){
+public int kthSmallest(TreeNode root, int k){
         InOrder(root, k);
         return result;
 
@@ -1528,6 +1518,30 @@ private List<Integer> res=new ArrayList<>();
             InOrder(root.right,k);
         }
 
+    }
+```
+
+非递归方式：
+
+```java
+public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack=new Stack<>();
+        TreeNode cur=root;
+        while(!stack.isEmpty()||cur!=null){
+            if(cur!=null){
+                stack.push(cur);
+                cur=cur.left;
+            }else{
+                cur=stack.pop();
+                k--;
+                if(k==0){
+                    return cur.val;
+                }
+                cur=cur.right;
+            }
+        }
+        return 0;
+        
     }
 ```
 

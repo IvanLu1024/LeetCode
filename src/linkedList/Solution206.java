@@ -2,6 +2,8 @@ package linkedList;
 
 import org.junit.Test;
 
+import java.util.Stack;
+
 /**
  * 反转链表
  *
@@ -26,13 +28,27 @@ public class Solution206 {
         }
         return pre;
     }
+
+    public ListNode reverseList1(ListNode head){
+        ListNode newHead = new ListNode(-1);
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = newHead.next;
+            newHead.next = head;
+            head = next;
+        }
+        return newHead.next;
+    }
+
     @Test
     public void test(){
+        Stack<Integer> stack=new Stack<>();
+        stack.empty();
         int[] arr={1,2,3,4,5};
         int n=arr.length;
         ListNode head = linkedList.Test.createLinkedList(arr, n);
         linkedList.Test.printLinkedList(head);
-        ListNode res = reverseList(head);
+        ListNode res = reverseList1(head);
 
         linkedList.Test.printLinkedList(res);
     }

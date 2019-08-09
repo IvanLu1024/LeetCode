@@ -65,6 +65,13 @@ public class Solution93 {
         return res;
 
     }
+
+    /**
+     *
+     * @param s     待解析的部分
+     * @param temp  已解析的部分
+     * @param n     已解析的位数
+     */
     private void generateIp(String s,String temp,int n){
         // 剪枝，因ip不会超过三位
         if (s.length()>3*(4-n)){

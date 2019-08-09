@@ -16,6 +16,8 @@ public class Solution695 {
         n=grid[0].length;
         visited=new boolean[m][n];
         int res = 0;
+        //深度遍历，当该位置为1的时候将其连通部分大小计算出来，
+        // 比较得到最大值
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (!visited[i][j]&&grid[i][j]==1){
@@ -29,17 +31,18 @@ public class Solution695 {
     //返回的值就是[x,y]所在位置的岛屿的面积
     private int dfs(int[][] grid,int x,int y){
         visited[x][y]=true;
-        int res=1;
+        //面积大小
+        int area =1;
         for (int i = 0; i < 4; i++) {
             int newX = x + d[i][0];
             int newY = y + d[i][1];
             //满足此条件，说明寻找到一个位置，加入该岛屿
             //相邻位置为1的区域为岛屿
             if (inArea(newX,newY)&&!visited[newX][newY]&&grid[newX][newY]==1){
-                res+=dfs(grid,newX,newY);
+                area +=dfs(grid,newX,newY);
             }
         }
-        return res;
+        return area;
     }
     //判断当前坐标是否在给定区域内
     private boolean inArea(int x,int y){

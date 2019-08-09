@@ -57,12 +57,12 @@ public class Solution61 {
         slow.next=null;
         return head;
     }
-    @Test
+    /*@Test
     public void test(){
         int[] arr={1,2,3,4,5};
         ListNode head = LinkedListUtils.createLinkedList(arr, arr.length);
         ListNode res = rotateRight(head, 2);
         LinkedListUtils.printLinkedList(res);
 
-    }
+    }*/
 }

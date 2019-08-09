@@ -80,6 +80,7 @@ public class Solution4 {
             return (findKnum(nums1,0,nums2,0,(n1+n2)/2)+findKnum(nums1,0,nums2,0,(n1+n2)/2+1))/2.0;
         }
     }
+    //寻找数组中第k小的元素
     private int findKnum(int[] nums1,int l1, int[] nums2,int l2,int k){
         if (l1>=nums1.length){
             return nums2[l2+k-1];
@@ -100,6 +101,7 @@ public class Solution4 {
             mid2 = nums2[l2+k/2-1];
         }
         if (mid1<mid2){
+            // mid1 < mid2 在 nums1.right 和 nums2 之间搜索, 丢掉 k/2 个数.
             return findKnum(nums1,l1+k/2,nums2,l2,k-k/2);
         }else {
             return findKnum(nums1,l1,nums2,l2+k/2,k-k/2);

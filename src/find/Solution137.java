@@ -37,22 +37,21 @@ public class Solution137 {
         return res;
     }
 
-    //对所有数而言，每一个数的第i位累加起来去mod3
-    //然后mod的结果返还i位给res(存最终结果的变量)
-    //逢3不进位的加法
+//    对int类型的每个数每一位单独统计出现1的次数, 如果出现的次数不能整除3
+//     则说明唯一存在的数在这一位上为1
     public int singleNumber1(int[] nums){
-        int n = nums.length;
-        if (n==1){
-            return nums[0];
-        }
         int res=0;
-        for (int i = 0; i < 32; i++) {
-            int sum=0;
-            for (int num:nums){
-                sum+=(num>>i)&1;
-                sum=sum%3;
+        for(int i=0;i<32;i++){
+            int bit=1<<i;
+            int bitCount=0;
+            for(int num:nums){
+                if((num&bit)!=0){
+                    bitCount++;
+                }
             }
-            res=res|(sum<<i);
+            if(bitCount%3!=0){
+                res|=bit;
+            }
         }
         return res;
     }

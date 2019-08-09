@@ -1,8 +1,6 @@
 package stack;
 
 import org.junit.Test;
-import queue.TreeNode;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;

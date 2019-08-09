@@ -2,6 +2,8 @@ package dp;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
  *
@@ -44,11 +46,35 @@ public class Solution714 {
         }
         return Math.max(hold[n-1],unhold[n-1]);
     }
+
+    public int maxProfit1(int[] prices, int fee) {
+        int n=prices.length;
+        if (n==0||n==1){
+            return 0;
+        }
+        int k = n/2;
+        int[] holds=new int[k];
+        int[] unholds=new int[k];
+        Arrays.fill(holds,Integer.MIN_VALUE);
+        Arrays.fill(unholds,0);
+        for (int i = 0; i < n; i++) {
+            //做K次交易，注意第一次交易hold的初始值为0
+            for (int j = 0; j < k; j++) {
+                if (j==0){
+                    holds[j]=Math.max(holds[j],-prices[i]);
+                }else {
+                    holds[j] = Math.max(holds[j], unholds[j-1] - prices[i]);
+                }
+                unholds[j] = Math.max(unholds[j], holds[j] + prices[i]-fee);
+            }
+        }
+        return Math.max(unholds[k-1],holds[k-1]);
+    }
     @Test
     public void test(){
         int[] p={1, 3, 2, 8, 4, 9};
         int fee=2;
-        int r = maxProfit(p,fee);
+        int r = maxProfit1(p,fee);
         System.out.println(r);
     }
 }
